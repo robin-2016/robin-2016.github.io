@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="变量声明声明一个名为test的字符串变量1var test string   其他类型，例如：int float都是一样，注意float类型只有float32和float64两种，没有float，int有int、int32、int64，这些都是整型，只是存储大小不同  变量赋值1test = &quot;test&quot;   这个没有什么特别之处，和Python是一样的  简短声明并赋值1test := &quot;te">
+<meta name="description" content="变量声明Go中变量是区分大小写的，Test和test是两个不同变量，大写开头的变量可以跨包进行引用，小写开头的变量只能在本包中使用，一般命名使用驼峰法：testFile。声明一个名为test的字符串变量1var test string   其他类型，例如：int float都是一样，注意float类型只有float32和float64两种，没有float，int有int、int32、int64，">
 <meta name="keywords" content="Go">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go 变量声明及赋值">
 <meta property="og:url" content="http://yoursite.com/2018/04/19/Go-变量声明及赋值/index.html">
 <meta property="og:site_name" content="Summer">
-<meta property="og:description" content="变量声明声明一个名为test的字符串变量1var test string   其他类型，例如：int float都是一样，注意float类型只有float32和float64两种，没有float，int有int、int32、int64，这些都是整型，只是存储大小不同  变量赋值1test = &quot;test&quot;   这个没有什么特别之处，和Python是一样的  简短声明并赋值1test := &quot;te">
+<meta property="og:description" content="变量声明Go中变量是区分大小写的，Test和test是两个不同变量，大写开头的变量可以跨包进行引用，小写开头的变量只能在本包中使用，一般命名使用驼峰法：testFile。声明一个名为test的字符串变量1var test string   其他类型，例如：int float都是一样，注意float类型只有float32和float64两种，没有float，int有int、int32、int64，">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-18T22:27:38.907Z">
+<meta property="og:updated_time" content="2018-04-19T21:01:11.730Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Go 变量声明及赋值">
-<meta name="twitter:description" content="变量声明声明一个名为test的字符串变量1var test string   其他类型，例如：int float都是一样，注意float类型只有float32和float64两种，没有float，int有int、int32、int64，这些都是整型，只是存储大小不同  变量赋值1test = &quot;test&quot;   这个没有什么特别之处，和Python是一样的  简短声明并赋值1test := &quot;te">
+<meta name="twitter:description" content="变量声明Go中变量是区分大小写的，Test和test是两个不同变量，大写开头的变量可以跨包进行引用，小写开头的变量只能在本包中使用，一般命名使用驼峰法：testFile。声明一个名为test的字符串变量1var test string   其他类型，例如：int float都是一样，注意float类型只有float32和float64两种，没有float，int有int、int32、int64，">
 
 
 
@@ -321,7 +321,7 @@
 
       
         <ol>
-<li>变量声明<br>声明一个名为test的字符串变量<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> test <span class="keyword">string</span></span><br></pre></td></tr></table></figure>
+<li>变量声明<br>Go中变量是区分大小写的，Test和test是两个不同变量，大写开头的变量可以跨包进行引用，小写开头的变量只能在本包中使用，一般命名使用驼峰法：testFile。<br>声明一个名为test的字符串变量<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> test <span class="keyword">string</span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <p>其他类型，例如：int float都是一样，注意float类型只有float32和float64两种，没有float，int有int、int32、int64，这些都是整型，只是存储大小不同</p>
@@ -344,8 +344,8 @@
 <li>定义多个变量<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> test1 test2 test3 (</span><br><span class="line">	test1 = <span class="number">123</span></span><br><span class="line">	test2 = <span class="string">"456"</span></span><br><span class="line">	test3 = <span class="literal">true</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>或者<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a,b,c <span class="keyword">int</span> = <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span></span><br></pre></td></tr></table></figure></p>
-<p>每个变量都可以定义自己的值，第一种情况每个变量的类型可以不同，第二种每个变量类型必须相同，多用在初始时</p>
+<p>或者<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a,b,c <span class="keyword">int</span> = <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span></span><br><span class="line">a,b,c := <span class="number">1</span>,<span class="string">"test"</span>,<span class="number">3</span></span><br></pre></td></tr></table></figure></p>
+<p>每个变量都可以定义自己的值，注意var a,b,c int = 1,2,3时每个变量类型必须都是一种类型。多个变量的定义较多用在初始时</p>
 <p>下节写go的安装设置</p>
 
       
@@ -416,6 +416,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/04/20/Go-安装配置/" rel="prev" title="Go-安装配置">
+                Go-安装配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -482,7 +486,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

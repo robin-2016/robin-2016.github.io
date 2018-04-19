@@ -252,6 +252,141 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/20/Go-安装配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Robin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Summer">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/20/Go-安装配置/" itemprop="url">Go-安装配置</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-20T05:03:24+08:00">
+                2018-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>1.安装Go<br>Go的官网：golang.org，但是打不开<br>可以从Go语言中文网下载：<a href="https://studygolang.com/dl，选择对应的平台包进行安装就行。还可以从GO的GitHub下载最新的，不过是源码，地址：https://github.com/golang/go/releases" target="_blank" rel="noopener">https://studygolang.com/dl，选择对应的平台包进行安装就行。还可以从GO的GitHub下载最新的，不过是源码，地址：https://github.com/golang/go/releases</a></p>
+<p>2.安装前要明白的关于环境变量的设置</p>
+<ul>
+<li>GOROOT<br> Go的安装目录</li>
+<li>GOPATH<br> Go的工作区，可以设置多个，这个就是我们编写源码地方</li>
+<li>GOBIN<br> 存放Go的可执行文件的目录</li>
+</ul>
+<p>3.常用的操作</p>
+<ul>
+<li>go get<br> 下载其他go程序，优先下载到第一个GOPATH目录</li>
+<li>go install<br> 安装扩展文件，执行文件会放在bin目录中，非执行文件安装到go下的pkg目录</li>
+<li>go build<br> 编译源码文件，生成对应平台可执行程序</li>
+<li>go run<br> 编译并运行源码文件</li>
+</ul>
+<p>4.IDE<br>我推荐使用JetBrains出品的golang，都是有了这个IDE我才鼓起学习Go的勇气。</p>
+<p>下节写Go的流控制。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/19/Go-变量声明及赋值/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -324,7 +459,7 @@
         
           
             <ol>
-<li>变量声明<br>声明一个名为test的字符串变量<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> test <span class="keyword">string</span></span><br></pre></td></tr></table></figure>
+<li>变量声明<br>Go中变量是区分大小写的，Test和test是两个不同变量，大写开头的变量可以跨包进行引用，小写开头的变量只能在本包中使用，一般命名使用驼峰法：testFile。<br>声明一个名为test的字符串变量<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> test <span class="keyword">string</span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <p>其他类型，例如：int float都是一样，注意float类型只有float32和float64两种，没有float，int有int、int32、int64，这些都是整型，只是存储大小不同</p>
@@ -347,8 +482,8 @@
 <li>定义多个变量<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> test1 test2 test3 (</span><br><span class="line">	test1 = <span class="number">123</span></span><br><span class="line">	test2 = <span class="string">"456"</span></span><br><span class="line">	test3 = <span class="literal">true</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>或者<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a,b,c <span class="keyword">int</span> = <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span></span><br></pre></td></tr></table></figure></p>
-<p>每个变量都可以定义自己的值，第一种情况每个变量的类型可以不同，第二种每个变量类型必须相同，多用在初始时</p>
+<p>或者<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a,b,c <span class="keyword">int</span> = <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span></span><br><span class="line">a,b,c := <span class="number">1</span>,<span class="string">"test"</span>,<span class="number">3</span></span><br></pre></td></tr></table></figure></p>
+<p>每个变量都可以定义自己的值，注意var a,b,c int = 1,2,3时每个变量类型必须都是一种类型。多个变量的定义较多用在初始时</p>
 <p>下节写go的安装设置</p>
 
           
@@ -550,7 +685,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
