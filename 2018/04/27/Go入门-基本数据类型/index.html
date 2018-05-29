@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="1.安装GoGo的官网：golang.org，但是打不开可以从Go语言中文网下载，选择对应的平台包进行安装就行。还可以从GO的GitHub下载最新的，不过是源码。 2.安装前要明白的关于环境变量的设置  GOROOT Go的安装目录 GOPATH Go的工作区，可以设置多个，这个就是我们编写源码地方 GOBIN 存放Go的可执行文件的目录  3.常用的操作  go get 下载其他go程序，优先下">
+<meta name="description" content="1.整型分为有符号整型和无符号整型：int8 int16 int 32 int64 uint8 uint16 uint32 uint64 int uint 其中，int和uint在不同平台不同编译器可能大小不同rune类型是int32类型的同义词，常用于指明一个值是Unicode码点byte类型是uint8类型的同义词，强调一个值是原始数据，而非量值 2.浮点数float32和float64两种，">
 <meta name="keywords" content="Go">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Go-安装配置">
-<meta property="og:url" content="http://yoursite.com/2018/04/20/Go-安装配置/index.html">
+<meta property="og:title" content="Go的基本数据类型">
+<meta property="og:url" content="http://yoursite.com/2018/04/27/Go入门-基本数据类型/index.html">
 <meta property="og:site_name" content="Summer">
-<meta property="og:description" content="1.安装GoGo的官网：golang.org，但是打不开可以从Go语言中文网下载，选择对应的平台包进行安装就行。还可以从GO的GitHub下载最新的，不过是源码。 2.安装前要明白的关于环境变量的设置  GOROOT Go的安装目录 GOPATH Go的工作区，可以设置多个，这个就是我们编写源码地方 GOBIN 存放Go的可执行文件的目录  3.常用的操作  go get 下载其他go程序，优先下">
+<meta property="og:description" content="1.整型分为有符号整型和无符号整型：int8 int16 int 32 int64 uint8 uint16 uint32 uint64 int uint 其中，int和uint在不同平台不同编译器可能大小不同rune类型是int32类型的同义词，常用于指明一个值是Unicode码点byte类型是uint8类型的同义词，强调一个值是原始数据，而非量值 2.浮点数float32和float64两种，">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-23T20:40:04.482Z">
+<meta property="og:updated_time" content="2018-04-27T14:30:24.918Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Go-安装配置">
-<meta name="twitter:description" content="1.安装GoGo的官网：golang.org，但是打不开可以从Go语言中文网下载，选择对应的平台包进行安装就行。还可以从GO的GitHub下载最新的，不过是源码。 2.安装前要明白的关于环境变量的设置  GOROOT Go的安装目录 GOPATH Go的工作区，可以设置多个，这个就是我们编写源码地方 GOBIN 存放Go的可执行文件的目录  3.常用的操作  go get 下载其他go程序，优先下">
+<meta name="twitter:title" content="Go的基本数据类型">
+<meta name="twitter:description" content="1.整型分为有符号整型和无符号整型：int8 int16 int 32 int64 uint8 uint16 uint32 uint64 int uint 其中，int和uint在不同平台不同编译器可能大小不同rune类型是int32类型的同义词，常用于指明一个值是Unicode码点byte类型是uint8类型的同义词，强调一个值是原始数据，而非量值 2.浮点数float32和float64两种，">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/20/Go-安装配置/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/04/27/Go入门-基本数据类型/"/>
 
 
 
 
 
-  <title>Go-安装配置 | Summer</title>
+  <title>Go的基本数据类型 | Summer</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/20/Go-安装配置/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/27/Go入门-基本数据类型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Robin">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Go-安装配置</h1>
+          <h1 class="post-title" itemprop="name headline">Go的基本数据类型</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-20T05:03:24+08:00">
-                2018-04-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-27T22:18:11+08:00">
+                2018-04-27
               </time>
             
 
@@ -320,22 +320,14 @@
       
 
       
-        <p>1.安装Go<br>Go的官网：golang.org，但是打不开<br>可以从<a href="https://studygolang.com/dl" target="_blank" rel="noopener">Go语言中文网下载</a>，选择对应的平台包进行安装就行。还可以从<a href="https://github.com/golang/go/releases" target="_blank" rel="noopener">GO的GitHub下载</a>最新的，不过是源码。</p>
-<p>2.安装前要明白的关于环境变量的设置</p>
-<ul>
-<li>GOROOT<br> Go的安装目录</li>
-<li>GOPATH<br> Go的工作区，可以设置多个，这个就是我们编写源码地方</li>
-<li>GOBIN<br> 存放Go的可执行文件的目录</li>
-</ul>
-<p>3.常用的操作</p>
-<ul>
-<li>go get<br> 下载其他go程序，优先下载到第一个GOPATH目录</li>
-<li>go install<br> 安装扩展文件，执行文件会放在bin目录中，非执行文件安装到go下的pkg目录</li>
-<li>go build<br> 编译源码文件，生成对应平台可执行程序</li>
-<li>go run<br> 编译并运行源码文件</li>
-</ul>
-<p>4.IDE<br>我推荐使用JetBrains出品的golang，都是有了这个IDE我才鼓起学习Go的勇气。</p>
-<p>下节写Go的流控制。</p>
+        <p>1.整型<br>分为有符号整型和无符号整型：int8 int16 int 32 int64 uint8 uint16 uint32 uint64 int uint 其中，int和uint在不同平台不同编译器可能大小不同<br>rune类型是int32类型的同义词，常用于指明一个值是Unicode码点<br>byte类型是uint8类型的同义词，强调一个值是原始数据，而非量值</p>
+<p>2.浮点数<br>float32和float64两种，优先使用float64<br>格式化输出时可以选择%g，自动保存精度，%e指数，%f指定精度</p>
+<p>3.复数<br>复数由实部和虚部组成<br>如果在浮点数或十进制整数后面紧跟着i就表示是实部为0的复数<br>判定复数相等时是实部和虚部都相等才相等</p>
+<p>4.布尔值<br>true false</p>
+<p>5.字符串<br>使用UTF-8编码<br>字符串切片s[i:j]，从0开始<br>原生字符串用<code></code>表示，即使用反引号<br>字符串赋值之后不可对字符串进行修改，例如：s[0]=”i”，是错误的</p>
+<p>6.常量<br>使用const定义<br>一般是布尔型 字符串 数字<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    a = <span class="number">1</span></span><br><span class="line">    b = <span class="string">"2"</span></span><br><span class="line">    c = <span class="literal">true</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>7.常量生成器iota<br>iota在const关键字出现时被重置为0<br>const中每新增一行常量声明，iota会加一。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    a = <span class="literal">iota</span></span><br><span class="line">    b = <span class="literal">iota</span>    </span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>a为0，b为1。</p>
 
       
     </div>
@@ -395,8 +387,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/19/Go-变量声明及赋值/" rel="next" title="Go 变量声明及赋值">
-                <i class="fa fa-chevron-left"></i> Go 变量声明及赋值
+              <a href="/2018/04/24/Go入门-if、for、switch/" rel="next" title="Go的if、for、switch">
+                <i class="fa fa-chevron-left"></i> Go的if、for、switch
               </a>
             
           </div>
@@ -405,8 +397,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/24/Go的if、for、switch/" rel="prev" title="Go的if、for、switch">
-                Go的if、for、switch <i class="fa fa-chevron-right"></i>
+              <a href="/2018/05/09/Go入门-复合数据类型/" rel="prev" title="Go入门-复杂数据类型">
+                Go入门-复杂数据类型 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -475,7 +467,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

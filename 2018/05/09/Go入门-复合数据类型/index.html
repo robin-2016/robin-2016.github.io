@@ -83,11 +83,11 @@
 <meta name="keywords" content="Go">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go入门-复杂数据类型">
-<meta property="og:url" content="http://yoursite.com/2018/05/09/Go入门-复杂数据类型/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/05/09/Go入门-复合数据类型/index.html">
 <meta property="og:site_name" content="Summer">
 <meta property="og:description" content="复杂数据类型：数组，切片（slice），map，结构体1.数组数组是具有固定长度且拥有零个或多个相同数据类型元素的序列Go语言中的数组和python中的数组最大的不同，这里的数组是固定长度的，定义后不能再插入和修改数据，使用的次数较少，较多是使用是切片（slice）例子：123456var a [3]int              //定义一个整型数组b := [3]int&amp;#123;1, 2,">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-09T14:02:07.016Z">
+<meta property="og:updated_time" content="2018-05-12T11:12:31.100Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Go入门-复杂数据类型">
 <meta name="twitter:description" content="复杂数据类型：数组，切片（slice），map，结构体1.数组数组是具有固定长度且拥有零个或多个相同数据类型元素的序列Go语言中的数组和python中的数组最大的不同，这里的数组是固定长度的，定义后不能再插入和修改数据，使用的次数较少，较多是使用是切片（slice）例子：123456var a [3]int              //定义一个整型数组b := [3]int&amp;#123;1, 2,">
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/05/09/Go入门-复杂数据类型/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/05/09/Go入门-复合数据类型/"/>
 
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/09/Go入门-复杂数据类型/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/09/Go入门-复合数据类型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Robin">
@@ -321,7 +321,7 @@
 
       
         <p>复杂数据类型：数组，切片（slice），map，结构体<br>1.数组<br>数组是具有固定长度且拥有零个或多个相同数据类型元素的序列<br>Go语言中的数组和python中的数组最大的不同，这里的数组是固定长度的，定义后不能再插入和修改数据，使用的次数较少，较多是使用是切片（slice）<br>例子：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a [<span class="number">3</span>]<span class="keyword">int</span>              <span class="comment">//定义一个整型数组</span></span><br><span class="line">b := [<span class="number">3</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125; <span class="comment">//定义一个长度为3的整型数组，并赋值</span></span><br><span class="line">c := b[<span class="number">0</span>]              <span class="comment">//取值</span></span><br><span class="line">fmt.Println(a)</span><br><span class="line">fmt.Println(b)</span><br><span class="line">fmt.Println(c)</span><br></pre></td></tr></table></figure></p>
-<p>输出：<br>[0 0 0]<br>[1 2 3]<br>1<br>注意数组的长度是数组类型的一部分，所以[3]int和[4]int是两种不同的数组类型。整型未赋值的为零，字符串未赋值的为空。</p>
+<p>输出：<br>[0 0 0]<br>[1 2 3]<br>1<br>注意：数组的长度是数组类型的一部分，所以[3]int和[4]int是两种不同的数组类型。整型未赋值的为零，字符串未赋值的为空。</p>
 <p>2.切片（slice）<br>切片的底层也是数组，但可以变长。定义时，程序会去申请一个大于这个切片的数组来存储切片，如果切片新增数据，先去检测切片是否有空间去存储，如果没有，程序再去申请一个更长的数组来存储这个切片，每次申请的数组的长度Go有一个较为复杂的算法来实现高效。<br>例子：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a := []<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>&#125; <span class="comment">//定义一个切片</span></span><br><span class="line">b := a[<span class="number">1</span>:]                      <span class="comment">//取a中的第二个值到最后</span></span><br><span class="line">c := b[<span class="number">2</span>:<span class="number">3</span>]                   <span class="comment">//取第三个值，但不包括第四个值</span></span><br><span class="line">e := <span class="built_in">make</span>([]<span class="keyword">int</span>, <span class="number">5</span>)     <span class="comment">//使用make函数定义一个长度为5的切片</span></span><br><span class="line">a = <span class="built_in">append</span>(a, <span class="number">7</span>)      <span class="comment">//使用内置append函数插入新的值</span></span><br><span class="line">a = <span class="built_in">append</span>(a[:<span class="number">2</span>], a[<span class="number">3</span>:]...) <span class="comment">//删除元素（第三个元素）</span></span><br><span class="line">fmt.Println(a)</span><br><span class="line">fmt.Println(b)</span><br><span class="line">fmt.Println(c)</span><br><span class="line">fmt.Println(e)</span><br></pre></td></tr></table></figure></p>
 <p>输出：<br>[1 2 4 5 6 7]<br>[2 3 4 5 6]<br>[4]<br>[0 0 0 0 0]</p>
 <p>3.map<br>map是拥有键值对的无序集合。所有的键的类型必须相同，所有的值的类型必须相同，但键的类型和值的类型不一定相同<br>例子：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">a := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span>)     <span class="comment">//定义一个map</span></span><br><span class="line">a[<span class="string">"test"</span>] = <span class="number">1</span>                         <span class="comment">//赋值</span></span><br><span class="line"><span class="comment">//定义一个map，并赋值</span></span><br><span class="line">b := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;</span><br><span class="line"><span class="string">"1"</span>: <span class="string">"a"</span>,</span><br><span class="line"><span class="string">"2"</span>: <span class="string">"b"</span>,</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(a)</span><br><span class="line">fmt.Println(b)</span><br><span class="line"><span class="comment">//遍历map</span></span><br><span class="line"><span class="keyword">for</span> k, v := <span class="keyword">range</span> b &#123;</span><br><span class="line">fmt.Printf(<span class="string">"key is %s,value is %s\n"</span>, k, v)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//判断键是否存在，如果存在ok为true，如果不存在ok为false</span></span><br><span class="line"><span class="keyword">if</span> _, ok := b[<span class="string">"3"</span>]; !ok &#123;</span><br><span class="line">fmt.Println(<span class="string">"b中不存在此键！"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -388,7 +388,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/27/Go的基本数据类型/" rel="next" title="Go的基本数据类型">
+              <a href="/2018/04/27/Go入门-基本数据类型/" rel="next" title="Go的基本数据类型">
                 <i class="fa fa-chevron-left"></i> Go的基本数据类型
               </a>
             
@@ -397,6 +397,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/29/Go入门-函数/" rel="prev" title="Go入门-函数">
+                Go入门-函数 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -464,7 +468,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
