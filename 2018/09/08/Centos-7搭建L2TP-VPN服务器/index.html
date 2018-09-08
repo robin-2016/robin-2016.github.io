@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Summer">
 <meta property="og:description" content="说明：Centos 7 作为L2TP服务器，h3c ER5200G2作为客户端本文参照https://blog.csdn.net/kitvv/article/details/50696585进行搭建配置 1.先看看你的主机是否支持pptp，返回结果为yes就表示通过。 1modprobe ppp-compress-18 &amp;amp;&amp;amp; echo yes 2 .是否开启了TUN，有的虚拟机主机">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-08T12:03:14.468Z">
+<meta property="og:updated_time" content="2018-09-08T12:12:23.676Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Centos 7搭建L2TP VPN服务器">
 <meta name="twitter:description" content="说明：Centos 7 作为L2TP服务器，h3c ER5200G2作为客户端本文参照https://blog.csdn.net/kitvv/article/details/50696585进行搭建配置 1.先看看你的主机是否支持pptp，返回结果为yes就表示通过。 1modprobe ppp-compress-18 &amp;amp;&amp;amp; echo yes 2 .是否开启了TUN，有的虚拟机主机">
@@ -329,7 +329,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install update</span><br><span class="line">yum update -y</span><br></pre></td></tr></table></figure>
 <p>4安装EPEL源（CentOS7官方源中已经去掉了xl2tpd）</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y epel-release</span><br></pre></td></tr></table></figure>
-<p>5安装xl2tpd和libreswan(openswan已经停止维护)</p>
+<p>5.安装xl2tpd和libreswan(openswan已经停止维护)</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y xl2tpd libreswan lsof</span><br></pre></td></tr></table></figure>
 <ol start="6">
 <li>vi /etc/xl2tpd/xl2tpd.conf</li>
@@ -340,13 +340,20 @@
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ipcp-accept-local</span><br><span class="line">ipcp-accept-remote</span><br><span class="line">ms-dns  8.8.8.8</span><br><span class="line">noccp</span><br><span class="line">auth</span><br><span class="line">idle 1800</span><br><span class="line">mtu 1410</span><br><span class="line">mru 1410</span><br><span class="line">nodefaultroute</span><br><span class="line">debug</span><br><span class="line">proxyarp</span><br><span class="line">connect-delay 5000</span><br></pre></td></tr></table></figure>
 <ol start="8">
-<li><p>vi /etc/ipsec.conf<br>config setup<br> virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.1.0.0/12,%v4:25.0.0.0/8,%v4:100.64.0.0/10,%v6:fd00::/8,%v6:fe80::/10<br>include /etc/ipsec.d/*.conf<br>主要添加对应自己地址池的配置%v4:172.1.0.0/12</p>
-</li>
-<li><p>vi /etc/ipsec.d/l2tp-ipsec.conf<br>conn L2TP-PSK-NAT<br>rightsubnet=0.0.0.0/0<br>dpddelay=10<br>dpdtimeout=20<br>dpdaction=clear<br>forceencaps=yes<br>also=L2TP-PSK-noNAT<br>conn L2TP-PSK-noNAT<br>authby=secret<br>pfs=no<br>auto=add<br>keyingtries=3<br>rekey=no<br>ikelifetime=8h<br>keylife=1h<br>type=transport<br>left=221.0.200.104<br>leftprotoport=17/1701<br>right=%any<br>rightprotoport=17/%any<br>left对应系统外网地址</p>
-</li>
-<li><p>设置用户名和密码<br>vi /etc/ppp/chap-secrets</p>
-<h1 id="client-server-secret-IP-addresses"><a href="#client-server-secret-IP-addresses" class="headerlink" title="client server secret IP addresses"></a>client server secret IP addresses</h1><p>username <em> passwd </em></p>
-</li>
+<li>vi /etc/ipsec.conf</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">config setup   </span><br><span class="line">    virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.1.0.0/12,%v4:25.0.0.0/8,%v4:100.64.0.0/10,%v6:fd00::/8,%v6:fe80::/10</span><br><span class="line">include /etc/ipsec.d/*.conf</span><br></pre></td></tr></table></figure>
+<p>主要添加对应自己地址池的配置%v4:172.1.0.0/12</p>
+<ol start="9">
+<li>vi /etc/ipsec.d/l2tp-ipsec.conf</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">conn L2TP-PSK-NAT</span><br><span class="line">    rightsubnet=0.0.0.0/0</span><br><span class="line">    dpddelay=10</span><br><span class="line">    dpdtimeout=20</span><br><span class="line">    dpdaction=clear</span><br><span class="line">    forceencaps=yes</span><br><span class="line">    also=L2TP-PSK-noNAT</span><br><span class="line">conn L2TP-PSK-noNAT</span><br><span class="line">    authby=secret</span><br><span class="line">    pfs=no</span><br><span class="line">    auto=add</span><br><span class="line">    keyingtries=3</span><br><span class="line">    rekey=no</span><br><span class="line">    ikelifetime=8h</span><br><span class="line">    keylife=1h</span><br><span class="line">    type=transport</span><br><span class="line">    left=192.168.1.1</span><br><span class="line">    leftprotoport=17/1701</span><br><span class="line">    right=%any</span><br><span class="line">    rightprotoport=17/%any</span><br></pre></td></tr></table></figure>
+<p>left对应系统外网地址</p>
+<ol start="10">
+<li>设置用户名和密码</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ppp/chap-secrets</span><br><span class="line"># client server secret IP addresses</span><br><span class="line">username * passwd *</span><br></pre></td></tr></table></figure>
+<ol start="11">
 <li><p>vi /etc/ipsec.d/default.secrets<br>: PSK “123456”</p>
 </li>
 <li><p>设置防火墙</p>
@@ -361,19 +368,18 @@
 <ol start="14">
 <li>ipsec启动&amp;检查</li>
 </ol>
-<p>systemctl enable ipsec<br>systemctl restart ipsec</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable ipsec</span><br><span class="line">systemctl restart ipsec</span><br></pre></td></tr></table></figure>
 <p>检查：ipsec verify  全部通过。</p>
 <ol start="15">
-<li>设置隧道认证<br>vi /etc/xl2tpd/l2tp-secrets<br>格式为us them secret    ,这个them就是路由器中的本段名称</li>
+<li><p>设置隧道认证<br>vi /etc/xl2tpd/l2tp-secrets</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#格式为us them secret    ,这个them就是路由器中的本段名称</span><br><span class="line">* them secret</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动xl2tp</p>
+</li>
 </ol>
-<ul>
-<li>user secret</li>
-</ul>
-<ol start="16">
-<li><p>启动xl2tp<br>systemctl enable xl2tpd<br>systemctl restart xl2tpd</p>
-</li>
-<li><p>路由器连接设置<br>在客户端还要添加一条策略路由：目标为192.168.2.1 的从l2tp端口出。<br>路由器在L2TP客户端中填写用户信息和隧道认证，连接就可以了。</p>
-</li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable xl2tpd</span><br><span class="line">systemctl restart xl2tpd</span><br></pre></td></tr></table></figure>
+<ol start="17">
+<li>路由器连接设置<br>在客户端还要添加一条策略路由：目标为192.168.2.1 的从l2tp端口出。<br>路由器在L2TP客户端中填写用户信息和隧道认证，连接就可以了。</li>
 </ol>
 
       
@@ -444,6 +450,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/09/08/MySQL配置文件/" rel="prev" title="MySQL配置文件">
+                MySQL配置文件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -494,17 +504,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -519,7 +520,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -532,7 +533,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -577,22 +578,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#client-server-secret-IP-addresses"><span class="nav-number">1.</span> <span class="nav-text">client server secret IP addresses</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
