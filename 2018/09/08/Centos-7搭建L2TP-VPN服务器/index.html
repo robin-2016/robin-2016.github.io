@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="说明：Centos 7 作为L2TP服务器，h3c ER5200G2作为客户端本文参照https://blog.csdn.net/kitvv/article/details/50696585进行搭建配置 1.先看看你的主机是否支持pptp，返回结果为yes就表示通过。 1modprobe ppp-compress-18 &amp;amp;&amp;amp; echo yes 2 .是否开启了TUN，有的虚拟机主机">
+<meta name="description" content="说明：Centos 7 作为L2TP服务器，h3c ER5200G2作为客户端本文参照这篇文件进行搭建配置 1.先看看你的主机是否支持pptp，返回结果为yes就表示通过。 1modprobe ppp-compress-18 &amp;amp;&amp;amp; echo yes 2 .是否开启了TUN，有的虚拟机主机需要开启，返回结果为cat: /dev/net/tun: File descriptor in">
 <meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Centos 7搭建L2TP VPN服务器">
 <meta property="og:url" content="http://yoursite.com/2018/09/08/Centos-7搭建L2TP-VPN服务器/index.html">
 <meta property="og:site_name" content="Summer">
-<meta property="og:description" content="说明：Centos 7 作为L2TP服务器，h3c ER5200G2作为客户端本文参照https://blog.csdn.net/kitvv/article/details/50696585进行搭建配置 1.先看看你的主机是否支持pptp，返回结果为yes就表示通过。 1modprobe ppp-compress-18 &amp;amp;&amp;amp; echo yes 2 .是否开启了TUN，有的虚拟机主机">
+<meta property="og:description" content="说明：Centos 7 作为L2TP服务器，h3c ER5200G2作为客户端本文参照这篇文件进行搭建配置 1.先看看你的主机是否支持pptp，返回结果为yes就表示通过。 1modprobe ppp-compress-18 &amp;amp;&amp;amp; echo yes 2 .是否开启了TUN，有的虚拟机主机需要开启，返回结果为cat: /dev/net/tun: File descriptor in">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-08T12:12:23.676Z">
+<meta property="og:updated_time" content="2018-09-08T12:35:03.314Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Centos 7搭建L2TP VPN服务器">
-<meta name="twitter:description" content="说明：Centos 7 作为L2TP服务器，h3c ER5200G2作为客户端本文参照https://blog.csdn.net/kitvv/article/details/50696585进行搭建配置 1.先看看你的主机是否支持pptp，返回结果为yes就表示通过。 1modprobe ppp-compress-18 &amp;amp;&amp;amp; echo yes 2 .是否开启了TUN，有的虚拟机主机">
+<meta name="twitter:description" content="说明：Centos 7 作为L2TP服务器，h3c ER5200G2作为客户端本文参照这篇文件进行搭建配置 1.先看看你的主机是否支持pptp，返回结果为yes就表示通过。 1modprobe ppp-compress-18 &amp;amp;&amp;amp; echo yes 2 .是否开启了TUN，有的虚拟机主机需要开启，返回结果为cat: /dev/net/tun: File descriptor in">
 
 
 
@@ -320,7 +320,7 @@
       
 
       
-        <p>说明：Centos 7 作为L2TP服务器，h3c ER5200G2作为客户端<br>本文参照<a href="https://blog.csdn.net/kitvv/article/details/50696585进行搭建配置" target="_blank" rel="noopener">https://blog.csdn.net/kitvv/article/details/50696585进行搭建配置</a></p>
+        <p>说明：Centos 7 作为L2TP服务器，h3c ER5200G2作为客户端<br>本文参照<a href="https://blog.csdn.net/kitvv/article/details/50696585" target="_blank" rel="noopener">这篇文件</a>进行搭建配置</p>
 <p>1.先看看你的主机是否支持pptp，返回结果为yes就表示通过。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">modprobe ppp-compress-18 &amp;&amp; echo yes</span><br></pre></td></tr></table></figure>
 <p>2 .是否开启了TUN，有的虚拟机主机需要开启，返回结果为cat: /dev/net/tun: File descriptor in bad state。就表示通过。</p>

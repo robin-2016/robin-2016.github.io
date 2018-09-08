@@ -323,8 +323,8 @@
       
         
           
-          ##《高性能MySQL》第八章 优化服务器设置
-建议：如果现在已经有mysql正在运行，不建议把配置文件大改一通，除非你知道你在干什么。安装新实例时可以按照上面的从新生成一份新配置文件。本文是我读完《高性能MySQL》第三版第八章时整理的笔记，有些地方可能理解的与书中有差别，请读一遍还是有收获的。觉
+          《高性能MySQL》第八章 优化服务器设置
+建议：如果现在已经有mysql正在运行，不建议把配置文件大改一通，除非你知道你在干什么。安装新实例时可以按照上面的从新生成一份新配置文件。本文是我读完《高性能MySQL》第三版第八章时整理的笔记，有些地方可能理解的与书中有差别，请读一遍还是有收获的。觉得可
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -450,9 +450,10 @@
       
         
           
-          说明：Centos 7 作为L2TP服务器，h3c ER5200G2作为客户端本文参照https://blog.csdn.net/kitvv/article/details/50696585进行搭建配置
+          说明：Centos 7 作为L2TP服务器，h3c ER5200G2作为客户端本文参照这篇文件进行搭建配置
 1.先看看你的主机是否支持pptp，返回结果为yes就表示通过。
-1modprobe ppp-c
+1modprobe ppp-compress-18 &amp;&amp; echo yes
+2 .是否开启了TUN，有的虚拟机
           ...
           <!--noindex-->
           <div class="post-button text-center">
