@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Ceph," />
+  <meta name="keywords" content="Linux,Ceph," />
 
 
 
@@ -80,14 +80,14 @@
 
 
 <meta name="description" content="下面所有操作都是基于ceph的luminous版本进行的官网安装非常详细，之前我安装这个版本的时候官网文档还未更新，现在官网已更新。下面记录了我安装的一些步骤供大家参考。最少有一个admin节点，即操作部署节点，两个node存储节点 一、所有节点都操作1.yum源(注意文件名必须为ceph.repo)1234567891011121314151617181920212223242526cat &amp;g">
-<meta name="keywords" content="Ceph">
+<meta name="keywords" content="Linux,Ceph">
 <meta property="og:type" content="article">
 <meta property="og:title" content="搭建ceph分布式存储">
 <meta property="og:url" content="http://yoursite.com/2019/03/30/搭建ceph分布式存储/index.html">
 <meta property="og:site_name" content="Summer">
 <meta property="og:description" content="下面所有操作都是基于ceph的luminous版本进行的官网安装非常详细，之前我安装这个版本的时候官网文档还未更新，现在官网已更新。下面记录了我安装的一些步骤供大家参考。最少有一个admin节点，即操作部署节点，两个node存储节点 一、所有节点都操作1.yum源(注意文件名必须为ceph.repo)1234567891011121314151617181920212223242526cat &amp;g">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-30T15:25:16.487Z">
+<meta property="og:updated_time" content="2019-03-30T15:28:47.126Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建ceph分布式存储">
 <meta name="twitter:description" content="下面所有操作都是基于ceph的luminous版本进行的官网安装非常详细，之前我安装这个版本的时候官网文档还未更新，现在官网已更新。下面记录了我安装的一些步骤供大家参考。最少有一个admin节点，即操作部署节点，两个node存储节点 一、所有节点都操作1.yum源(注意文件名必须为ceph.repo)1234567891011121314151617181920212223242526cat &amp;g">
@@ -340,8 +340,8 @@
 <p>查看存储池<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph osd lspools</span><br></pre></td></tr></table></figure></p>
 <p>9.创建存储池<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph osd pool create test 128</span><br></pre></td></tr></table></figure></p>
 <p>test为存储池名称，128为pg_unm的值，归置组计算方式如下:<br>少于 5 个 OSD 时可把 pg_num 设置为 128<br>OSD 数量在 5 到 10 个时，可把 pg_num 设置为 512<br>OSD 数量在 10 到 50 个时，可把 pg_num 设置为 4096<br>OSD 数量大于 50 时，你得理解权衡方法、以及如何自己计算 pg_num 取值<br>自己计算 pg_num 取值时可借助 pgcalc 工具</p>
-<p>优化：<br>硬盘和文件系统<br>建议系统和osd分别使用不同的硬盘，或者是不同的分区<br>开启认证（ceph-deploy部署方式默认是开启认证的）<br>使用cephx协议进行认证，防止中间人攻击<br>心跳<br>各 OSD 每 6 秒会与其他 OSD 进行心跳检查，用 [osd] 下的 osd heartbeat interval 可更改此间隔、或运行时更改。如果一个 OSD 20 秒都没有心跳，集群就认为它 down 了，用 [osd] 下的 osd heartbeat grace 可更改宽限期、或者运行时更改。</p>
-<p>本文只是入门，ceph的部署在生产环境使用时，还需要考虑mgr,mon,osd,mds等服务的高可用，网络方法可以分成两个网络，即存储网络和管理网络。</p>
+<p>优化：<br>硬盘和文件系统：<br>建议系统和osd分别使用不同的硬盘，或者是不同的分区<br>开启认证：（ceph-deploy部署方式默认是开启认证的）<br>使用cephx协议进行认证，防止中间人攻击<br>心跳：<br>各 OSD 每 6 秒会与其他 OSD 进行心跳检查，如果一个 OSD 20 秒都没有心跳，集群就认为它 down 了，用 [osd] 下的 osd heartbeat grace 可更改宽限期、或者运行时更改。</p>
+<p>本文只是入门，ceph的部署在生产环境使用时，还需要考虑mgr,mon,osd,mds等服务的高可用，网络方面可以分成两个网络，即存储网络和管理网络。</p>
 
       
     </div>
@@ -387,6 +387,8 @@
     <footer class="post-footer">
       
         <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
           
             <a href="/tags/Ceph/" rel="tag"># Ceph</a>
           
