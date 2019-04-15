@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Go," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -79,18 +79,16 @@
 
 
 
-<meta name="description" content="1.整型分为有符号整型和无符号整型：int8 int16 int 32 int64 uint8 uint16 uint32 uint64 int uint 其中，int和uint在不同平台不同编译器可能大小不同rune类型是int32类型的同义词，常用于指明一个值是Unicode码点byte类型是uint8类型的同义词，强调一个值是原始数据，而非量值 2.浮点数float32和float64两种，">
-<meta name="keywords" content="Go">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Go的基本数据类型">
-<meta property="og:url" content="http://yoursite.com/2018/04/27/Go入门-基本数据类型/index.html">
+<meta name="description" content="Linux,Python,Go">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Summer">
+<meta property="og:url" content="http://yoursite.com/tags/Docker/index.html">
 <meta property="og:site_name" content="Summer">
-<meta property="og:description" content="1.整型分为有符号整型和无符号整型：int8 int16 int 32 int64 uint8 uint16 uint32 uint64 int uint 其中，int和uint在不同平台不同编译器可能大小不同rune类型是int32类型的同义词，常用于指明一个值是Unicode码点byte类型是uint8类型的同义词，强调一个值是原始数据，而非量值 2.浮点数float32和float64两种，">
+<meta property="og:description" content="Linux,Python,Go">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-27T14:30:24.918Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Go的基本数据类型">
-<meta name="twitter:description" content="1.整型分为有符号整型和无符号整型：int8 int16 int 32 int64 uint8 uint16 uint32 uint64 int uint 其中，int和uint在不同平台不同编译器可能大小不同rune类型是int32类型的同义词，常用于指明一个值是Unicode码点byte类型是uint8类型的同义词，强调一个值是原始数据，而非量值 2.浮点数float32和float64两种，">
+<meta name="twitter:title" content="Summer">
+<meta name="twitter:description" content="Linux,Python,Go">
 
 
 
@@ -120,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/27/Go入门-基本数据类型/"/>
+  <link rel="canonical" href="http://yoursite.com/tags/Docker/"/>
 
 
 
 
 
-  <title>Go的基本数据类型 | Summer</title>
+  <title>标签: Docker | Summer</title>
   
 
 
@@ -145,7 +143,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -239,187 +237,54 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block tag">
 
-  
+    <div id="posts" class="posts-collapse">
+      <div class="collection-title">
+        <h1>Docker<small>标签</small>
+        </h1>
+      </div>
 
-  
-  
-  
+      
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/27/Go入门-基本数据类型/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Robin">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Summer">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
-        
-          <h1 class="post-title" itemprop="name headline">Go的基本数据类型</h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
+            <a class="post-title-link" href="/2019/04/15/Harbor安装并配置https之注意事项/" itemprop="url">
               
-                <span class="post-meta-item-text">发表于</span>
+                <span itemprop="name">Harbor安装并配置https之注意事项</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-27T22:18:11+08:00">
-                2018-04-27
-              </time>
-            
+            </a>
+        
+      </h2>
 
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>1.整型<br>分为有符号整型和无符号整型：int8 int16 int 32 int64 uint8 uint16 uint32 uint64 int uint 其中，int和uint在不同平台不同编译器可能大小不同<br>rune类型是int32类型的同义词，常用于指明一个值是Unicode码点<br>byte类型是uint8类型的同义词，强调一个值是原始数据，而非量值</p>
-<p>2.浮点数<br>float32和float64两种，优先使用float64<br>格式化输出时可以选择%g，自动保存精度，%e指数，%f指定精度</p>
-<p>3.复数<br>复数由实部和虚部组成<br>如果在浮点数或十进制整数后面紧跟着i就表示是实部为0的复数<br>判定复数相等时是实部和虚部都相等才相等</p>
-<p>4.布尔值<br>true false</p>
-<p>5.字符串<br>使用UTF-8编码<br>字符串切片s[i:j]，从0开始<br>原生字符串用<code></code>表示，即使用反引号<br>字符串赋值之后不可对字符串进行修改，例如：s[0]=”i”，是错误的</p>
-<p>6.常量<br>使用const定义<br>一般是布尔型 字符串 数字<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    a = <span class="number">1</span></span><br><span class="line">    b = <span class="string">"2"</span></span><br><span class="line">    c = <span class="literal">true</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
-<p>7.常量生成器iota<br>iota在const关键字出现时被重置为0<br>const中每新增一行常量声明，iota会加一。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    a = <span class="literal">iota</span></span><br><span class="line">    b = <span class="literal">iota</span>    </span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
-<p>a为0，b为1。</p>
-
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-      <div>
-        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
-  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
-    <span>打赏</span>
-  </button>
-  <div id="QR" style="display: none;">
-
-    
-      <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/images/wechat.jpg" alt="Robin 微信支付"/>
-        <p>微信支付</p>
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2019-04-15T20:54:22+08:00"
+              content="2019-04-15" >
+          04-15
+        </time>
       </div>
-    
 
-    
-      <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/zhifubao.jpg" alt="Robin 支付宝"/>
-        <p>支付宝</p>
-      </div>
-    
-
-    
-
-  </div>
-</div>
-
-      </div>
-    
-
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/Go/" rel="tag"># Go</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/04/24/Go入门-if、for、switch/" rel="next" title="Go的if、for、switch">
-                <i class="fa fa-chevron-left"></i> Go的if、for、switch
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/09/Go入门-复合数据类型/" rel="prev" title="Go入门-复杂数据类型">
-                Go入门-复杂数据类型 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
-
-    <div class="post-spread">
       
     </div>
+
   </div>
+  
+  
+  
+
+  
 
 
           </div>
@@ -427,10 +292,6 @@
 
 
           
-
-  
-
-
 
         </div>
         
@@ -652,10 +513,6 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 

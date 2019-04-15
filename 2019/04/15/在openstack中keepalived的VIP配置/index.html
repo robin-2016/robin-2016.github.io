@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Go," />
+  <meta name="keywords" content="Openstack,Keepalived," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="1.整型分为有符号整型和无符号整型：int8 int16 int 32 int64 uint8 uint16 uint32 uint64 int uint 其中，int和uint在不同平台不同编译器可能大小不同rune类型是int32类型的同义词，常用于指明一个值是Unicode码点byte类型是uint8类型的同义词，强调一个值是原始数据，而非量值 2.浮点数float32和float64两种，">
-<meta name="keywords" content="Go">
+<meta name="description" content="问题描述：在openstack环境下安装配置keepalived后，VIP只能在所在的主机节点ping通，其他节点无法ping通解决方式：需要配置allowed-address-pairs红帽官网对allowed-address-pairs的解释：allowed-address-pairs 允许您指定 mac_address/ip_address（CIDR）对，使它们可以在不考虑子网的情况下通过一">
+<meta name="keywords" content="Openstack,Keepalived">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Go的基本数据类型">
-<meta property="og:url" content="http://yoursite.com/2018/04/27/Go入门-基本数据类型/index.html">
+<meta property="og:title" content="在openstack中keepalived的VIP配置">
+<meta property="og:url" content="http://yoursite.com/2019/04/15/在openstack中keepalived的VIP配置/index.html">
 <meta property="og:site_name" content="Summer">
-<meta property="og:description" content="1.整型分为有符号整型和无符号整型：int8 int16 int 32 int64 uint8 uint16 uint32 uint64 int uint 其中，int和uint在不同平台不同编译器可能大小不同rune类型是int32类型的同义词，常用于指明一个值是Unicode码点byte类型是uint8类型的同义词，强调一个值是原始数据，而非量值 2.浮点数float32和float64两种，">
+<meta property="og:description" content="问题描述：在openstack环境下安装配置keepalived后，VIP只能在所在的主机节点ping通，其他节点无法ping通解决方式：需要配置allowed-address-pairs红帽官网对allowed-address-pairs的解释：allowed-address-pairs 允许您指定 mac_address/ip_address（CIDR）对，使它们可以在不考虑子网的情况下通过一">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-27T14:30:24.918Z">
+<meta property="og:updated_time" content="2019-04-15T13:54:57.739Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Go的基本数据类型">
-<meta name="twitter:description" content="1.整型分为有符号整型和无符号整型：int8 int16 int 32 int64 uint8 uint16 uint32 uint64 int uint 其中，int和uint在不同平台不同编译器可能大小不同rune类型是int32类型的同义词，常用于指明一个值是Unicode码点byte类型是uint8类型的同义词，强调一个值是原始数据，而非量值 2.浮点数float32和float64两种，">
+<meta name="twitter:title" content="在openstack中keepalived的VIP配置">
+<meta name="twitter:description" content="问题描述：在openstack环境下安装配置keepalived后，VIP只能在所在的主机节点ping通，其他节点无法ping通解决方式：需要配置allowed-address-pairs红帽官网对allowed-address-pairs的解释：allowed-address-pairs 允许您指定 mac_address/ip_address（CIDR）对，使它们可以在不考虑子网的情况下通过一">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/27/Go入门-基本数据类型/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/04/15/在openstack中keepalived的VIP配置/"/>
 
 
 
 
 
-  <title>Go的基本数据类型 | Summer</title>
+  <title>在openstack中keepalived的VIP配置 | Summer</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/27/Go入门-基本数据类型/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/15/在openstack中keepalived的VIP配置/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Robin">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Go的基本数据类型</h1>
+          <h1 class="post-title" itemprop="name headline">在openstack中keepalived的VIP配置</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-27T22:18:11+08:00">
-                2018-04-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-15T21:32:49+08:00">
+                2019-04-15
               </time>
             
 
@@ -320,14 +320,10 @@
       
 
       
-        <p>1.整型<br>分为有符号整型和无符号整型：int8 int16 int 32 int64 uint8 uint16 uint32 uint64 int uint 其中，int和uint在不同平台不同编译器可能大小不同<br>rune类型是int32类型的同义词，常用于指明一个值是Unicode码点<br>byte类型是uint8类型的同义词，强调一个值是原始数据，而非量值</p>
-<p>2.浮点数<br>float32和float64两种，优先使用float64<br>格式化输出时可以选择%g，自动保存精度，%e指数，%f指定精度</p>
-<p>3.复数<br>复数由实部和虚部组成<br>如果在浮点数或十进制整数后面紧跟着i就表示是实部为0的复数<br>判定复数相等时是实部和虚部都相等才相等</p>
-<p>4.布尔值<br>true false</p>
-<p>5.字符串<br>使用UTF-8编码<br>字符串切片s[i:j]，从0开始<br>原生字符串用<code></code>表示，即使用反引号<br>字符串赋值之后不可对字符串进行修改，例如：s[0]=”i”，是错误的</p>
-<p>6.常量<br>使用const定义<br>一般是布尔型 字符串 数字<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    a = <span class="number">1</span></span><br><span class="line">    b = <span class="string">"2"</span></span><br><span class="line">    c = <span class="literal">true</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
-<p>7.常量生成器iota<br>iota在const关键字出现时被重置为0<br>const中每新增一行常量声明，iota会加一。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    a = <span class="literal">iota</span></span><br><span class="line">    b = <span class="literal">iota</span>    </span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
-<p>a为0，b为1。</p>
+        <p>问题描述：<br>在openstack环境下安装配置keepalived后，VIP只能在所在的主机节点ping通，其他节点无法ping通<br>解决方式：<br>需要配置allowed-address-pairs<br>红帽官网对allowed-address-pairs的解释：allowed-address-pairs 允许您指定 mac_address/ip_address（CIDR）对，使它们可以在不考虑子网的情况下通过一个端口。这会启用对一些协议的使用，如 VRRP，它会在两个实例间浮动一个 IP 地址，从而实现快速故障切换功能。</p>
+<p>配置步骤：（在openstack的neutron的控制节点操作）<br>查看需要使用VIP网络id<br>neutron net-list<br>创建带有allowed-address-pairs功能的IP<br>neutron port-create –fixed-ip –allowed-address-pairs subnet_id=子网id,ip_address=VIP 网络id<br>在需要启动keepalived所有实例的网络接口上启用allowed-address-pairs功能<br>neutron port-update 实例网卡id –allowed-address-pair ip_address=VIP<br>查找实例的网络接口的信息<br>neutron port-list |grep 实例IP</p>
+<p>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@openstack ~]# neutron net-list</span><br><span class="line">neutron CLI is deprecated and will be removed in the future. Use openstack CLI instead.</span><br><span class="line">+--------------------------------------+--------+----------------------------------+-----------------------------------------------------+</span><br><span class="line">| id | name | tenant_id | subnets |</span><br><span class="line">+--------------------------------------+--------+----------------------------------+-----------------------------------------------------+</span><br><span class="line">| 12e41d31-5be5-4cf9-a45c-4ee374388759 | EX-NET | a2ff5d90248e46328448f02252f190ec | 6489102f-60c1-4938-b5f5-7a97689429f5 192.168.1.0/24 |</span><br><span class="line">| a8751de8-016d-4038-afc1-bcff552044a2 | YTJY | a2ff5d90248e46328448f02252f190ec | 327a7ca8-9fb5-4ab3-850e-9d835e7575ee 192.168.2.0/24 |</span><br><span class="line">+--------------------------------------+--------+----------------------------------+-----------------------------------------------------+</span><br><span class="line">[root@openstack ~]# neutron port-create --fixed-ip subnet_id=327a7ca8-9fb5-4ab3-850e-9d835e7575ee,ip_address=192.168.2.6 a8751de8-016d-4038-afc1-bcff552044a</span><br><span class="line">[root@openstack ~]# neutron port-list |grep 192.168.2.4</span><br><span class="line">neutron CLI is deprecated and will be removed in the future. Use openstack CLI instead.</span><br><span class="line">| 69ebfd68-a789-4330-88d5-8f5ba4370caa |      | a2ff5d90248e46328448f02252f190ec | fa:16:3e:55:90:c7 | &#123;&quot;subnet_id&quot;: &quot;327a7ca8-9fb5-4ab3-850e-9d835e7575ee&quot;, &quot;ip_address&quot;: 192.168.2.4&quot;&#125;  |</span><br><span class="line">[root@openstack ~]# neutron port-update 69ebfd68-a789-4330-88d5-8f5ba4370caa --allowed-address-pair ip_address=192.168.2.6</span><br></pre></td></tr></table></figure></p>
+<p>所有实例都开启allowed-address-pairs就可以正常使用keepalived了</p>
 
       
     </div>
@@ -374,7 +370,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Go/" rel="tag"># Go</a>
+            <a href="/tags/Openstack/" rel="tag"># Openstack</a>
+          
+            <a href="/tags/Keepalived/" rel="tag"># Keepalived</a>
           
         </div>
       
@@ -387,8 +385,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/24/Go入门-if、for、switch/" rel="next" title="Go的if、for、switch">
-                <i class="fa fa-chevron-left"></i> Go的if、for、switch
+              <a href="/2019/04/15/Harbor安装并配置https之注意事项/" rel="next" title="Harbor安装并配置https之注意事项">
+                <i class="fa fa-chevron-left"></i> Harbor安装并配置https之注意事项
               </a>
             
           </div>
@@ -396,10 +394,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/09/Go入门-复合数据类型/" rel="prev" title="Go入门-复杂数据类型">
-                Go入门-复杂数据类型 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

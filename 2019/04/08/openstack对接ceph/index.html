@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Summer">
 <meta property="og:description" content="本文章是参考http://docs.ceph.com/docs/master/rbd/rbd-openstack/进行操作的，是官网文档文章，只是没有说明openstack-cinder-volume应该部署的位置，我尝试了几次才成功，希望你看完文章后能减少一点弯路。与文章的差别是我没有使用openstack-cinder-backup。openstack版本为rock版，ceph为luminou">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-08T14:43:55.547Z">
+<meta property="og:updated_time" content="2019-04-15T13:30:42.490Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="openstack对接ceph">
 <meta name="twitter:description" content="本文章是参考http://docs.ceph.com/docs/master/rbd/rbd-openstack/进行操作的，是官网文档文章，只是没有说明openstack-cinder-volume应该部署的位置，我尝试了几次才成功，希望你看完文章后能减少一点弯路。与文章的差别是我没有使用openstack-cinder-backup。openstack版本为rock版，ceph为luminou">
@@ -320,7 +320,7 @@
       
 
       
-        <p>本文章是参考<a href="http://docs.ceph.com/docs/master/rbd/rbd-openstack/进行操作的，是官网文档文章，只是没有说明openstack-cinder-volume应该部署的位置，我尝试了几次才成功，希望你看完文章后能减少一点弯路。" target="_blank" rel="noopener">http://docs.ceph.com/docs/master/rbd/rbd-openstack/进行操作的，是官网文档文章，只是没有说明openstack-cinder-volume应该部署的位置，我尝试了几次才成功，希望你看完文章后能减少一点弯路。</a><br>与文章的差别是我没有使用openstack-cinder-backup。<br>openstack版本为rock版，ceph为luminous版本。前提是已经有openstack和ceph环境。</p>
+        <p>本文章是参考<a href="http://docs.ceph.com/docs/master/rbd/rbd-openstack/" target="_blank" rel="noopener">http://docs.ceph.com/docs/master/rbd/rbd-openstack/</a><br>进行操作的，是官网文档文章，只是没有说明openstack-cinder-volume应该部署的位置，我尝试了几次才成功，希望你看完文章后能减少一点弯路。<br>与文章的差别是我没有使用openstack-cinder-backup。<br>openstack版本为rock版，ceph为luminous版本。前提是已经有openstack和ceph环境。</p>
 <p>一、创建ceph存储池并初始化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ceph osd pool create volumes 128</span><br><span class="line">ceph osd pool create images 128</span><br><span class="line">ceph osd pool create compute 128</span><br><span class="line">#初始化</span><br><span class="line">rbd pool init volumes</span><br><span class="line">rbd pool init images</span><br><span class="line">rbd pool init compute</span><br></pre></td></tr></table></figure></p>
 <p>二、配置ceph客户端<br>注意：openstack-cinder-volume应该部署在ceph的mon所在节点上。不是cinder-api节点，也不是ceph的osd节点。（我就是在这里尝试了多次）<br>复制ceph集群的/etc/ceph/ceph.conf配置文件到glance-api，cinder-volume，nova-compute的/etc/ceph/ceph.conf<br>glance-api节点安装python-rbd<br>yum install python-rbd<br>nova-compute，cinder-backup和上cinder-volume节点上安装ceph-common<br>yum install ceph-common<br>如果ceph启用了认证，还需要创建用户和生成认证文件，并将认证文件复制的openstack的节点<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ceph auth get-or-create client.glance mon &apos;profile rbd&apos; osd &apos;profile rbd pool=images&apos;</span><br><span class="line">ceph auth get-or-create client.cinder mon &apos;profile rbd&apos; osd &apos;profile rbd pool=volumes, profile rbd pool=compute, profile rbd pool=images&apos;</span><br><span class="line">ceph auth get-or-create client.glance | ssh glance sudo tee /etc/ceph/ceph.client.glance.keyring</span><br><span class="line">ssh glance chown glance:glance /etc/ceph/ceph.client.glance.keyring</span><br><span class="line">ceph auth get-or-create client.cinder | ssh cinder sudo tee /etc/ceph/ceph.client.cinder.keyring</span><br><span class="line">ssh cinder chown cinder:cinder /etc/ceph/ceph.client.cinder.keyring</span><br><span class="line">ceph auth get-or-create client.cinder | ssh nova-compute sudo tee /etc/ceph/ceph.client.cinder.keyring</span><br></pre></td></tr></table></figure></p>
 <p>nova-compute节点创建密钥环文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ceph auth get-key client.cinder | ssh nova-compute tee client.cinder.key</span><br><span class="line">uuidgen</span><br><span class="line">457eb676-33da-42ec-9a8c-9293d545c337</span><br><span class="line"></span><br><span class="line">cat &gt; secret.xml &lt;&lt;EOF</span><br><span class="line">&lt;secret ephemeral=&apos;no&apos; private=&apos;no&apos;&gt;</span><br><span class="line">  &lt;uuid&gt;457eb676-33da-42ec-9a8c-9293d545c337&lt;/uuid&gt;</span><br><span class="line">  &lt;usage type=&apos;ceph&apos;&gt;</span><br><span class="line">    &lt;name&gt;client.cinder secret&lt;/name&gt;</span><br><span class="line">  &lt;/usage&gt;</span><br><span class="line">&lt;/secret&gt;</span><br><span class="line">EOF</span><br><span class="line">virsh secret-define --file secret.xml</span><br><span class="line">virsh secret-set-value --secret 457eb676-33da-42ec-9a8c-9293d545c337 --base64 $(cat client.cinder.key) &amp;&amp; rm client.cinder.key secret.xml</span><br></pre></td></tr></table></figure></p>
@@ -471,7 +471,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -484,7 +484,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
