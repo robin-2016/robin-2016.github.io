@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="openstack 版本为rocky ###neutron-controlleryum install openstack-neutron-lbaas -y vi /etc/neutron/neutron.confservice_plugins = router,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2 vi /">
+<meta name="description" content="openstack 版本为rocky ######neutron-controlleryum install openstack-neutron-lbaas -y vi /etc/neutron/neutron.confservice_plugins = router,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2 v">
 <meta name="keywords" content="Openstack">
 <meta property="og:type" content="article">
 <meta property="og:title" content="openstack配置LBaas">
 <meta property="og:url" content="http://yoursite.com/2019/04/23/openstack配置LBaas/index.html">
 <meta property="og:site_name" content="Summer">
-<meta property="og:description" content="openstack 版本为rocky ###neutron-controlleryum install openstack-neutron-lbaas -y vi /etc/neutron/neutron.confservice_plugins = router,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2 vi /">
+<meta property="og:description" content="openstack 版本为rocky ######neutron-controlleryum install openstack-neutron-lbaas -y vi /etc/neutron/neutron.confservice_plugins = router,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2 v">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-23T13:21:04.882Z">
+<meta property="og:updated_time" content="2019-04-23T13:27:37.442Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="openstack配置LBaas">
-<meta name="twitter:description" content="openstack 版本为rocky ###neutron-controlleryum install openstack-neutron-lbaas -y vi /etc/neutron/neutron.confservice_plugins = router,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2 vi /">
+<meta name="twitter:description" content="openstack 版本为rocky ######neutron-controlleryum install openstack-neutron-lbaas -y vi /etc/neutron/neutron.confservice_plugins = router,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2 v">
 
 
 
@@ -321,17 +321,17 @@
 
       
         <p>openstack 版本为rocky</p>
-<p>###neutron-controller<br>yum install openstack-neutron-lbaas -y</p>
+<p>######neutron-controller<br>yum install openstack-neutron-lbaas -y</p>
 <p>vi /etc/neutron/neutron.conf<br>service_plugins = router,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2</p>
 <p>vi /etc/neutron/neutron_lbaas.conf<br>[service_providers]<br>service_provider = LOADBALANCERV2:Haproxy:neutron_lbaas.drivers.haproxy.plugin_driver.HaproxyOnHostPluginDriver:default</p>
 <p>vi /etc/neutron/lbaas_agent.ini<br>[DEFAULT]<br>device_driver = neutron_lbaas.drivers.haproxy.namespace_driver.HaproxyNSDriver<br>interface_driver = linuxbridge<br>[haproxy]<br>user_group = haproxy</p>
 <p>systemctl restart neutron-server</p>
-<p>###computer<br>yum install openstack-neutron-lbaas haproxy -y</p>
+<p>######computer<br>yum install openstack-neutron-lbaas haproxy -y</p>
 <p>vi /etc/neutron/neutron.conf<br>service_plugins = router,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2</p>
 <p>vi /etc/neutron/neutron_lbaas.conf<br>[service_providers]<br>service_provider = LOADBALANCERV2:Haproxy:neutron_lbaas.drivers.haproxy.plugin_driver.HaproxyOnHostPluginDriver:default</p>
 <p>vi /etc/neutron/lbaas_agent.ini<br>[DEFAULT]<br>device_driver = neutron_lbaas.drivers.haproxy.namespace_driver.HaproxyNSDriver<br>interface_driver = linuxbridge<br>[haproxy]<br>user_group = haproxy</p>
 <p>systemctl enable neutron-lbaasv2-agent<br>systemctl start neutron-lbaasv2-agent</p>
-<p>###dashboard 开启lbaas<br>git clone <a href="https://git.openstack.org/openstack/neutron-lbaas-dashboard" target="_blank" rel="noopener">https://git.openstack.org/openstack/neutron-lbaas-dashboard</a><br>cd neutron-lbaas-dashboard<br>git checkout stable/rocky</p>
+<p>######dashboard 开启lbaas<br>git clone <a href="https://git.openstack.org/openstack/neutron-lbaas-dashboard" target="_blank" rel="noopener">https://git.openstack.org/openstack/neutron-lbaas-dashboard</a><br>cd neutron-lbaas-dashboard<br>git checkout stable/rocky</p>
 <p>python setup.py install<br>cp neutron_lbaas_dashboard/enabled/_1481_project_ng_loadbalancersv2_panel.py /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/</p>
 <p>vi /etc/openstack-dashboard/local_settings<br>OPENSTACK_NEUTRON_NETWORK  中添加 ‘enable_lb’: True,</p>
 <p>安装模块pip install neutron-lbaas-dashboard</p>

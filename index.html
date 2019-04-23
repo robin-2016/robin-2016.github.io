@@ -324,8 +324,8 @@
         
           
           openstack 版本为rocky
-###neutron-controlleryum install openstack-neutron-lbaas -y
-vi /etc/neutron/neutron.confservice_plugins = router,neutron_lbaas.serv
+######neutron-controlleryum install openstack-neutron-lbaas -y
+vi /etc/neutron/neutron.confservice_plugins = router,neutron_lbaas.s
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -452,7 +452,7 @@ vi /etc/neutron/neutron.confservice_plugins = router,neutron_lbaas.serv
         
           
           先介绍一下总体思路：由于virtio-win.iso和系统安装镜像都是iso格式的，不能添加两个光驱，cdrom无法热添加，先使用普通驱动进行系统安装，添加virtio驱动的磁盘和网卡，更新之前安装设备网卡驱动，可以删除后来添加的设备，也可以删除安装系统时使用的设备，再进行系统优化。
-安装系统：vi
+安装系统：1v
           ...
           <!--noindex-->
           <div class="post-button text-center">
