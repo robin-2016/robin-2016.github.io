@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Linux,Openstack," />
+  <meta name="keywords" content="Openstack," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="创建镜像目录，创建镜像文件，安装系统12345mkdir /home/vms/centos7-image1qemu-img create -f qcow2 /home/vms/centos7/centos7.qcow2 10Gvirt-install --virt-type kvm --name centos7 --ram 2048 --disk /home/vms/centos7/centos7">
-<meta name="keywords" content="Linux,Openstack">
+<meta name="description" content="openstack 版本为rocky ###neutron-controlleryum install openstack-neutron-lbaas -y vi /etc/neutron/neutron.confservice_plugins = router,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2 vi /">
+<meta name="keywords" content="Openstack">
 <meta property="og:type" content="article">
-<meta property="og:title" content="制作openstack的centos7镜像">
-<meta property="og:url" content="http://yoursite.com/2019/04/08/制作openstack的centos7镜像/index.html">
+<meta property="og:title" content="openstack配置LBaas">
+<meta property="og:url" content="http://yoursite.com/2019/04/23/openstack配置LBaas/index.html">
 <meta property="og:site_name" content="Summer">
-<meta property="og:description" content="创建镜像目录，创建镜像文件，安装系统12345mkdir /home/vms/centos7-image1qemu-img create -f qcow2 /home/vms/centos7/centos7.qcow2 10Gvirt-install --virt-type kvm --name centos7 --ram 2048 --disk /home/vms/centos7/centos7">
+<meta property="og:description" content="openstack 版本为rocky ###neutron-controlleryum install openstack-neutron-lbaas -y vi /etc/neutron/neutron.confservice_plugins = router,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2 vi /">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-08T14:43:33.524Z">
+<meta property="og:updated_time" content="2019-04-23T13:21:04.882Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="制作openstack的centos7镜像">
-<meta name="twitter:description" content="创建镜像目录，创建镜像文件，安装系统12345mkdir /home/vms/centos7-image1qemu-img create -f qcow2 /home/vms/centos7/centos7.qcow2 10Gvirt-install --virt-type kvm --name centos7 --ram 2048 --disk /home/vms/centos7/centos7">
+<meta name="twitter:title" content="openstack配置LBaas">
+<meta name="twitter:description" content="openstack 版本为rocky ###neutron-controlleryum install openstack-neutron-lbaas -y vi /etc/neutron/neutron.confservice_plugins = router,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2 vi /">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/08/制作openstack的centos7镜像/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/04/23/openstack配置LBaas/"/>
 
 
 
 
 
-  <title>制作openstack的centos7镜像 | Summer</title>
+  <title>openstack配置LBaas | Summer</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/08/制作openstack的centos7镜像/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/23/openstack配置LBaas/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Robin">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">制作openstack的centos7镜像</h1>
+          <h1 class="post-title" itemprop="name headline">openstack配置LBaas</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-08T21:09:24+08:00">
-                2019-04-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-23T20:42:25+08:00">
+                2019-04-23
               </time>
             
 
@@ -320,19 +320,24 @@
       
 
       
-        <p>创建镜像目录，创建镜像文件，安装系统<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir /home/vms/centos7-image1</span><br><span class="line"></span><br><span class="line">qemu-img create -f qcow2 /home/vms/centos7/centos7.qcow2 10G</span><br><span class="line"></span><br><span class="line">virt-install --virt-type kvm --name centos7 --ram 2048 --disk /home/vms/centos7/centos7.qcow2,format=qcow2 --network network=default --graphics vnc,listen=0.0.0.0 --noautoconsole --os-type=linux --os-variant=centos7.0 --location=/home/iso/CentOS-7-x86_64-Minimal-1810.iso</span><br></pre></td></tr></table></figure></p>
-<p>安装系统：<br>只要一个根分区，存储驱动选择Virtio Block Device，设置时区，关闭kdump，网络开启dhcp</p>
-<p>优化：<br>安装epel源<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install epel-release</span><br><span class="line">yum update</span><br><span class="line">yum groupinstall -y &apos;Development Tools&apos;</span><br><span class="line">yum install vim wget ntp</span><br></pre></td></tr></table></figure></p>
-<p>关闭防火墙和selinux，配置ntp时间同步<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br><span class="line">systemctl start ntpd</span><br><span class="line">systemctl enable ntpd</span><br><span class="line">sed -i &apos;s/SELINUX=enforcing/SELINUX=disabled/&apos; /etc/selinux/config</span><br></pre></td></tr></table></figure></p>
-<p>安装电源管理服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install acpid</span><br><span class="line">systemctl start acpid.service</span><br><span class="line">systemctl enable acpid.service</span><br></pre></td></tr></table></figure></p>
-<p>配置启动日志显示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/default/grub</span><br><span class="line">删除 rhgb quiet 增加 console=tty0 console=ttyS0,115200n8</span><br><span class="line">grub2-mkconfig -o /boot/grub2/grub.cfg</span><br></pre></td></tr></table></figure></p>
-<p>Disable the zeroconf route  禁用zeroconf 路由<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;NOZEROCONF=yes&quot; &gt;&gt; /etc/sysconfig/network</span><br></pre></td></tr></table></figure></p>
-<p>安装配置qemu-guest-agent<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install -y qemu-guest-agent</span><br><span class="line">vim /etc/sysconfig/qemu-ga</span><br><span class="line">#增加下面的配置</span><br><span class="line">BLACKLIST_RPC=guest-file-open,guest-file-close,guest-file-read,guest-file-write,guest-file-seek,guest-file-flush,guest-exec,guest-exec-status</span><br></pre></td></tr></table></figure></p>
-<p>安装配置cloud 软件包<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">yum install cloud-init cloud-utils cloud-utils-growpart</span><br><span class="line">useradd -u 1000 centos -s /sbin/nologin</span><br><span class="line">vim /etc/cloud/cloud.cfg</span><br><span class="line">system_info:</span><br><span class="line">     default_user:</span><br><span class="line">         name: centos</span><br></pre></td></tr></table></figure></p>
-<p>弹出cdrom<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">virsh attach-disk --type cdrom --mode readonly centos7 &quot;&quot; hda</span><br></pre></td></tr></table></figure></p>
-<p>封装镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install libguestfs-tools</span><br><span class="line">virt-sysprep -d centos7</span><br><span class="line">virsh undefine centos7</span><br></pre></td></tr></table></figure></p>
-<p>压缩镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">virt-sparsify --compress centos7.qcow2 CentOS-7-x86_64.qcow2</span><br></pre></td></tr></table></figure></p>
-<p>上传镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openstack image create --file CentOS-7-2019.04.08.qcow2 --container-format bare --disk-format qcow2 --public Centos-7</span><br></pre></td></tr></table></figure></p>
+        <p>openstack 版本为rocky</p>
+<p>###neutron-controller<br>yum install openstack-neutron-lbaas -y</p>
+<p>vi /etc/neutron/neutron.conf<br>service_plugins = router,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2</p>
+<p>vi /etc/neutron/neutron_lbaas.conf<br>[service_providers]<br>service_provider = LOADBALANCERV2:Haproxy:neutron_lbaas.drivers.haproxy.plugin_driver.HaproxyOnHostPluginDriver:default</p>
+<p>vi /etc/neutron/lbaas_agent.ini<br>[DEFAULT]<br>device_driver = neutron_lbaas.drivers.haproxy.namespace_driver.HaproxyNSDriver<br>interface_driver = linuxbridge<br>[haproxy]<br>user_group = haproxy</p>
+<p>systemctl restart neutron-server</p>
+<p>###computer<br>yum install openstack-neutron-lbaas haproxy -y</p>
+<p>vi /etc/neutron/neutron.conf<br>service_plugins = router,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2</p>
+<p>vi /etc/neutron/neutron_lbaas.conf<br>[service_providers]<br>service_provider = LOADBALANCERV2:Haproxy:neutron_lbaas.drivers.haproxy.plugin_driver.HaproxyOnHostPluginDriver:default</p>
+<p>vi /etc/neutron/lbaas_agent.ini<br>[DEFAULT]<br>device_driver = neutron_lbaas.drivers.haproxy.namespace_driver.HaproxyNSDriver<br>interface_driver = linuxbridge<br>[haproxy]<br>user_group = haproxy</p>
+<p>systemctl enable neutron-lbaasv2-agent<br>systemctl start neutron-lbaasv2-agent</p>
+<p>###dashboard 开启lbaas<br>git clone <a href="https://git.openstack.org/openstack/neutron-lbaas-dashboard" target="_blank" rel="noopener">https://git.openstack.org/openstack/neutron-lbaas-dashboard</a><br>cd neutron-lbaas-dashboard<br>git checkout stable/rocky</p>
+<p>python setup.py install<br>cp neutron_lbaas_dashboard/enabled/_1481_project_ng_loadbalancersv2_panel.py /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/</p>
+<p>vi /etc/openstack-dashboard/local_settings<br>OPENSTACK_NEUTRON_NETWORK  中添加 ‘enable_lb’: True,</p>
+<p>安装模块pip install neutron-lbaas-dashboard</p>
+<p>systemctl restart httpd<br>在项目，网络，有load balance</p>
+<p>创建load balance后无法ping通，需要设置安全组<br>neutron lbaas-loadbalancer-show lbaas_name<br>neutron port-update –security-group security-group-name vip-port-id<br>安全组开放80和443端口</p>
+<p>参考资料：<br><a href="https://docs.openstack.org/neutron/rocky/admin/config-lbaas.html" target="_blank" rel="noopener">https://docs.openstack.org/neutron/rocky/admin/config-lbaas.html</a><br><a href="https://www.server-world.info/en/note?os=CentOS_7&amp;p=openstack_rocky2&amp;f=16" target="_blank" rel="noopener">https://www.server-world.info/en/note?os=CentOS_7&amp;p=openstack_rocky2&amp;f=16</a><br><a href="https://kurisu.love/index.php/archives/82/" target="_blank" rel="noopener">https://kurisu.love/index.php/archives/82/</a></p>
 
       
     </div>
@@ -379,8 +384,6 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Linux/" rel="tag"># Linux</a>
-          
             <a href="/tags/Openstack/" rel="tag"># Openstack</a>
           
         </div>
@@ -394,8 +397,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/08/openstack对接ceph/" rel="next" title="openstack对接ceph">
-                <i class="fa fa-chevron-left"></i> openstack对接ceph
+              <a href="/2019/04/23/制作openstack的windows-server-2016镜像/" rel="next" title="制作openstack的windows server 2016镜像">
+                <i class="fa fa-chevron-left"></i> 制作openstack的windows server 2016镜像
               </a>
             
           </div>
@@ -403,10 +406,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/04/15/Harbor安装并配置https之注意事项/" rel="prev" title="Harbor安装并配置https之注意事项">
-                Harbor安装并配置https之注意事项 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
