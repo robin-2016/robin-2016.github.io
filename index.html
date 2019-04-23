@@ -324,8 +324,7 @@
         
           
           openstack 版本为rocky
-neutron-controlleryum install openstack-neutron-lbaas -y
-vi /etc/neutron/neutron.confservice_plugins = router,neutron_lbaas.service
+neutron-controller配置yum install openstack-neutron-lbaas -y修改下面的配置文件vi /etc/neutron/neutron.conf（router是之前原有，只增加后面的）service_plugins 
           ...
           <!--noindex-->
           <div class="post-button text-center">
