@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Openstack,Keepalived," />
+  <meta name="keywords" content="思科,CCNA," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="问题描述：在openstack环境下安装配置keepalived后，VIP只能在所在的主机节点ping通，其他节点无法ping通解决方式：需要配置allowed-address-pairs红帽官网对allowed-address-pairs的解释：allowed-address-pairs 允许您指定 mac_address/ip_address（CIDR）对，使它们可以在不考虑子网的情况下通过一">
-<meta name="keywords" content="Openstack,Keepalived">
+<meta name="description" content="1.冲突域和广播域连接集线器的设备处在同一个冲突域交换机分割冲突域，但不分割广播域路由器即分割冲突域，又分割广播域2.ISO OSI IOSISO international organization for standardization  国际标准化组织OSI Open system interconnection  开放系统互联IOS Internetworking operating sy">
+<meta name="keywords" content="思科,CCNA">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在openstack中keepalived的VIP配置">
-<meta property="og:url" content="http://yoursite.com/2019/04/15/在openstack中keepalived的VIP配置/index.html">
+<meta property="og:title" content="思科网络CCNA学习笔记一">
+<meta property="og:url" content="http://yoursite.com/2019/05/29/思科网络CCNA学习笔记一/index.html">
 <meta property="og:site_name" content="Summer">
-<meta property="og:description" content="问题描述：在openstack环境下安装配置keepalived后，VIP只能在所在的主机节点ping通，其他节点无法ping通解决方式：需要配置allowed-address-pairs红帽官网对allowed-address-pairs的解释：allowed-address-pairs 允许您指定 mac_address/ip_address（CIDR）对，使它们可以在不考虑子网的情况下通过一">
+<meta property="og:description" content="1.冲突域和广播域连接集线器的设备处在同一个冲突域交换机分割冲突域，但不分割广播域路由器即分割冲突域，又分割广播域2.ISO OSI IOSISO international organization for standardization  国际标准化组织OSI Open system interconnection  开放系统互联IOS Internetworking operating sy">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-15T13:54:57.739Z">
+<meta property="og:updated_time" content="2019-05-29T13:52:54.729Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="在openstack中keepalived的VIP配置">
-<meta name="twitter:description" content="问题描述：在openstack环境下安装配置keepalived后，VIP只能在所在的主机节点ping通，其他节点无法ping通解决方式：需要配置allowed-address-pairs红帽官网对allowed-address-pairs的解释：allowed-address-pairs 允许您指定 mac_address/ip_address（CIDR）对，使它们可以在不考虑子网的情况下通过一">
+<meta name="twitter:title" content="思科网络CCNA学习笔记一">
+<meta name="twitter:description" content="1.冲突域和广播域连接集线器的设备处在同一个冲突域交换机分割冲突域，但不分割广播域路由器即分割冲突域，又分割广播域2.ISO OSI IOSISO international organization for standardization  国际标准化组织OSI Open system interconnection  开放系统互联IOS Internetworking operating sy">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/15/在openstack中keepalived的VIP配置/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/05/29/思科网络CCNA学习笔记一/"/>
 
 
 
 
 
-  <title>在openstack中keepalived的VIP配置 | Summer</title>
+  <title>思科网络CCNA学习笔记一 | Summer</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/15/在openstack中keepalived的VIP配置/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/29/思科网络CCNA学习笔记一/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Robin">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">在openstack中keepalived的VIP配置</h1>
+          <h1 class="post-title" itemprop="name headline">思科网络CCNA学习笔记一</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-15T21:32:49+08:00">
-                2019-04-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-29T21:45:15+08:00">
+                2019-05-29
               </time>
             
 
@@ -320,10 +320,7 @@
       
 
       
-        <p>问题描述：<br>在openstack环境下安装配置keepalived后，VIP只能在所在的主机节点ping通，其他节点无法ping通<br>解决方式：<br>需要配置allowed-address-pairs<br>红帽官网对allowed-address-pairs的解释：allowed-address-pairs 允许您指定 mac_address/ip_address（CIDR）对，使它们可以在不考虑子网的情况下通过一个端口。这会启用对一些协议的使用，如 VRRP，它会在两个实例间浮动一个 IP 地址，从而实现快速故障切换功能。</p>
-<p>配置步骤：（在openstack的neutron的控制节点操作）<br>查看需要使用VIP网络id<br>neutron net-list<br>创建带有allowed-address-pairs功能的IP<br>neutron port-create –fixed-ip –allowed-address-pairs subnet_id=子网id,ip_address=VIP 网络id<br>在需要启动keepalived所有实例的网络接口上启用allowed-address-pairs功能<br>neutron port-update 实例网卡id –allowed-address-pair ip_address=VIP<br>查找实例的网络接口的信息<br>neutron port-list |grep 实例IP</p>
-<p>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@openstack ~]# neutron net-list</span><br><span class="line">neutron CLI is deprecated and will be removed in the future. Use openstack CLI instead.</span><br><span class="line">+--------------------------------------+--------+----------------------------------+-----------------------------------------------------+</span><br><span class="line">| id | name | tenant_id | subnets |</span><br><span class="line">+--------------------------------------+--------+----------------------------------+-----------------------------------------------------+</span><br><span class="line">| 12e41d31-5be5-4cf9-a45c-4ee374388759 | EX-NET | a2ff5d90248e46328448f02252f190ec | 6489102f-60c1-4938-b5f5-7a97689429f5 192.168.1.0/24 |</span><br><span class="line">| a8751de8-016d-4038-afc1-bcff552044a2 | YTJY | a2ff5d90248e46328448f02252f190ec | 327a7ca8-9fb5-4ab3-850e-9d835e7575ee 192.168.2.0/24 |</span><br><span class="line">+--------------------------------------+--------+----------------------------------+-----------------------------------------------------+</span><br><span class="line">[root@openstack ~]# neutron port-create --fixed-ip subnet_id=327a7ca8-9fb5-4ab3-850e-9d835e7575ee,ip_address=192.168.2.6 a8751de8-016d-4038-afc1-bcff552044a</span><br><span class="line">[root@openstack ~]# neutron port-list |grep 192.168.2.4</span><br><span class="line">neutron CLI is deprecated and will be removed in the future. Use openstack CLI instead.</span><br><span class="line">| 69ebfd68-a789-4330-88d5-8f5ba4370caa |      | a2ff5d90248e46328448f02252f190ec | fa:16:3e:55:90:c7 | &#123;&quot;subnet_id&quot;: &quot;327a7ca8-9fb5-4ab3-850e-9d835e7575ee&quot;, &quot;ip_address&quot;: 192.168.2.4&quot;&#125;  |</span><br><span class="line">[root@openstack ~]# neutron port-update 69ebfd68-a789-4330-88d5-8f5ba4370caa --allowed-address-pair ip_address=192.168.2.6</span><br></pre></td></tr></table></figure></p>
-<p>所有实例都开启allowed-address-pairs就可以正常使用keepalived了</p>
+        <p>1.冲突域和广播域<br>连接集线器的设备处在同一个冲突域<br>交换机分割冲突域，但不分割广播域<br>路由器即分割冲突域，又分割广播域<br>2.ISO OSI IOS<br>ISO international organization for standardization  国际标准化组织<br>OSI Open system interconnection  开放系统互联<br>IOS Internetworking operating system  互联网络操作系统<br>3.七层参考模型<br>应用层          用户界面<br>表示层          表示数据、加密数据<br>会话层          分离不同应用程序数据    端口          单工、半双工、全双工<br>传输层          提供可靠或不可靠传输                                                  数据段<br>网络层          提供逻辑地址，路由器选择路径                                      包               单播、多播和广播<br>数据链路层   使用Mac地址提供介质访问，执行错误检查，但不纠错       帧               包含两个子层：介质访问控制MAC和逻辑链路控制LLC<br>物理层          在设备之间传输比特，指定电平、电缆速度等                   比特<br>4.DTE和DCE<br>DTE数据终端设备<br>DCE数据通信设备     一般位于服务提供商处<br>5.CSMA/CD<br>带有冲突检测但载波侦听多路访问   以太网<br>6.以太网布线<br>直通线                       不同设备<br>交叉线：13、26互换   相同设备<br>反转线：console线<br>设备的区分是根据DCE和DTE<br>DCE：switch<br>DTE：pc route<br>7.交换机Mac地址学习过程<br>转发<br>交换机根据MAC地址表单播转发数据帧<br>学习<br>MAC地址表是交换机通过学习接收的数据帧的源MAC地址来形成的<br>广播<br>如果目标地址在MAC地址表中没有，交换机就向除接收到该数据帧的端口外的其他所有端口广播该数据帧<br>更新<br>交换机MAC地址表的老化时间是300秒<br>交换机如果发现一个帧的入端口和MAC地址表中源MAC地址的所在端口不同，交换机将MAC 地址重新学习到新的端口<br>8.ARP<br>IP地址解析为Mac地址<br>设备通过ARP广播查找，响应返回通过单播返回<br>代理ARP：不在同一个广播域时，网关就是代理ARP<br>ARP欺骗  攻击者发送假的ARP数据包到网上，尤其是送到网关上。其目的是要让送至特定的IP地址的流量被错误送到攻击者所取代的地方<br>9.ping<br>ping <a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a> -l 65500 -t   设置数据包大小，死亡ping就是设置最大的数据包进行ping<br>10.TCP/IP<br>三次握手（这里应该有一个经典的三次握手图片）<br>syn泛洪攻击：建立TCP连接时只发送syn，不回复ack<br>慢速攻击：正常建立连接，但10分钟左右发送一个比特占有连接。特点是连接正常，不易察觉<br>11.子网划分<br>块大小划分法<br>例子：<br>192.168.2.2/25<br>C类子网划分<br>子网个数：2的(25-24)次方<br>子网的有效IP数：2的(32-25)次方-2<br>块大小：256-最后一个子网掩码<br>第一个子网的开始IP地址：192.168.2.0/25<br>第一个子网的结束IP地址：192.168.2.127/25<br>第二个子网的开始IP地址：192.168.2.128/25<br>第二个子网的结束IP地址：192.168.2.255/25</p>
 
       
     </div>
@@ -370,9 +367,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Openstack/" rel="tag"># Openstack</a>
+            <a href="/tags/思科/" rel="tag"># 思科</a>
           
-            <a href="/tags/Keepalived/" rel="tag"># Keepalived</a>
+            <a href="/tags/CCNA/" rel="tag"># CCNA</a>
           
         </div>
       
@@ -385,8 +382,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/15/Harbor安装并配置https之注意事项/" rel="next" title="Harbor安装并配置https之注意事项">
-                <i class="fa fa-chevron-left"></i> Harbor安装并配置https之注意事项
+              <a href="/2019/04/23/openstack配置LBaas/" rel="next" title="openstack配置LBaas">
+                <i class="fa fa-chevron-left"></i> openstack配置LBaas
               </a>
             
           </div>
@@ -395,8 +392,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/04/23/制作openstack的windows-server-2016镜像/" rel="prev" title="制作openstack的windows server 2016镜像">
-                制作openstack的windows server 2016镜像 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/05/29/思科网络CCNA学习笔记二/" rel="prev" title="思科网络CCNA学习笔记二">
+                思科网络CCNA学习笔记二 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

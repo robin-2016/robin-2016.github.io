@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Openstack,Keepalived," />
+  <meta name="keywords" content="思科,CCNA," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="问题描述：在openstack环境下安装配置keepalived后，VIP只能在所在的主机节点ping通，其他节点无法ping通解决方式：需要配置allowed-address-pairs红帽官网对allowed-address-pairs的解释：allowed-address-pairs 允许您指定 mac_address/ip_address（CIDR）对，使它们可以在不考虑子网的情况下通过一">
-<meta name="keywords" content="Openstack,Keepalived">
+<meta name="description" content="这节讲的是具体的设备的配置操作方法设备配置方式：console auxiliary telnet tftp web 模式：用户模式特权模式全局模式接口模式 ? 帮助默认是用户模式enable 进入特权模式show running-config 查看正在运行的配置config t 进入全局配置模式interface  进入接口do show ip int bri  查看接口ip address 19">
+<meta name="keywords" content="思科,CCNA">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在openstack中keepalived的VIP配置">
-<meta property="og:url" content="http://yoursite.com/2019/04/15/在openstack中keepalived的VIP配置/index.html">
+<meta property="og:title" content="思科网络CCNA学习笔记二">
+<meta property="og:url" content="http://yoursite.com/2019/05/29/思科网络CCNA学习笔记二/index.html">
 <meta property="og:site_name" content="Summer">
-<meta property="og:description" content="问题描述：在openstack环境下安装配置keepalived后，VIP只能在所在的主机节点ping通，其他节点无法ping通解决方式：需要配置allowed-address-pairs红帽官网对allowed-address-pairs的解释：allowed-address-pairs 允许您指定 mac_address/ip_address（CIDR）对，使它们可以在不考虑子网的情况下通过一">
+<meta property="og:description" content="这节讲的是具体的设备的配置操作方法设备配置方式：console auxiliary telnet tftp web 模式：用户模式特权模式全局模式接口模式 ? 帮助默认是用户模式enable 进入特权模式show running-config 查看正在运行的配置config t 进入全局配置模式interface  进入接口do show ip int bri  查看接口ip address 19">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-15T13:54:57.739Z">
+<meta property="og:updated_time" content="2019-05-29T13:58:41.423Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="在openstack中keepalived的VIP配置">
-<meta name="twitter:description" content="问题描述：在openstack环境下安装配置keepalived后，VIP只能在所在的主机节点ping通，其他节点无法ping通解决方式：需要配置allowed-address-pairs红帽官网对allowed-address-pairs的解释：allowed-address-pairs 允许您指定 mac_address/ip_address（CIDR）对，使它们可以在不考虑子网的情况下通过一">
+<meta name="twitter:title" content="思科网络CCNA学习笔记二">
+<meta name="twitter:description" content="这节讲的是具体的设备的配置操作方法设备配置方式：console auxiliary telnet tftp web 模式：用户模式特权模式全局模式接口模式 ? 帮助默认是用户模式enable 进入特权模式show running-config 查看正在运行的配置config t 进入全局配置模式interface  进入接口do show ip int bri  查看接口ip address 19">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/15/在openstack中keepalived的VIP配置/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/05/29/思科网络CCNA学习笔记二/"/>
 
 
 
 
 
-  <title>在openstack中keepalived的VIP配置 | Summer</title>
+  <title>思科网络CCNA学习笔记二 | Summer</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/15/在openstack中keepalived的VIP配置/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/29/思科网络CCNA学习笔记二/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Robin">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">在openstack中keepalived的VIP配置</h1>
+          <h1 class="post-title" itemprop="name headline">思科网络CCNA学习笔记二</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-15T21:32:49+08:00">
-                2019-04-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-29T21:53:40+08:00">
+                2019-05-29
               </time>
             
 
@@ -320,10 +320,18 @@
       
 
       
-        <p>问题描述：<br>在openstack环境下安装配置keepalived后，VIP只能在所在的主机节点ping通，其他节点无法ping通<br>解决方式：<br>需要配置allowed-address-pairs<br>红帽官网对allowed-address-pairs的解释：allowed-address-pairs 允许您指定 mac_address/ip_address（CIDR）对，使它们可以在不考虑子网的情况下通过一个端口。这会启用对一些协议的使用，如 VRRP，它会在两个实例间浮动一个 IP 地址，从而实现快速故障切换功能。</p>
-<p>配置步骤：（在openstack的neutron的控制节点操作）<br>查看需要使用VIP网络id<br>neutron net-list<br>创建带有allowed-address-pairs功能的IP<br>neutron port-create –fixed-ip –allowed-address-pairs subnet_id=子网id,ip_address=VIP 网络id<br>在需要启动keepalived所有实例的网络接口上启用allowed-address-pairs功能<br>neutron port-update 实例网卡id –allowed-address-pair ip_address=VIP<br>查找实例的网络接口的信息<br>neutron port-list |grep 实例IP</p>
-<p>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@openstack ~]# neutron net-list</span><br><span class="line">neutron CLI is deprecated and will be removed in the future. Use openstack CLI instead.</span><br><span class="line">+--------------------------------------+--------+----------------------------------+-----------------------------------------------------+</span><br><span class="line">| id | name | tenant_id | subnets |</span><br><span class="line">+--------------------------------------+--------+----------------------------------+-----------------------------------------------------+</span><br><span class="line">| 12e41d31-5be5-4cf9-a45c-4ee374388759 | EX-NET | a2ff5d90248e46328448f02252f190ec | 6489102f-60c1-4938-b5f5-7a97689429f5 192.168.1.0/24 |</span><br><span class="line">| a8751de8-016d-4038-afc1-bcff552044a2 | YTJY | a2ff5d90248e46328448f02252f190ec | 327a7ca8-9fb5-4ab3-850e-9d835e7575ee 192.168.2.0/24 |</span><br><span class="line">+--------------------------------------+--------+----------------------------------+-----------------------------------------------------+</span><br><span class="line">[root@openstack ~]# neutron port-create --fixed-ip subnet_id=327a7ca8-9fb5-4ab3-850e-9d835e7575ee,ip_address=192.168.2.6 a8751de8-016d-4038-afc1-bcff552044a</span><br><span class="line">[root@openstack ~]# neutron port-list |grep 192.168.2.4</span><br><span class="line">neutron CLI is deprecated and will be removed in the future. Use openstack CLI instead.</span><br><span class="line">| 69ebfd68-a789-4330-88d5-8f5ba4370caa |      | a2ff5d90248e46328448f02252f190ec | fa:16:3e:55:90:c7 | &#123;&quot;subnet_id&quot;: &quot;327a7ca8-9fb5-4ab3-850e-9d835e7575ee&quot;, &quot;ip_address&quot;: 192.168.2.4&quot;&#125;  |</span><br><span class="line">[root@openstack ~]# neutron port-update 69ebfd68-a789-4330-88d5-8f5ba4370caa --allowed-address-pair ip_address=192.168.2.6</span><br></pre></td></tr></table></figure></p>
-<p>所有实例都开启allowed-address-pairs就可以正常使用keepalived了</p>
+        <p>这节讲的是具体的设备的配置操作方法<br>设备配置方式：console auxiliary telnet tftp web</p>
+<p>模式：<br>用户模式<br>特权模式<br>全局模式<br>接口模式</p>
+<p>? 帮助<br>默认是用户模式<br>enable 进入特权模式<br>show running-config 查看正在运行的配置<br>config t 进入全局配置模式<br>interface  进入接口<br>do show ip int bri  查看接口<br>ip address 192.168.1.1 255.255.255.0 配置IP地址<br>exit 退出<br>end 直接退出到特权模式<br>默认接口是关闭的<br>no shutdown 启用接口<br>no hostname 删除主机名<br>no ip address 删除IP地址<br>no 删除命令（后面跟具体要删除的内容）</p>
+<p>ctrl+ shift + 6 输入错误命令时取消域名解析过程（域名解析超时的时间较长）<br>no ip domain-lookup 关闭域名解析（这样在输入错误命令不会进行域名解析）<br>show terminal 查看控制台<br>terminal history size 100 设置历史大小<br>banner login # xuhongbin # 设置登陆提示信息<br>banner motd  设置每日信息<br>description string  给接口设置描述信息<br>write 保存<br>copy running-config startup-config 保存配置到开机启动配置<br>show startup-config 查看开机启动配置</p>
+<p>配置enable 密码<br>全局配置模式下 enable secret string</p>
+<p>telent 密码<br>1.互通<br>2.配置enable密码和vty密码<br>设置enable密码<br>line vty 0 4    4表示同时5个用户登陆<br>password 456<br>login 应用密码</p>
+<p>console 密码<br>line console 0<br>password 456<br>login 应用密码</p>
+<p>privilege—针对不同的等级设定不同的权限<br>路由器密码重启过程：<br>1 重启路由器，按ctrl+break c/b,进入remmon模式<br>2 confreg 0x2142　修改寄存器的值<br>3 reset　重启<br>4 copy start run　把nvram内的文件转到内存中<br>5 config-register 0x2102<br>6 修改密码<br>7 copy run start<br>8 reload NVRAM：config.text<br>0x2142:路由器启动不读取NVRAM，出厂配置启动<br>0x2102:路由器启动读取NVRAM，正常配置启动<br>0x2101:路由器启动不读取新指定的IOS，以出厂IOS启动，通常<br>为base版本，支持功能有限</p>
+<p>交换机密码恢复过程：<br>1 重启，按面板上的mode键3-5秒<br>2 进入switch：模式<br>3 输入：flash_init 初始化flash文件系统<br>4 dir flash:查看flash内文件，其中包含配置文件为config.text<br>5 rename flash:config.text flash:config.old<br>把原来的文件重命名，随意起名字<br>6 boot重启<br>7 rename flash:config.old flash:config.text<br>8 copy flash:config.text system:running-config<br>9 修改密码<br>10 copy run start 保存配置<br>11 reload/reset/boot 重启</p>
+<p>设置用户名和密码 优先级<br>username xhb privilege 15 password 123<br>line vty 0 4<br>login local</p>
+<p>show users 查看用户<br>ip host R1 192.168.1.1 手动设置解析</p>
+<p>静态路由<br>路由表<br>来源 目标网段 AD/metric 下一跳<br>AD值是管理难度，是不同协议   值越小越好<br>度量值metric是不同路径，相同协议，不同路径</p>
 
       
     </div>
@@ -370,9 +378,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Openstack/" rel="tag"># Openstack</a>
+            <a href="/tags/思科/" rel="tag"># 思科</a>
           
-            <a href="/tags/Keepalived/" rel="tag"># Keepalived</a>
+            <a href="/tags/CCNA/" rel="tag"># CCNA</a>
           
         </div>
       
@@ -385,8 +393,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/15/Harbor安装并配置https之注意事项/" rel="next" title="Harbor安装并配置https之注意事项">
-                <i class="fa fa-chevron-left"></i> Harbor安装并配置https之注意事项
+              <a href="/2019/05/29/思科网络CCNA学习笔记一/" rel="next" title="思科网络CCNA学习笔记一">
+                <i class="fa fa-chevron-left"></i> 思科网络CCNA学习笔记一
               </a>
             
           </div>
@@ -394,10 +402,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/04/23/制作openstack的windows-server-2016镜像/" rel="prev" title="制作openstack的windows server 2016镜像">
-                制作openstack的windows server 2016镜像 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
