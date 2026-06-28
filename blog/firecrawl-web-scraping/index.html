@@ -1,0 +1,175 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/firecrawl-web-scraping/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/firecrawl-web-scraping/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/firecrawl-web-scraping/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/firecrawl-web-scraping/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/firecrawl-web-scraping/"><meta property="og:title" content="firecrawl-web-scraping — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="firecrawl-web-scraping — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>firecrawl-web-scraping — Robin</title><style>.post-header[data-astro-cid-bvzihdzo]{padding:24px 24px 20px;border-bottom:var(--rule-thick) solid var(--ink)}.post-meta[data-astro-cid-bvzihdzo]{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}.post-title[data-astro-cid-bvzihdzo]{font-size:clamp(22px,4vw,32px);font-weight:900;letter-spacing:-.5px;line-height:1.25;margin-bottom:12px}.post-tags[data-astro-cid-bvzihdzo]{display:flex;flex-wrap:wrap;gap:6px}.post-body[data-astro-cid-bvzihdzo]{display:grid;grid-template-columns:1fr 200px}.post-content[data-astro-cid-bvzihdzo]{padding:28px 24px;border-right:var(--rule-thin) solid var(--gray-light);font-size:16px;line-height:1.8;color:#333;min-width:0}.post-content[data-astro-cid-bvzihdzo] h2,.post-content[data-astro-cid-bvzihdzo] h3{font-size:18px;font-weight:800;margin:32px 0 12px;padding-left:10px;border-left:2.5px solid var(--accent)}.post-content[data-astro-cid-bvzihdzo] h3{font-size:16px}.post-content[data-astro-cid-bvzihdzo] p{margin-bottom:16px}.post-content[data-astro-cid-bvzihdzo] ul,.post-content[data-astro-cid-bvzihdzo] ol{padding-left:24px;margin-bottom:16px}.post-content[data-astro-cid-bvzihdzo] li{margin-bottom:6px}.post-content[data-astro-cid-bvzihdzo] pre{background:#f4f4f4;padding:16px;overflow-x:auto;margin:20px 0;border-radius:2px;font-size:14px}.post-content[data-astro-cid-bvzihdzo] code{font-size:14px;background:#f4f4f4;padding:1px 5px;border-radius:2px}.post-content[data-astro-cid-bvzihdzo] pre code{background:none;padding:0}.post-content[data-astro-cid-bvzihdzo] img{max-width:100%;margin:20px auto;border:var(--rule-thin) solid var(--gray-light)}.post-content[data-astro-cid-bvzihdzo] blockquote{border-left:3px solid var(--accent);padding-left:16px;color:var(--gray);margin:20px 0}.post-content[data-astro-cid-bvzihdzo] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-bvzihdzo]{padding:28px 20px}.sidebar-block[data-astro-cid-bvzihdzo]{margin-bottom:24px}.sidebar-label[data-astro-cid-bvzihdzo]{font-size:10px;letter-spacing:2px;color:var(--gray);margin-bottom:8px}.sidebar-author[data-astro-cid-bvzihdzo]{font-size:14px;font-weight:800;margin-bottom:2px}.sidebar-author-desc[data-astro-cid-bvzihdzo]{font-size:12px;color:var(--gray)}.sidebar-tags[data-astro-cid-bvzihdzo]{display:flex;flex-direction:column;gap:6px}.sidebar-tag[data-astro-cid-bvzihdzo]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-bvzihdzo]{display:flex;justify-content:space-between;padding:16px 24px;border-top:var(--rule-thick) solid var(--ink);gap:16px}.post-nav-link[data-astro-cid-bvzihdzo]{font-size:13px;font-weight:700;border-bottom:1px solid var(--ink)}.post-nav-next[data-astro-cid-bvzihdzo]{margin-left:auto;text-align:right}@media(max-width:768px){.post-body[data-astro-cid-bvzihdzo]{grid-template-columns:1fr}.post-header[data-astro-cid-bvzihdzo]{padding:16px}.post-content[data-astro-cid-bvzihdzo]{padding:20px 16px}.post-sidebar[data-astro-cid-bvzihdzo]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-bvzihdzo]{padding:12px 16px;flex-wrap:wrap}.post-nav-next[data-astro-cid-bvzihdzo]{margin-left:0;text-align:left}}
+.site-nav[data-astro-cid-dmqpwcec]{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;border-bottom:var(--rule-thick) solid var(--ink)}.site-logo[data-astro-cid-dmqpwcec]{font-size:14px;font-weight:900;letter-spacing:3px;color:var(--ink)}.nav-right[data-astro-cid-dmqpwcec]{display:flex;align-items:center}.nav-links[data-astro-cid-dmqpwcec]{display:flex}.lang-switch[data-astro-cid-dmqpwcec]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media(max-width:480px){.site-nav[data-astro-cid-dmqpwcec]{padding:10px 16px}.nav-links[data-astro-cid-dmqpwcec] a[data-astro-cid-dmqpwcec]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-dmqpwcec]{margin-left:8px}}@media(max-width:360px){.site-nav[data-astro-cid-dmqpwcec]{padding:10px 12px}.nav-links[data-astro-cid-dmqpwcec] a[data-astro-cid-dmqpwcec]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-dmqpwcec]{margin-left:6px}}.site-footer[data-astro-cid-sz7xmlte]{background:var(--ink);padding:14px 24px;display:flex;justify-content:space-between;align-items:center}.copy[data-astro-cid-sz7xmlte]{font-size:12px;color:#ffffff4d}.motto[data-astro-cid-sz7xmlte]{font-size:12px;color:var(--accent);font-weight:700}:root{--ink: #0a2540;--accent: #f8c400;--bg: #ffffff;--bg-warm: #fafaf8;--gray: #888888;--gray-light: #eeeeee;--white: #ffffff;--rule-thick: 2.5px;--rule-grid: 1.5px;--rule-thin: 1px;--font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,*:before,*:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}img{display:block;max-width:100%;height:auto}a{color:inherit;text-decoration:none}.text-meta{font-size:11px;letter-spacing:.08em;font-weight:700;color:var(--gray)}.text-label{font-size:12px;letter-spacing:.05em;color:var(--gray)}.tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;padding:2px 8px;line-height:1.6}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{display:inline-block;border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;letter-spacing:.06em;padding:4px 14px;cursor:pointer;background:transparent;transition:background .15s,color .15s}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{min-height:100vh;display:flex;flex-direction:column}.site-main{flex:1}.breadcrumb{display:flex;align-items:center;gap:8px;padding:10px 24px;border-bottom:var(--rule-thin) solid var(--gray-light);font-size:12px}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media(max-width:768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head> <body> <div class="site-wrapper"> <nav class="site-nav" data-astro-cid-dmqpwcec> <a href="/" class="site-logo" data-astro-cid-dmqpwcec>ROBIN</a> <div class="nav-right" data-astro-cid-dmqpwcec> <div class="nav-links" data-astro-cid-dmqpwcec> <a href="/" class="box-btn" data-astro-cid-dmqpwcec> 产品 </a> <a href="/blog" class="box-btn active" data-astro-cid-dmqpwcec> 博客 </a> <a href="/about" class="box-btn" data-astro-cid-dmqpwcec> 关于 </a> </div> <a href="/en/blog/firecrawl-web-scraping/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-dmqpwcec> EN </a> </div> </nav> <script type="module">document.querySelector(".lang-switch")?.addEventListener("click",e=>{const t=e.currentTarget;localStorage.setItem("robin-lang",t.dataset.otherLang??"zh")});</script>  <main class="site-main">  <div class="breadcrumb" data-astro-cid-bvzihdzo> <a href="/blog" data-astro-cid-bvzihdzo>博客</a> <span class="sep" data-astro-cid-bvzihdzo>/</span><span class="cur" data-astro-cid-bvzihdzo>AI</span> </div> <div class="post-header" data-astro-cid-bvzihdzo> <div class="post-meta" data-astro-cid-bvzihdzo> <span class="tag tag-ink" data-astro-cid-bvzihdzo>AI</span> <span class="text-meta" data-astro-cid-bvzihdzo>2026 / 06 / 27</span> <span class="text-meta" data-astro-cid-bvzihdzo>约 14 分钟阅读</span> </div> <h1 class="post-title" data-astro-cid-bvzihdzo>firecrawl-web-scraping</h1> <div class="post-tags" data-astro-cid-bvzihdzo> <span class="tag-outline" data-astro-cid-bvzihdzo>爬虫</span><span class="tag-outline" data-astro-cid-bvzihdzo>开发工具</span><span class="tag-outline" data-astro-cid-bvzihdzo>AI</span> </div> </div> <div class="post-body" data-astro-cid-bvzihdzo> <article class="post-content" data-astro-cid-bvzihdzo>  <h1 id="用-firecrawl-把整个互联网变成-ai-的知识库">用 Firecrawl 把整个互联网变成 AI 的知识库</h1>
+<p><img src="/assets/images/firecrawl-web-scraping-summary.png" alt="知识点总结"></p>
+<h2 id="摘要">摘要</h2>
+<p>训练好的大模型天生不了解”今天”——它的知识截止于训练数据，而真实世界在不停更新。Firecrawl 是一个开源的网页数据 API，专门解决这个缺口：它能把任意 URL 转换成干净的 Markdown 或结构化 JSON，让 AI 智能体实时获取互联网上的最新内容。无论是抓单页、爬整站还是按提示自主搜索，一个 API 全部搞定。</p>
+<hr>
+<h2 id="核心优势">核心优势</h2>
+<p><strong>为什么选 Firecrawl，而不是自己写爬虫？</strong></p>
+<p>自研爬虫的噩梦大家都懂：JS 渲染失败、反爬封 IP、验证码墙、动态加载……Firecrawl 把这些难题全包了，开发者只需要关心”我想要什么数据”。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>优势</th><th>说明</th></tr></thead><tbody><tr><td><strong>覆盖率 96%</strong></td><td>支持 JS 密集型页面，不依赖简单 HTTP 请求</td></tr><tr><td><strong>速度极快</strong></td><td>百万页面 P95 延迟仅 3.4 秒，适合实时场景</td></tr><tr><td><strong>AI 直用格式</strong></td><td>输出干净 Markdown / 结构化 JSON / 截图，减少 token 浪费</td></tr><tr><td><strong>免运维</strong></td><td>轮换代理、限速处理、JS 渲染全自动，零配置</td></tr><tr><td><strong>Agent 原生</strong></td><td>一条命令接入任何 MCP 客户端或 AI 智能体</td></tr><tr><td><strong>多格式解析</strong></td><td>支持网页托管的 PDF、DOCX 等文档</td></tr><tr><td><strong>交互能力</strong></td><td>可在抓取前执行点击、滚动、输入、等待等操作</td></tr><tr><td><strong>完全开源</strong></td><td>AGPL-3.0，可自托管，也可用 firecrawl.dev 云服务</td></tr></tbody></table>
+<p>与竞品相比，Firecrawl 官方基准测试显示其 web 覆盖率领先同类产品，且输出质量经过专门为 LLM 管道优化，无需二次清洗。</p>
+<hr>
+<h2 id="面向人群">面向人群</h2>
+<p><strong>最适合以下场景的开发者：</strong></p>
+<ul>
+<li><strong>AI 应用开发者</strong>：需要给智能体注入实时网页知识，替代过时的训练数据</li>
+<li><strong>数据工程师</strong>：批量采集竞品价格、行业动态、学术信息等结构化数据</li>
+<li><strong>RAG 系统构建者</strong>：把整站内容导入向量数据库，构建企业知识库</li>
+<li><strong>自动化研究员</strong>：让 AI 自主搜索和归纳特定主题，无需手动查资料</li>
+<li><strong>产品经理 / 独立开发者</strong>：快速抓取竞品功能、定价页做对比分析</li>
+</ul>
+<p>不太适合的场景：需要登录后才能访问的付费内容（涉及法律与平台条款）、以及对 robots.txt 有严格限制的站点。Firecrawl 默认遵守 robots.txt，用户需自行确保合规。</p>
+<hr>
+<h2 id="快速上手">快速上手</h2>
+<h3 id="1-获取-api-key">1. 获取 API Key</h3>
+<p>在 <a href="https://firecrawl.dev">firecrawl.dev</a> 注册账号，免费计划每月有足够的额度用于测试。</p>
+<h3 id="2-安装-sdk">2. 安装 SDK</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Python</span></span>
+<span class="line"><span style="color:#B392F0">pip</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> firecrawl-py</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Node.js</span></span>
+<span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> firecrawl</span></span></code></pre>
+<h3 id="3-抓取单个页面">3. 抓取单个页面</h3>
+<p>最常见的用法——把任意 URL 转成 Markdown：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> firecrawl </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> Firecrawl</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">app </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Firecrawl(</span><span style="color:#FFAB70">api_key</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"fc-YOUR_API_KEY"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 抓取并输出 Markdown</span></span>
+<span class="line"><span style="color:#E1E4E8">result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> app.scrape(</span><span style="color:#9ECBFF">'https://example.com'</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(result.markdown)</span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { Firecrawl } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> 'firecrawl'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> app</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Firecrawl</span><span style="color:#E1E4E8">({ apiKey: </span><span style="color:#9ECBFF">'fc-YOUR_API_KEY'</span><span style="color:#E1E4E8"> });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> doc</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> app.</span><span style="color:#B392F0">scrape</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'https://example.com'</span><span style="color:#E1E4E8">, { formats: [</span><span style="color:#9ECBFF">'markdown'</span><span style="color:#E1E4E8">] });</span></span>
+<span class="line"><span style="color:#E1E4E8">console.</span><span style="color:#B392F0">log</span><span style="color:#E1E4E8">(doc.markdown);</span></span></code></pre>
+<h3 id="4-搜索网页并获取正文">4. 搜索网页并获取正文</h3>
+<p>不只是搜索标题，直接拿到每个结果页的完整内容：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">results </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> app.search(</span><span style="color:#9ECBFF">"2024年最佳 AI 编程工具"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">limit</span><span style="color:#F97583">=</span><span style="color:#79B8FF">5</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">for</span><span style="color:#E1E4E8"> r </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> results:</span></span>
+<span class="line"><span style="color:#79B8FF">    print</span><span style="color:#E1E4E8">(r[</span><span style="color:#9ECBFF">'url'</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#79B8FF">    print</span><span style="color:#E1E4E8">(r[</span><span style="color:#9ECBFF">'markdown'</span><span style="color:#E1E4E8">][:</span><span style="color:#79B8FF">500</span><span style="color:#E1E4E8">])  </span><span style="color:#6A737D"># 截取前500字</span></span></code></pre>
+<h3 id="5-爬取整站">5. 爬取整站</h3>
+<p>把整个文档站变成结构化数据集：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">docs </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> app.crawl(</span><span style="color:#9ECBFF">"https://docs.example.com"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">limit</span><span style="color:#F97583">=</span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">for</span><span style="color:#E1E4E8"> doc </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> docs.data:</span></span>
+<span class="line"><span style="color:#79B8FF">    print</span><span style="color:#E1E4E8">(doc.metadata.source_url)</span></span>
+<span class="line"><span style="color:#79B8FF">    print</span><span style="color:#E1E4E8">(doc.markdown[:</span><span style="color:#79B8FF">200</span><span style="color:#E1E4E8">])</span></span></code></pre>
+<p>SDK 会自动轮询等待爬取完成，无需手动处理异步任务。</p>
+<hr>
+<h2 id="进阶用法">进阶用法</h2>
+<h3 id="agent-模式告诉它我要什么它自己去找">Agent 模式：告诉它”我要什么”，它自己去找</h3>
+<p>最强大的功能之一。不需要知道 URL，直接描述需求：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> firecrawl </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> Firecrawl</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> pydantic </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> BaseModel, Field</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> typing </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> List, Optional</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">app </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Firecrawl(</span><span style="color:#FFAB70">api_key</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"fc-YOUR_API_KEY"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> Competitor</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">BaseModel</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#E1E4E8">    name: </span><span style="color:#79B8FF">str</span></span>
+<span class="line"><span style="color:#E1E4E8">    price: Optional[</span><span style="color:#79B8FF">str</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Field(</span><span style="color:#79B8FF">None</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">description</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"月付价格"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    free_tier: </span><span style="color:#79B8FF">bool</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Field(</span><span style="color:#FFAB70">description</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"是否有免费计划"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> CompetitorList</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">BaseModel</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#E1E4E8">    competitors: List[Competitor]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 让 Agent 自主搜索竞品定价</span></span>
+<span class="line"><span style="color:#E1E4E8">result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> app.agent(</span></span>
+<span class="line"><span style="color:#FFAB70">    prompt</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"找出 Notion、Obsidian、Logseq 的定价方案和免费层信息"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    schema</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">CompetitorList</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(result.data)</span></span></code></pre>
+<p>返回的是结构化数据，直接可以入库或传给下游 LLM。</p>
+<h3 id="交互式抓取先操作再提取">交互式抓取：先操作，再提取</h3>
+<p>对于需要交互才能展示内容的页面，可以先模拟用户操作：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># 先抓取页面，拿到 scrape_id</span></span>
+<span class="line"><span style="color:#E1E4E8">result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> app.scrape(</span><span style="color:#9ECBFF">"https://amazon.com"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">scrape_id </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> result.metadata.scrape_id</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 模拟搜索操作</span></span>
+<span class="line"><span style="color:#E1E4E8">app.interact(scrape_id, </span><span style="color:#FFAB70">prompt</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"Search for 'mechanical keyboard'"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">app.interact(scrape_id, </span><span style="color:#FFAB70">prompt</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"Click the first result"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 此时再 scrape 就能拿到点击后的页面内容</span></span></code></pre>
+<h3 id="接入-mcp-客户端一行配置">接入 MCP 客户端（一行配置）</h3>
+<p>如果你在用 Claude Code、Cursor 或其他 MCP 兼容工具，只需一条命令安装：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">npx</span><span style="color:#79B8FF"> -y</span><span style="color:#9ECBFF"> firecrawl-cli@latest</span><span style="color:#9ECBFF"> init</span><span style="color:#79B8FF"> --all</span><span style="color:#79B8FF"> --browser</span></span></code></pre>
+<p>重启智能体后，它就能直接调用 Firecrawl 的所有能力，无需额外编码。</p>
+<p>或者在 <code>mcp_config.json</code> 中手动添加：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  "mcpServers"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">    "firecrawl-mcp"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">      "command"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"npx"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">      "args"</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">"-y"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"firecrawl-mcp"</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#79B8FF">      "env"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">        "FIRECRAWL_API_KEY"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"fc-YOUR_API_KEY"</span></span>
+<span class="line"><span style="color:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h3 id="批量抓取异步处理数千个-url">批量抓取：异步处理数千个 URL</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">job </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> app.batch_scrape([</span></span>
+<span class="line"><span style="color:#9ECBFF">    "https://site1.com/page1"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">    "https://site2.com/page2"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#6A737D">    # ...可以放数千个 URL</span></span>
+<span class="line"><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">formats</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">"markdown"</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">for</span><span style="color:#E1E4E8"> doc </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> job.data:</span></span>
+<span class="line"><span style="color:#79B8FF">    print</span><span style="color:#E1E4E8">(doc.metadata.source_url, doc.markdown[:</span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">])</span></span></code></pre>
+<h3 id="站点地图发现">站点地图发现</h3>
+<p>快速扫描一个网站有哪些 URL，再决定抓哪些页面：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> app.map(</span><span style="color:#9ECBFF">"https://firecrawl.dev"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">search</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"pricing"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#6A737D"># 返回按"pricing"相关度排序的 URL 列表</span></span></code></pre>
+<hr>
+<h2 id="开源与自托管">开源与自托管</h2>
+<p>Firecrawl 核心代码以 AGPL-3.0 开源，可以完全自托管在私有服务器上。云服务版本 (firecrawl.dev) 在开源基础上额外提供了更高的并发上限、企业级 SLA 和一些高级功能。</p>
+<p>对于数据隐私要求高的企业场景，自托管版本是更好的选择；对于个人项目和中小规模应用，云服务的免费层已经足够使用。</p>
+<hr>  </article> <aside class="post-sidebar" data-astro-cid-bvzihdzo> <div class="sidebar-block" data-astro-cid-bvzihdzo> <p class="sidebar-label" data-astro-cid-bvzihdzo>Robin</p> <p class="sidebar-author" data-astro-cid-bvzihdzo>Robin</p> <p class="sidebar-author-desc" data-astro-cid-bvzihdzo>自由职业者</p> </div> <div class="sidebar-block" data-astro-cid-bvzihdzo> <p class="sidebar-label" data-astro-cid-bvzihdzo>标签</p> <div class="sidebar-tags" data-astro-cid-bvzihdzo> <span class="sidebar-tag" data-astro-cid-bvzihdzo>爬虫</span><span class="sidebar-tag" data-astro-cid-bvzihdzo>开发工具</span><span class="sidebar-tag" data-astro-cid-bvzihdzo>AI</span> </div> </div> </aside> </div> <div class="post-nav" data-astro-cid-bvzihdzo> <a href="/blog/notebooklm" class="post-nav-link post-nav-prev" data-astro-cid-bvzihdzo> ← 上一篇 notebooklm </a> <a href="/blog/alibaba-zvec-vector-engine" class="post-nav-link post-nav-next" data-astro-cid-bvzihdzo> alibaba-zvec-vector-engine 下一篇 → </a> </div>  </main> <footer class="site-footer" data-astro-cid-sz7xmlte> <span class="copy" data-astro-cid-sz7xmlte>© 2026 Robin</span> <span class="motto" data-astro-cid-sz7xmlte>总想折腾点啥</span> </footer>  </div> <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --> </body></html> 
