@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/egonex-understand-anything/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/egonex-understand-anything/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/egonex-understand-anything/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/egonex-understand-anything/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/egonex-understand-anything/"><meta property="og:title" content="egonex-understand-anything — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="egonex-understand-anything — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>egonex-understand-anything — Robin</title><style>.post-header[data-astro-cid-bvzihdzo]{padding:24px 24px 20px;border-bottom:var(--rule-thick) solid var(--ink)}.post-meta[data-astro-cid-bvzihdzo]{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}.post-title[data-astro-cid-bvzihdzo]{font-size:clamp(22px,4vw,32px);font-weight:900;letter-spacing:-.5px;line-height:1.25;margin-bottom:12px}.post-tags[data-astro-cid-bvzihdzo]{display:flex;flex-wrap:wrap;gap:6px}.post-body[data-astro-cid-bvzihdzo]{display:grid;grid-template-columns:1fr 200px}.post-content[data-astro-cid-bvzihdzo]{padding:28px 24px;border-right:var(--rule-thin) solid var(--gray-light);font-size:16px;line-height:1.8;color:#333;min-width:0}.post-content[data-astro-cid-bvzihdzo] h2,.post-content[data-astro-cid-bvzihdzo] h3{font-size:18px;font-weight:800;margin:32px 0 12px;padding-left:10px;border-left:2.5px solid var(--accent)}.post-content[data-astro-cid-bvzihdzo] h3{font-size:16px}.post-content[data-astro-cid-bvzihdzo] p{margin-bottom:16px}.post-content[data-astro-cid-bvzihdzo] ul,.post-content[data-astro-cid-bvzihdzo] ol{padding-left:24px;margin-bottom:16px}.post-content[data-astro-cid-bvzihdzo] li{margin-bottom:6px}.post-content[data-astro-cid-bvzihdzo] pre{background:#f4f4f4;padding:16px;overflow-x:auto;margin:20px 0;border-radius:2px;font-size:14px}.post-content[data-astro-cid-bvzihdzo] code{font-size:14px;background:#f4f4f4;padding:1px 5px;border-radius:2px}.post-content[data-astro-cid-bvzihdzo] pre code{background:none;padding:0}.post-content[data-astro-cid-bvzihdzo] img{max-width:100%;margin:20px auto;border:var(--rule-thin) solid var(--gray-light)}.post-content[data-astro-cid-bvzihdzo] blockquote{border-left:3px solid var(--accent);padding-left:16px;color:var(--gray);margin:20px 0}.post-content[data-astro-cid-bvzihdzo] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-bvzihdzo]{padding:28px 20px}.sidebar-block[data-astro-cid-bvzihdzo]{margin-bottom:24px}.sidebar-label[data-astro-cid-bvzihdzo]{font-size:10px;letter-spacing:2px;color:var(--gray);margin-bottom:8px}.sidebar-author[data-astro-cid-bvzihdzo]{font-size:14px;font-weight:800;margin-bottom:2px}.sidebar-author-desc[data-astro-cid-bvzihdzo]{font-size:12px;color:var(--gray)}.sidebar-tags[data-astro-cid-bvzihdzo]{display:flex;flex-direction:column;gap:6px}.sidebar-tag[data-astro-cid-bvzihdzo]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-bvzihdzo]{display:flex;justify-content:space-between;padding:16px 24px;border-top:var(--rule-thick) solid var(--ink);gap:16px}.post-nav-link[data-astro-cid-bvzihdzo]{font-size:13px;font-weight:700;border-bottom:1px solid var(--ink)}.post-nav-next[data-astro-cid-bvzihdzo]{margin-left:auto;text-align:right}@media(max-width:768px){.post-body[data-astro-cid-bvzihdzo]{grid-template-columns:1fr}.post-header[data-astro-cid-bvzihdzo]{padding:16px}.post-content[data-astro-cid-bvzihdzo]{padding:20px 16px}.post-sidebar[data-astro-cid-bvzihdzo]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-bvzihdzo]{padding:12px 16px;flex-wrap:wrap}.post-nav-next[data-astro-cid-bvzihdzo]{margin-left:0;text-align:left}}
+.site-nav[data-astro-cid-dmqpwcec]{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;border-bottom:var(--rule-thick) solid var(--ink)}.site-logo[data-astro-cid-dmqpwcec]{font-size:14px;font-weight:900;letter-spacing:3px;color:var(--ink)}.nav-right[data-astro-cid-dmqpwcec]{display:flex;align-items:center}.nav-links[data-astro-cid-dmqpwcec]{display:flex}.lang-switch[data-astro-cid-dmqpwcec]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media(max-width:480px){.site-nav[data-astro-cid-dmqpwcec]{padding:10px 16px}.nav-links[data-astro-cid-dmqpwcec] a[data-astro-cid-dmqpwcec]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-dmqpwcec]{margin-left:8px}}@media(max-width:360px){.site-nav[data-astro-cid-dmqpwcec]{padding:10px 12px}.nav-links[data-astro-cid-dmqpwcec] a[data-astro-cid-dmqpwcec]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-dmqpwcec]{margin-left:6px}}.site-footer[data-astro-cid-sz7xmlte]{background:var(--ink);padding:14px 24px;display:flex;justify-content:space-between;align-items:center}.copy[data-astro-cid-sz7xmlte]{font-size:12px;color:#ffffff4d}.motto[data-astro-cid-sz7xmlte]{font-size:12px;color:var(--accent);font-weight:700}:root{--ink: #0a2540;--accent: #f8c400;--bg: #ffffff;--bg-warm: #fafaf8;--gray: #888888;--gray-light: #eeeeee;--white: #ffffff;--rule-thick: 2.5px;--rule-grid: 1.5px;--rule-thin: 1px;--font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,*:before,*:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}img{display:block;max-width:100%;height:auto}a{color:inherit;text-decoration:none}.text-meta{font-size:11px;letter-spacing:.08em;font-weight:700;color:var(--gray)}.text-label{font-size:12px;letter-spacing:.05em;color:var(--gray)}.tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;padding:2px 8px;line-height:1.6}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{display:inline-block;border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;letter-spacing:.06em;padding:4px 14px;cursor:pointer;background:transparent;transition:background .15s,color .15s}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{min-height:100vh;display:flex;flex-direction:column}.site-main{flex:1}.breadcrumb{display:flex;align-items:center;gap:8px;padding:10px 24px;border-bottom:var(--rule-thin) solid var(--gray-light);font-size:12px}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media(max-width:768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head> <body> <div class="site-wrapper"> <nav class="site-nav" data-astro-cid-dmqpwcec> <a href="/" class="site-logo" data-astro-cid-dmqpwcec>ROBIN</a> <div class="nav-right" data-astro-cid-dmqpwcec> <div class="nav-links" data-astro-cid-dmqpwcec> <a href="/" class="box-btn" data-astro-cid-dmqpwcec> 产品 </a> <a href="/blog" class="box-btn active" data-astro-cid-dmqpwcec> 博客 </a> <a href="/about" class="box-btn" data-astro-cid-dmqpwcec> 关于 </a> </div> <a href="/en/blog/egonex-understand-anything/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-dmqpwcec> EN </a> </div> </nav> <script type="module">document.querySelector(".lang-switch")?.addEventListener("click",e=>{const t=e.currentTarget;localStorage.setItem("robin-lang",t.dataset.otherLang??"zh")});</script>  <main class="site-main">  <div class="breadcrumb" data-astro-cid-bvzihdzo> <a href="/blog" data-astro-cid-bvzihdzo>博客</a> <span class="sep" data-astro-cid-bvzihdzo>/</span><span class="cur" data-astro-cid-bvzihdzo>AI</span> </div> <div class="post-header" data-astro-cid-bvzihdzo> <div class="post-meta" data-astro-cid-bvzihdzo> <span class="tag tag-ink" data-astro-cid-bvzihdzo>AI</span> <span class="text-meta" data-astro-cid-bvzihdzo>2026 / 06 / 29</span> <span class="text-meta" data-astro-cid-bvzihdzo>约 11 分钟阅读</span> </div> <h1 class="post-title" data-astro-cid-bvzihdzo>egonex-understand-anything</h1> <div class="post-tags" data-astro-cid-bvzihdzo> <span class="tag-outline" data-astro-cid-bvzihdzo>知识图谱</span><span class="tag-outline" data-astro-cid-bvzihdzo>开发工具</span><span class="tag-outline" data-astro-cid-bvzihdzo>AI编程</span> </div> </div> <div class="post-body" data-astro-cid-bvzihdzo> <article class="post-content" data-astro-cid-bvzihdzo>  <h1 id="用-understand-anything-把任何代码库变成可交互知识图谱">用 Understand Anything 把任何代码库变成可交互知识图谱</h1>
+<p><img src="/assets/images/egonex-understand-anything-summary.png" alt="知识点总结"></p>
+<h2 id="摘要">摘要</h2>
+<p>Understand Anything 是一款支持 Claude Code、Cursor、Copilot、Codex、Gemini CLI 等主流 AI 编程工具的插件，能将任意代码库、知识库或文档自动构建为可交互的知识图谱。它采用 Tree-sitter 静态分析 + 多 Agent LLM 流水线的混合架构，让你在几分钟内看懂一个陌生的大型项目全貌，而不是在代码文件间盲目跳转。</p>
+<h2 id="核心优势">核心优势</h2>
+<p><strong>不只是可视化，而是真正可学习的图谱。</strong> 很多代码可视化工具生成漂亮但无法交互的关系图，Understand Anything 的目标不同——图谱中的每个节点都附有自然语言摘要、架构层级标注和依赖关系，你可以模糊搜索、语义搜索（“哪些部分处理支付流程？”），还能点击节点查看代码并触发 AI 解释。</p>
+<p><strong>Tree-sitter + LLM 混合，兼顾准确与洞察。</strong> 结构侧（imports、函数定义、调用关系、继承）由 Tree-sitter 确定性解析，保证相同代码产生相同的图结构。语义侧（文件用途、架构层分配、业务领域映射）由 LLM 补充，覆盖纯解析器无法捕获的意图信息。</p>
+<p><strong>增量更新，首次之后几乎无额外成本。</strong> 初次分析整个代码库后，后续只重新分析变更文件，token 消耗大幅下降；也可以开启 <code>--auto-update</code> 在每次 commit 后自动增量更新图谱。</p>
+<p><strong>图谱即文档，可提交到 Git。</strong> <code>.understand-anything/knowledge-graph.json</code> 是标准 JSON，提交一次后新队友克隆即可直接使用，无需重跑分析流水线——对于 onboarding 和 PR review 场景尤其实用。</p>
+<p><strong>多平台全覆盖。</strong> 同一套插件通过一条 <code>install.sh</code> 命令即可安装到 Codex、Gemini CLI、VS Code Copilot、Trae、Kiro 等 17 个平台，不锁定任何单一 AI 工具。</p>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li><strong>刚加入新团队的工程师</strong>：面对 20 万行代码不知从何下手，用知识图谱看清整体结构再深入局部。</li>
+<li><strong>做代码审查的 Tech Lead</strong>：用 <code>/understand-diff</code> 在 commit 前看清改动的波及范围，避免隐性副作用。</li>
+<li><strong>需要快速理解遗留系统的架构师</strong>：通过业务领域视图（<code>/understand-domain</code>）把代码映射到真实业务流程。</li>
+<li><strong>维护 LLM wiki 知识库的研究者</strong>：用 <code>/understand-knowledge</code> 分析 Karpathy 式 wiki，自动构建实体关系图。</li>
+<li><strong>技术 PM</strong>：在 persona-adaptive 仪表盘中以非开发者视角浏览系统结构，理解各模块的业务含义。</li>
+</ul>
+<h2 id="快速上手">快速上手</h2>
+<h3 id="1-安装插件">1. 安装插件</h3>
+<p><strong>Claude Code（原生支持）：</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">/plugin</span><span style="color:#9ECBFF"> marketplace</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> Egonex-AI/Understand-Anything</span></span>
+<span class="line"><span style="color:#B392F0">/plugin</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> understand-anything</span></span></code></pre>
+<p><strong>其他平台（一行命令，macOS/Linux）：</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 通用安装，会提示选择平台</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -fsSL</span><span style="color:#9ECBFF"> https://raw.githubusercontent.com/Egonex-AI/Understand-Anything/main/install.sh</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> bash</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 指定平台跳过提示，例如 Codex</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -fsSL</span><span style="color:#9ECBFF"> https://raw.githubusercontent.com/Egonex-AI/Understand-Anything/main/install.sh</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> bash</span><span style="color:#79B8FF"> -s</span><span style="color:#9ECBFF"> codex</span></span></code></pre>
+<p>支持的平台参数：<code>gemini</code>、<code>codex</code>、<code>opencode</code>、<code>vscode</code>、<code>trae</code>、<code>kiro</code> 等 14 个。</p>
+<p><strong>Windows（PowerShell）：</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="powershell"><code><span class="line"><span style="color:#E1E4E8">iwr </span><span style="color:#F97583">-</span><span style="color:#E1E4E8">useb https:</span><span style="color:#F97583">//</span><span style="color:#79B8FF">raw.githubusercontent.com</span><span style="color:#F97583">/</span><span style="color:#E1E4E8">Egonex</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AI</span><span style="color:#F97583">/</span><span style="color:#E1E4E8">Understand</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">Anything</span><span style="color:#F97583">/</span><span style="color:#E1E4E8">main</span><span style="color:#F97583">/</span><span style="color:#E1E4E8">install.ps1 </span><span style="color:#F97583">|</span><span style="color:#E1E4E8"> iex</span></span></code></pre>
+<h3 id="2-分析代码库">2. 分析代码库</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">/understand</span></span></code></pre>
+<p>多 Agent 流水线启动，扫描项目中所有文件、函数、类和依赖，构建知识图谱并保存到 <code>.understand-anything/knowledge-graph.json</code>。</p>
+<blockquote>
+<p><strong>中文输出：</strong> 加上 <code>--language zh</code> 参数，节点描述、Dashboard UI 和导览说明均以中文生成。</p>
+</blockquote>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">/understand</span><span style="color:#79B8FF"> --language</span><span style="color:#9ECBFF"> zh</span></span></code></pre>
+<h3 id="3-打开交互仪表盘">3. 打开交互仪表盘</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">/understand-dashboard</span></span></code></pre>
+<p>浏览器中弹出交互式图谱：节点按架构层颜色区分（API / Service / Data / UI / Utility），支持缩放、平移、模糊搜索和语义搜索。点击任意节点可查看源码、依赖关系和 AI 生成的自然语言解释。</p>
+<h2 id="进阶用法">进阶用法</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 向图谱提问——比直接问 AI 更精准，因为已有结构化上下文</span></span>
+<span class="line"><span style="color:#B392F0">/understand-chat</span><span style="color:#9ECBFF"> 支付流程是如何实现的？</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 查看当前改动影响哪些模块（提交前必用）</span></span>
+<span class="line"><span style="color:#B392F0">/understand-diff</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 深入分析某个文件或函数</span></span>
+<span class="line"><span style="color:#B392F0">/understand-explain</span><span style="color:#9ECBFF"> src/auth/login.ts</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 生成新人 onboarding 指南</span></span>
+<span class="line"><span style="color:#B392F0">/understand-onboard</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 提取业务领域知识（domains、flows、steps）</span></span>
+<span class="line"><span style="color:#B392F0">/understand-domain</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 分析 Karpathy 式 LLM wiki，构建知识关系图</span></span>
+<span class="line"><span style="color:#B392F0">/understand-knowledge</span><span style="color:#9ECBFF"> ~/path/to/wiki</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 只分析 monorepo 中的某个子目录</span></span>
+<span class="line"><span style="color:#B392F0">/understand</span><span style="color:#9ECBFF"> src/frontend</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 每次 commit 后自动增量更新图谱</span></span>
+<span class="line"><span style="color:#B392F0">/understand</span><span style="color:#79B8FF"> --auto-update</span></span></code></pre>
+<p><strong>大型图谱（10 MB 以上）建议配合 git-lfs：</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> lfs</span><span style="color:#9ECBFF"> install</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> lfs</span><span style="color:#9ECBFF"> track</span><span style="color:#9ECBFF"> ".understand-anything/*.json"</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> .gitattributes</span><span style="color:#9ECBFF"> .understand-anything/</span></span></code></pre>
+<h2 id="七个-agent-分工协作">七个 Agent 分工协作</h2>
+<p><code>/understand</code> 在底层编排 5 个专用 Agent，<code>/understand-domain</code> 再加入第 6 个，<code>/understand-knowledge</code> 加入第 7 个：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Agent</th><th>职责</th></tr></thead><tbody><tr><td><code>project-scanner</code></td><td>发现文件、识别语言和框架</td></tr><tr><td><code>file-analyzer</code></td><td>提取函数/类/imports，生成节点和边（最多 5 路并行，每批 20-30 个文件）</td></tr><tr><td><code>architecture-analyzer</code></td><td>识别架构层级</td></tr><tr><td><code>tour-builder</code></td><td>生成按依赖顺序排列的导览路径</td></tr><tr><td><code>graph-reviewer</code></td><td>验证图的完整性和引用完整性</td></tr><tr><td><code>domain-analyzer</code></td><td>提取业务领域、流程和步骤</td></tr><tr><td><code>article-analyzer</code></td><td>从 wiki 文章中提取实体、关联和隐式关系</td></tr></tbody></table>  </article> <aside class="post-sidebar" data-astro-cid-bvzihdzo> <div class="sidebar-block" data-astro-cid-bvzihdzo> <p class="sidebar-label" data-astro-cid-bvzihdzo>Robin</p> <p class="sidebar-author" data-astro-cid-bvzihdzo>Robin</p> <p class="sidebar-author-desc" data-astro-cid-bvzihdzo>自由职业者</p> </div> <div class="sidebar-block" data-astro-cid-bvzihdzo> <p class="sidebar-label" data-astro-cid-bvzihdzo>标签</p> <div class="sidebar-tags" data-astro-cid-bvzihdzo> <span class="sidebar-tag" data-astro-cid-bvzihdzo>知识图谱</span><span class="sidebar-tag" data-astro-cid-bvzihdzo>开发工具</span><span class="sidebar-tag" data-astro-cid-bvzihdzo>AI编程</span> </div> </div> </aside> </div> <div class="post-nav" data-astro-cid-bvzihdzo> <a href="/blog/alibaba-zvec-vector-engine" class="post-nav-link post-nav-prev" data-astro-cid-bvzihdzo> ← 上一篇 alibaba-zvec-vector-engine </a>  </div>  </main> <footer class="site-footer" data-astro-cid-sz7xmlte> <span class="copy" data-astro-cid-sz7xmlte>© 2026 Robin</span> <span class="motto" data-astro-cid-sz7xmlte>总想折腾点啥</span> </footer>  </div> <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --> </body></html> 
