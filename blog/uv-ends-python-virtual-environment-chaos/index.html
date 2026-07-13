@@ -1,0 +1,168 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/uv-ends-python-virtual-environment-chaos/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/uv-ends-python-virtual-environment-chaos/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/uv-ends-python-virtual-environment-chaos/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/uv-ends-python-virtual-environment-chaos/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/uv-ends-python-virtual-environment-chaos/"><meta property="og:title" content="uv-ends-python-virtual-environment-chaos — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="uv-ends-python-virtual-environment-chaos — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>uv-ends-python-virtual-environment-chaos — Robin</title><style>.post-header[data-astro-cid-bvzihdzo]{padding:24px 24px 20px;border-bottom:var(--rule-thick) solid var(--ink)}.post-meta[data-astro-cid-bvzihdzo]{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}.post-title[data-astro-cid-bvzihdzo]{font-size:clamp(22px,4vw,32px);font-weight:900;letter-spacing:-.5px;line-height:1.25;margin-bottom:12px}.post-tags[data-astro-cid-bvzihdzo]{display:flex;flex-wrap:wrap;gap:6px}.post-body[data-astro-cid-bvzihdzo]{display:grid;grid-template-columns:1fr 200px}.post-content[data-astro-cid-bvzihdzo]{padding:28px 24px;border-right:var(--rule-thin) solid var(--gray-light);font-size:16px;line-height:1.8;color:#333;min-width:0}.post-content[data-astro-cid-bvzihdzo] h2,.post-content[data-astro-cid-bvzihdzo] h3{font-size:18px;font-weight:800;margin:32px 0 12px;padding-left:10px;border-left:2.5px solid var(--accent)}.post-content[data-astro-cid-bvzihdzo] h3{font-size:16px}.post-content[data-astro-cid-bvzihdzo] p{margin-bottom:16px}.post-content[data-astro-cid-bvzihdzo] ul,.post-content[data-astro-cid-bvzihdzo] ol{padding-left:24px;margin-bottom:16px}.post-content[data-astro-cid-bvzihdzo] li{margin-bottom:6px}.post-content[data-astro-cid-bvzihdzo] pre{background:#f4f4f4;padding:16px;overflow-x:auto;margin:20px 0;border-radius:2px;font-size:14px}.post-content[data-astro-cid-bvzihdzo] code{font-size:14px;background:#f4f4f4;padding:1px 5px;border-radius:2px}.post-content[data-astro-cid-bvzihdzo] pre code{background:none;padding:0}.post-content[data-astro-cid-bvzihdzo] img{max-width:100%;margin:20px auto;border:var(--rule-thin) solid var(--gray-light)}.post-content[data-astro-cid-bvzihdzo] blockquote{border-left:3px solid var(--accent);padding-left:16px;color:var(--gray);margin:20px 0}.post-content[data-astro-cid-bvzihdzo] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-bvzihdzo]{padding:28px 20px}.sidebar-block[data-astro-cid-bvzihdzo]{margin-bottom:24px}.sidebar-label[data-astro-cid-bvzihdzo]{font-size:10px;letter-spacing:2px;color:var(--gray);margin-bottom:8px}.sidebar-author[data-astro-cid-bvzihdzo]{font-size:14px;font-weight:800;margin-bottom:2px}.sidebar-author-desc[data-astro-cid-bvzihdzo]{font-size:12px;color:var(--gray)}.sidebar-tags[data-astro-cid-bvzihdzo]{display:flex;flex-direction:column;gap:6px}.sidebar-tag[data-astro-cid-bvzihdzo]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-bvzihdzo]{display:flex;justify-content:space-between;padding:16px 24px;border-top:var(--rule-thick) solid var(--ink);gap:16px}.post-nav-link[data-astro-cid-bvzihdzo]{font-size:13px;font-weight:700;border-bottom:1px solid var(--ink)}.post-nav-next[data-astro-cid-bvzihdzo]{margin-left:auto;text-align:right}@media(max-width:768px){.post-body[data-astro-cid-bvzihdzo]{grid-template-columns:1fr}.post-header[data-astro-cid-bvzihdzo]{padding:16px}.post-content[data-astro-cid-bvzihdzo]{padding:20px 16px}.post-sidebar[data-astro-cid-bvzihdzo]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-bvzihdzo]{padding:12px 16px;flex-wrap:wrap}.post-nav-next[data-astro-cid-bvzihdzo]{margin-left:0;text-align:left}}
+.site-nav[data-astro-cid-dmqpwcec]{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;border-bottom:var(--rule-thick) solid var(--ink)}.site-logo[data-astro-cid-dmqpwcec]{font-size:14px;font-weight:900;letter-spacing:3px;color:var(--ink)}.nav-right[data-astro-cid-dmqpwcec]{display:flex;align-items:center}.nav-links[data-astro-cid-dmqpwcec]{display:flex}.lang-switch[data-astro-cid-dmqpwcec]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media(max-width:480px){.site-nav[data-astro-cid-dmqpwcec]{padding:10px 16px}.nav-links[data-astro-cid-dmqpwcec] a[data-astro-cid-dmqpwcec]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-dmqpwcec]{margin-left:8px}}@media(max-width:360px){.site-nav[data-astro-cid-dmqpwcec]{padding:10px 12px}.nav-links[data-astro-cid-dmqpwcec] a[data-astro-cid-dmqpwcec]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-dmqpwcec]{margin-left:6px}}.site-footer[data-astro-cid-sz7xmlte]{background:var(--ink);padding:14px 24px;display:flex;justify-content:space-between;align-items:center}.copy[data-astro-cid-sz7xmlte]{font-size:12px;color:#ffffff4d}.motto[data-astro-cid-sz7xmlte]{font-size:12px;color:var(--accent);font-weight:700}:root{--ink: #0a2540;--accent: #f8c400;--bg: #ffffff;--bg-warm: #fafaf8;--gray: #888888;--gray-light: #eeeeee;--white: #ffffff;--rule-thick: 2.5px;--rule-grid: 1.5px;--rule-thin: 1px;--font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,*:before,*:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}img{display:block;max-width:100%;height:auto}a{color:inherit;text-decoration:none}.text-meta{font-size:11px;letter-spacing:.08em;font-weight:700;color:var(--gray)}.text-label{font-size:12px;letter-spacing:.05em;color:var(--gray)}.tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;padding:2px 8px;line-height:1.6}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{display:inline-block;border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;letter-spacing:.06em;padding:4px 14px;cursor:pointer;background:transparent;transition:background .15s,color .15s}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{min-height:100vh;display:flex;flex-direction:column}.site-main{flex:1}.breadcrumb{display:flex;align-items:center;gap:8px;padding:10px 24px;border-bottom:var(--rule-thin) solid var(--gray-light);font-size:12px}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media(max-width:768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head> <body> <div class="site-wrapper"> <nav class="site-nav" data-astro-cid-dmqpwcec> <a href="/" class="site-logo" data-astro-cid-dmqpwcec>ROBIN</a> <div class="nav-right" data-astro-cid-dmqpwcec> <div class="nav-links" data-astro-cid-dmqpwcec> <a href="/" class="box-btn" data-astro-cid-dmqpwcec> 产品 </a> <a href="/blog" class="box-btn active" data-astro-cid-dmqpwcec> 博客 </a> <a href="/about" class="box-btn" data-astro-cid-dmqpwcec> 关于 </a> </div> <a href="/en/blog/uv-ends-python-virtual-environment-chaos/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-dmqpwcec> EN </a> </div> </nav> <script type="module">document.querySelector(".lang-switch")?.addEventListener("click",e=>{const t=e.currentTarget;localStorage.setItem("robin-lang",t.dataset.otherLang??"zh")});</script>  <main class="site-main">  <div class="breadcrumb" data-astro-cid-bvzihdzo> <a href="/blog" data-astro-cid-bvzihdzo>博客</a> <span class="sep" data-astro-cid-bvzihdzo>/</span><span class="cur" data-astro-cid-bvzihdzo>AI</span> </div> <div class="post-header" data-astro-cid-bvzihdzo> <div class="post-meta" data-astro-cid-bvzihdzo> <span class="tag tag-ink" data-astro-cid-bvzihdzo>AI</span> <span class="text-meta" data-astro-cid-bvzihdzo>2026 / 07 / 12</span> <span class="text-meta" data-astro-cid-bvzihdzo>约 14 分钟阅读</span> </div> <h1 class="post-title" data-astro-cid-bvzihdzo>uv-ends-python-virtual-environment-chaos</h1> <div class="post-tags" data-astro-cid-bvzihdzo> <span class="tag-outline" data-astro-cid-bvzihdzo>Python</span><span class="tag-outline" data-astro-cid-bvzihdzo>开发工具</span> </div> </div> <div class="post-body" data-astro-cid-bvzihdzo> <article class="post-content" data-astro-cid-bvzihdzo>  <h1 id="uv终结-python-虚拟环境管理乱局">uv：终结 Python 虚拟环境管理乱局</h1>
+<p><img src="/assets/images/uv-ends-python-virtual-environment-chaos-summary.png" alt="知识点总结"></p>
+<h2 id="摘要">摘要</h2>
+<p>如果你还在 <code>python -m venv .venv &#x26;&#x26; source .venv/bin/activate &#x26;&#x26; pip install -r requirements.txt</code> 这套流程里反复横跳，是时候看看 uv 了。uv 是 Astral（Ruff、ty 的作者）用 Rust 写的 Python 包与项目管理工具，把版本管理、依赖安装、锁文件、虚拟环境、项目管理这五件事揉进一个单文件二进制里，安装速度是 pip 的 10-100 倍，而且完全不需要手动激活环境。</p>
+<h2 id="uv-是什么">uv 是什么</h2>
+<p>一句话概括：uv = pyenv（Python 版本管理）+ pip（包安装）+ pip-tools（锁文件）+ venv（虚拟环境）+ poetry/pdm（项目管理）。</p>
+<p>它不是又一个”更快的 pip”，而是把 Python 生态里长期分裂的这几层工具统一到了一个工具链里：</p>
+<ul>
+<li><strong>Python 版本管理</strong>：<code>uv python install 3.12</code> 直接下载对应版本的解释器，不用再单独装 pyenv</li>
+<li><strong>虚拟环境</strong>：<code>uv venv</code> 或者干脆不用手动建，<code>uv run</code> 会自动检测/创建项目的 <code>.venv</code></li>
+<li><strong>依赖安装与锁定</strong>：<code>uv add</code>/<code>uv sync</code> 生成并使用 <code>uv.lock</code>，保证团队成员和 CI 装出来的依赖版本完全一致</li>
+<li><strong>一键运行</strong>：<code>uv run python script.py</code> 自动在项目虚拟环境里执行，全程不需要 <code>source activate</code></li>
+</ul>
+<h2 id="核心优势和其他虚拟环境工具比">核心优势：和其他虚拟环境工具比</h2>
+<p>Python 生态里管理虚拟环境和依赖的工具不少，各自解决的问题也不完全一样：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>工具</th><th>定位</th><th>需要手动 activate？</th><th>Python 版本管理</th><th>锁文件</th><th>速度</th></tr></thead><tbody><tr><td><strong>uv</strong></td><td>全能（版本+包+环境+项目）</td><td>否，<code>uv run</code> 自动进环境</td><td>✅ 内置，自动下载</td><td>✅ <code>uv.lock</code></td><td>极快</td></tr><tr><td>venv（标准库）</td><td>只管环境隔离</td><td>✅ 必须手动 activate</td><td>❌</td><td>❌</td><td>慢</td></tr><tr><td>virtualenv</td><td>venv 的前身/增强版</td><td>✅</td><td>❌</td><td>❌</td><td>慢</td></tr><tr><td>pip</td><td>只管装包</td><td>依赖 venv</td><td>❌</td><td>❌（requirements.txt 不是真锁文件）</td><td>慢</td></tr><tr><td>pipenv</td><td>pip+virtualenv 整合</td><td>否，<code>pipenv run</code></td><td>❌</td><td>✅ Pipfile.lock</td><td>慢，解析器出了名地卡</td></tr><tr><td>poetry</td><td>项目+依赖管理</td><td>否，<code>poetry run</code></td><td>❌（要配合 pyenv）</td><td>✅ poetry.lock</td><td>中等</td></tr><tr><td>pdm</td><td>类似 poetry，支持 PEP 582</td><td>否，<code>pdm run</code></td><td>部分支持</td><td>✅ pdm.lock</td><td>较快</td></tr><tr><td>conda/mamba</td><td>科学计算全家桶</td><td>✅（也有 <code>conda run</code>）</td><td>✅</td><td>⚠️ 非严格锁文件</td><td>conda 慢，mamba 快</td></tr><tr><td>pyenv</td><td>只管 Python 版本</td><td>不适用</td><td>✅</td><td>❌</td><td>—</td></tr></tbody></table>
+<p>几个容易误解的地方：</p>
+<ol>
+<li><strong>“不用 activate” 不是 uv 独有</strong>：poetry/pdm/pipenv 的 <code>xxx run</code> 命令本来就能做到不激活直接跑命令，本质都是给子进程临时改 PATH。uv 的优势是把这个模式做到最快、最零配置。</li>
+<li><strong>uv 真正独特之处</strong>：一个二进制同时管 Python 版本（不用配 pyenv）；全局内容寻址缓存，多个项目共用同一份包的磁盘存储，不重复占空间；完全兼容 pip 接口，<code>uv pip install</code> 可以直接当 pip 替代，迁移成本几乎为零。</li>
+<li><strong>conda 什么时候还该用</strong>：项目依赖非 Python 的编译库（CUDA、MKL、某些 R/Julia 绑定）时，conda/mamba 的二进制包管理仍然更合适——uv 只管 Python 生态，不处理系统级二进制依赖。</li>
+</ol>
+<h3 id="对-ai-编程助手格外友好">对 AI 编程助手格外友好</h3>
+<p>这一点在 AI Agent 编程时代价值被明显放大了：如果你写的 Python 脚本是要交给 AI（Claude Code、Cursor 等）调用执行的，用 <code>uv run</code> 意味着<strong>完全不需要在给 AI 的指令里专门交代”先激活虚拟环境再执行程序”这一步</strong>。AI 每次工具调用往往是独立的 shell 进程，环境激活状态本来就留不住，稍不注意就会因为忘记 activate 而报 <code>ModuleNotFoundError</code>；而 <code>uv run python xxx.py</code> 每次都会自动定位并使用项目自己的虚拟环境，AI 只要记住这一条命令格式就行，不用理解”环境是否已激活”这个状态问题。这也是为什么现在几乎所有新建的 Python 项目都会直接用 uv 起步——对人省心，对 AI 更省心。</p>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li>受够了 <code>venv</code> + <code>pip</code> + <code>requirements.txt</code> 这套老流程、想要更快更省心的开发者</li>
+<li>已经在用 poetry/pdm，但嫌解析器和安装速度不够快的团队</li>
+<li>需要在 CI 里频繁重建虚拟环境、对安装速度敏感的项目</li>
+<li>想要一个工具同时搞定 Python 版本切换和依赖管理，减少工具链复杂度的人</li>
+<li>用 Claude Code、Cursor 等 AI 编程助手写 Python 自动化脚本、不想每次都在 prompt 里教 AI “先激活环境”的人</li>
+</ul>
+<h2 id="快速上手">快速上手</h2>
+<p><strong>安装</strong>（macOS / Linux）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -LsSf</span><span style="color:#9ECBFF"> https://astral.sh/uv/install.sh</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> sh</span></span></code></pre>
+<p>Windows 用 PowerShell：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="powershell"><code><span class="line"><span style="color:#E1E4E8">powershell </span><span style="color:#F97583">-</span><span style="color:#E1E4E8">ExecutionPolicy ByPass </span><span style="color:#F97583">-</span><span style="color:#E1E4E8">c </span><span style="color:#9ECBFF">"irm https://astral.sh/uv/install.ps1 | iex"</span></span></code></pre>
+<p>也可以用已有的包管理器安装，比如 Homebrew：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">brew</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> uv</span></span></code></pre>
+<p>或者通过 pipx：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">pipx</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> uv</span></span></code></pre>
+<p><strong>安装指定版本的 Python</strong>（不用再单独装 pyenv）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> python</span><span style="color:#9ECBFF"> install</span><span style="color:#79B8FF"> 3.12</span></span></code></pre>
+<p><strong>新建一个项目</strong>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> init</span><span style="color:#9ECBFF"> myproject</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> myproject</span></span></code></pre>
+<p><strong>添加依赖</strong>（自动创建虚拟环境、更新 <code>pyproject.toml</code> 和 <code>uv.lock</code>）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> requests</span><span style="color:#9ECBFF"> fastapi</span></span></code></pre>
+<p><strong>运行代码</strong>（自动在项目虚拟环境里执行，不需要手动 activate）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> python</span><span style="color:#9ECBFF"> main.py</span></span></code></pre>
+<p><strong>同步依赖</strong>（按 <code>uv.lock</code> 精确还原环境，适合 CI 或团队协作）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> sync</span></span></code></pre>
+<h2 id="进阶用法">进阶用法</h2>
+<ol>
+<li><strong>把 CLI 工具变成系统命令，还不污染全局环境</strong>（pipx 的直接替代）：</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> tool</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> comfy-cli</span><span style="color:#6A737D">   # 装进独立隔离环境，只把 comfy 命令暴露到 PATH</span></span>
+<span class="line"><span style="color:#B392F0">comfy</span><span style="color:#9ECBFF"> some-command</span><span style="color:#6A737D">          # 之后直接执行，命令行里不出现 uv，也不用 activate</span></span>
+<span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> tool</span><span style="color:#9ECBFF"> update-shell</span><span style="color:#6A737D">        # 首次使用前跑一次，把暴露命令的目录加进 PATH</span></span>
+<span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> tool</span><span style="color:#9ECBFF"> list</span><span style="color:#6A737D">                # 看装了哪些工具</span></span>
+<span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> tool</span><span style="color:#9ECBFF"> upgrade</span><span style="color:#9ECBFF"> comfy-cli</span><span style="color:#6A737D">   # 升级</span></span>
+<span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> tool</span><span style="color:#9ECBFF"> uninstall</span><span style="color:#9ECBFF"> comfy-cli</span><span style="color:#6A737D"> # 卸载（连隔离环境一起删掉）</span></span></code></pre>
+<ol start="2">
+<li><strong>把 uv 当 pip 的直接替代</strong>（迁移老项目最省事的方式）：</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> pip</span><span style="color:#9ECBFF"> install</span><span style="color:#79B8FF"> -r</span><span style="color:#9ECBFF"> requirements.txt</span></span>
+<span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> pip</span><span style="color:#9ECBFF"> compile</span><span style="color:#9ECBFF"> requirements.in</span><span style="color:#79B8FF"> -o</span><span style="color:#9ECBFF"> requirements.txt</span></span></code></pre>
+<ol start="3">
+<li><strong>像 npx 一样直接运行工具，不用提前安装</strong>：</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">uvx</span><span style="color:#9ECBFF"> ruff</span><span style="color:#9ECBFF"> check</span><span style="color:#9ECBFF"> .</span></span>
+<span class="line"><span style="color:#B392F0">uvx</span><span style="color:#9ECBFF"> black</span><span style="color:#9ECBFF"> .</span></span></code></pre>
+<ol start="4">
+<li><strong>多项目 workspace</strong>（类似 Cargo 的 workspace 概念，适合 monorepo）：</li>
+</ol>
+<p>在根目录 <code>pyproject.toml</code> 里声明 <code>[tool.uv.workspace]</code> 后，<code>uv run</code>/<code>uv sync</code> 会理解子项目之间的依赖关系，不需要每个子项目单独管理虚拟环境。</p>
+<ol start="5">
+<li><strong>锁定依赖但不同步</strong>（比如只想更新 lock 文件、暂不落地到本地环境）：</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> lock</span></span></code></pre>
+<p>如果你的项目还停留在 <code>venv</code> + <code>requirements.txt</code> 的年代，花十分钟切到 uv，大概率再也不想回去了——我自己现在所有的 Python 项目都已经全部切到了 uv，不再单独维护 <code>.venv</code> 的激活步骤。</p>  </article> <aside class="post-sidebar" data-astro-cid-bvzihdzo> <div class="sidebar-block" data-astro-cid-bvzihdzo> <p class="sidebar-label" data-astro-cid-bvzihdzo>Robin</p> <p class="sidebar-author" data-astro-cid-bvzihdzo>Robin</p> <p class="sidebar-author-desc" data-astro-cid-bvzihdzo>自由职业者</p> </div> <div class="sidebar-block" data-astro-cid-bvzihdzo> <p class="sidebar-label" data-astro-cid-bvzihdzo>标签</p> <div class="sidebar-tags" data-astro-cid-bvzihdzo> <span class="sidebar-tag" data-astro-cid-bvzihdzo>Python</span><span class="sidebar-tag" data-astro-cid-bvzihdzo>开发工具</span> </div> </div> </aside> </div> <div class="post-nav" data-astro-cid-bvzihdzo> <a href="/blog/litellm-ai-gateway-for-100-plus-llm-providers" class="post-nav-link post-nav-prev" data-astro-cid-bvzihdzo> ← 上一篇 litellm-ai-gateway-for-100-plus-llm-providers </a>  </div>  </main> <footer class="site-footer" data-astro-cid-sz7xmlte> <span class="copy" data-astro-cid-sz7xmlte>© 2026 Robin</span> <span class="motto" data-astro-cid-sz7xmlte>总想折腾点啥</span> </footer>  </div> <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --> </body></html> 
