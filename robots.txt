@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://robin-2016.github.io/sitemap-index.xml

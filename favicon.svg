@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Navy background -->
+  <rect width="32" height="32" fill="#0a2540"/>
+  <!-- Terminal chevron ">" in yellow, based on Lucide terminal icon (lucide.dev/icons/terminal, ISC License) -->
+  <polyline points="5,9 13,17 5,25" fill="none" stroke="#f8c400" stroke-width="2.8" stroke-linecap="square" stroke-linejoin="miter"/>
+  <!-- Horizontal underline in white -->
+  <line x1="16" y1="25" x2="27" y2="25" stroke="white" stroke-width="2.8" stroke-linecap="square"/>
+</svg>

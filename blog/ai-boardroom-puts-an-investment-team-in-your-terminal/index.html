@@ -1,0 +1,163 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/ai-boardroom-puts-an-investment-team-in-your-terminal/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/ai-boardroom-puts-an-investment-team-in-your-terminal/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/ai-boardroom-puts-an-investment-team-in-your-terminal/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/ai-boardroom-puts-an-investment-team-in-your-terminal/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/ai-boardroom-puts-an-investment-team-in-your-terminal/"><meta property="og:title" content="ai-boardroom-puts-an-investment-team-in-your-terminal — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="ai-boardroom-puts-an-investment-team-in-your-terminal — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>ai-boardroom-puts-an-investment-team-in-your-terminal — Robin</title><style>.post-header[data-astro-cid-bvzihdzo]{padding:24px 24px 20px;border-bottom:var(--rule-thick) solid var(--ink)}.post-meta[data-astro-cid-bvzihdzo]{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}.post-title[data-astro-cid-bvzihdzo]{font-size:clamp(22px,4vw,32px);font-weight:900;letter-spacing:-.5px;line-height:1.25;margin-bottom:12px}.post-tags[data-astro-cid-bvzihdzo]{display:flex;flex-wrap:wrap;gap:6px}.post-body[data-astro-cid-bvzihdzo]{display:grid;grid-template-columns:1fr 200px}.post-content[data-astro-cid-bvzihdzo]{padding:28px 24px;border-right:var(--rule-thin) solid var(--gray-light);font-size:16px;line-height:1.8;color:#333;min-width:0}.post-content[data-astro-cid-bvzihdzo] h2,.post-content[data-astro-cid-bvzihdzo] h3{font-size:18px;font-weight:800;margin:32px 0 12px;padding-left:10px;border-left:2.5px solid var(--accent)}.post-content[data-astro-cid-bvzihdzo] h3{font-size:16px}.post-content[data-astro-cid-bvzihdzo] p{margin-bottom:16px}.post-content[data-astro-cid-bvzihdzo] ul,.post-content[data-astro-cid-bvzihdzo] ol{padding-left:24px;margin-bottom:16px}.post-content[data-astro-cid-bvzihdzo] li{margin-bottom:6px}.post-content[data-astro-cid-bvzihdzo] pre{background:#f4f4f4;padding:16px;overflow-x:auto;margin:20px 0;border-radius:2px;font-size:14px}.post-content[data-astro-cid-bvzihdzo] code{font-size:14px;background:#f4f4f4;padding:1px 5px;border-radius:2px}.post-content[data-astro-cid-bvzihdzo] pre code{background:none;padding:0}.post-content[data-astro-cid-bvzihdzo] img{max-width:100%;margin:20px auto;border:var(--rule-thin) solid var(--gray-light)}.post-content[data-astro-cid-bvzihdzo] blockquote{border-left:3px solid var(--accent);padding-left:16px;color:var(--gray);margin:20px 0}.post-content[data-astro-cid-bvzihdzo] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-bvzihdzo]{padding:28px 20px}.sidebar-block[data-astro-cid-bvzihdzo]{margin-bottom:24px}.sidebar-label[data-astro-cid-bvzihdzo]{font-size:10px;letter-spacing:2px;color:var(--gray);margin-bottom:8px}.sidebar-author[data-astro-cid-bvzihdzo]{font-size:14px;font-weight:800;margin-bottom:2px}.sidebar-author-desc[data-astro-cid-bvzihdzo]{font-size:12px;color:var(--gray)}.sidebar-tags[data-astro-cid-bvzihdzo]{display:flex;flex-direction:column;gap:6px}.sidebar-tag[data-astro-cid-bvzihdzo]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-bvzihdzo]{display:flex;justify-content:space-between;padding:16px 24px;border-top:var(--rule-thick) solid var(--ink);gap:16px}.post-nav-link[data-astro-cid-bvzihdzo]{font-size:13px;font-weight:700;border-bottom:1px solid var(--ink)}.post-nav-next[data-astro-cid-bvzihdzo]{margin-left:auto;text-align:right}@media(max-width:768px){.post-body[data-astro-cid-bvzihdzo]{grid-template-columns:1fr}.post-header[data-astro-cid-bvzihdzo]{padding:16px}.post-content[data-astro-cid-bvzihdzo]{padding:20px 16px}.post-sidebar[data-astro-cid-bvzihdzo]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-bvzihdzo]{padding:12px 16px;flex-wrap:wrap}.post-nav-next[data-astro-cid-bvzihdzo]{margin-left:0;text-align:left}}
+.site-nav[data-astro-cid-dmqpwcec]{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;border-bottom:var(--rule-thick) solid var(--ink)}.site-logo[data-astro-cid-dmqpwcec]{font-size:14px;font-weight:900;letter-spacing:3px;color:var(--ink)}.nav-right[data-astro-cid-dmqpwcec]{display:flex;align-items:center}.nav-links[data-astro-cid-dmqpwcec]{display:flex}.lang-switch[data-astro-cid-dmqpwcec]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media(max-width:480px){.site-nav[data-astro-cid-dmqpwcec]{padding:10px 16px}.nav-links[data-astro-cid-dmqpwcec] a[data-astro-cid-dmqpwcec]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-dmqpwcec]{margin-left:8px}}@media(max-width:360px){.site-nav[data-astro-cid-dmqpwcec]{padding:10px 12px}.nav-links[data-astro-cid-dmqpwcec] a[data-astro-cid-dmqpwcec]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-dmqpwcec]{margin-left:6px}}.site-footer[data-astro-cid-sz7xmlte]{background:var(--ink);padding:14px 24px;display:flex;justify-content:space-between;align-items:center}.copy[data-astro-cid-sz7xmlte]{font-size:12px;color:#ffffff4d}.motto[data-astro-cid-sz7xmlte]{font-size:12px;color:var(--accent);font-weight:700}:root{--ink: #0a2540;--accent: #f8c400;--bg: #ffffff;--bg-warm: #fafaf8;--gray: #888888;--gray-light: #eeeeee;--white: #ffffff;--rule-thick: 2.5px;--rule-grid: 1.5px;--rule-thin: 1px;--font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,*:before,*:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}img{display:block;max-width:100%;height:auto}a{color:inherit;text-decoration:none}.text-meta{font-size:11px;letter-spacing:.08em;font-weight:700;color:var(--gray)}.text-label{font-size:12px;letter-spacing:.05em;color:var(--gray)}.tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;padding:2px 8px;line-height:1.6}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{display:inline-block;border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;letter-spacing:.06em;padding:4px 14px;cursor:pointer;background:transparent;transition:background .15s,color .15s}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{min-height:100vh;display:flex;flex-direction:column}.site-main{flex:1}.breadcrumb{display:flex;align-items:center;gap:8px;padding:10px 24px;border-bottom:var(--rule-thin) solid var(--gray-light);font-size:12px}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media(max-width:768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head> <body> <div class="site-wrapper"> <nav class="site-nav" data-astro-cid-dmqpwcec> <a href="/" class="site-logo" data-astro-cid-dmqpwcec>ROBIN</a> <div class="nav-right" data-astro-cid-dmqpwcec> <div class="nav-links" data-astro-cid-dmqpwcec> <a href="/" class="box-btn" data-astro-cid-dmqpwcec> 产品 </a> <a href="/blog" class="box-btn active" data-astro-cid-dmqpwcec> 博客 </a> <a href="/about" class="box-btn" data-astro-cid-dmqpwcec> 关于 </a> </div> <a href="/en/blog/ai-boardroom-puts-an-investment-team-in-your-terminal/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-dmqpwcec> EN </a> </div> </nav> <script type="module">document.querySelector(".lang-switch")?.addEventListener("click",e=>{const t=e.currentTarget;localStorage.setItem("robin-lang",t.dataset.otherLang??"zh")});</script>  <main class="site-main">  <div class="breadcrumb" data-astro-cid-bvzihdzo> <a href="/blog" data-astro-cid-bvzihdzo>博客</a> <span class="sep" data-astro-cid-bvzihdzo>/</span><span class="cur" data-astro-cid-bvzihdzo>AI</span> </div> <div class="post-header" data-astro-cid-bvzihdzo> <div class="post-meta" data-astro-cid-bvzihdzo> <span class="tag tag-ink" data-astro-cid-bvzihdzo>AI</span> <span class="text-meta" data-astro-cid-bvzihdzo>2026 / 07 / 15</span> <span class="text-meta" data-astro-cid-bvzihdzo>约 18 分钟阅读</span> </div> <h1 class="post-title" data-astro-cid-bvzihdzo>ai-boardroom-puts-an-investment-team-in-your-terminal</h1> <div class="post-tags" data-astro-cid-bvzihdzo> <span class="tag-outline" data-astro-cid-bvzihdzo>AI投研</span><span class="tag-outline" data-astro-cid-bvzihdzo>美股交易</span> </div> </div> <div class="post-body" data-astro-cid-bvzihdzo> <article class="post-content" data-astro-cid-bvzihdzo>  <h1 id="ai-boardroom把投研团队装进终端">AI Boardroom：把投研团队装进终端</h1>
+<p><img src="/assets/images/ai-boardroom-puts-an-investment-team-in-your-terminal-summary.png" alt="知识点总结"></p>
+<h2 id="摘要">摘要</h2>
+<p>AI Boardroom 是一套跑在 Claude Code 终端里的美股投研与交易 skill 集合：不用写代码，靠自然语言就能查持仓、看K线、盯盘、跑AI委员会辩论、拿期权策略建议、找低估标的，还能直接下单和一键止损。它把过去分散在行情软件、研报、期权计算器里的动作，收进了一个对话窗口。</p>
+<h2 id="是什么">是什么</h2>
+<p>AI Boardroom 建立在盈立证券（uSMART）Open API 之上，行情、持仓、交易全部走真实券商接口，不是模拟盘。整个交互层由七个 Claude Code skill 加一个独立终端工具组成：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Skill</th><th>作用</th></tr></thead><tbody><tr><td><code>/portfolio</code></td><td>实时持仓、盈亏、均线位置、止损预警</td></tr><tr><td><code>/analyze</code></td><td>四角色 AI 委员会深层分析</td></tr><tr><td><code>/optstrat</code></td><td>期权策略建议</td></tr><tr><td><code>/quote</code></td><td>实时行情快照</td></tr><tr><td><code>/kline</code></td><td>终端文本K线图</td></tr><tr><td><code>/trade</code></td><td>买入/卖出/撤单/止损/止盈</td></tr><tr><td><code>/scout</code></td><td>自上而下低估标的发现</td></tr><tr><td><code>watch_quotes.py</code></td><td>独立终端实时盯盘（非 skill）</td></tr></tbody></table>
+<p>三个最值得展开讲的是 AI 委员会、期权策略建议、和自上而下的低估标的发现——这也是整套系统里 AI 判断密度最高的三块。</p>
+<h2 id="核心优势">核心优势</h2>
+<h3 id="四角色-ai-委员会让分歧摆在台面上">四角色 AI 委员会：让分歧摆在台面上</h3>
+<p><code>/analyze TICKER</code> 不是让一个模型给一个结论，而是四个角色分别站在对立立场上辩论：</p>
+<ul>
+<li><strong>多头研究员</strong>：找上行催化剂，要求有具体数据支撑</li>
+<li><strong>空头风控官</strong>：找核心风险，给出量化止损位</li>
+<li><strong>宏观分析师</strong>：评估 VIX、市场体制、利率环境</li>
+<li><strong>裁判</strong>：读完前三方的完整输出后，给出 1-10 综合评分、入场区间、止损位和 6 周目标价</li>
+</ul>
+<p>三个分析角色是并行启动的 subagent，各自能主动用 Bash 抓补充新闻、用 WebSearch/WebFetch 查最新事件，而且新闻按时效性分权重——24 小时内的消息高权重直接影响判断，一周以上的只当背景。裁判要等三方全部交完卷才登场，避免被任何单一立场带偏。单只股票整个流程大约 2-4 分钟，报告自动存档，个股和 ETF（比如 SCHD、BOXX）都支持。</p>
+<h3 id="期权策略委员会结论--期权链--iv-环境三合一">期权策略：委员会结论 + 期权链 + IV 环境三合一</h3>
+<p><code>/optstrat TICKER</code> 不是从零开始猜方向，而是直接复用当天 <code>/analyze</code> 已经辩论出的结论——评分、目标价、止损位，全部是当天价格下的判断，跨天就作废，所以系统硬性规定只认当天报告，过期报告一律不复用（除非加 <code>--fresh</code> 强制重跑）。</p>
+<p>在方向判断之上，再叠加两层期权特有的数据：</p>
+<ul>
+<li><strong>期权链</strong>：各到期日的 call/put 报价、成交量、持仓量、delta/gamma/theta/vega 希腊字母</li>
+<li><strong>IV 环境</strong>：把已实现波动率（realized vol）和平值隐含波动率（ATM IV）做对比，判断当前期权是”贵”还是”便宜”</li>
+</ul>
+<p>期权策略师 subagent 综合这三层信息给出具体策略建议。注意这里只输出建议不下单——盈立 Open API 本身没有期权交易接口，这是设计上的边界，不是功能缺失。如果当天已有委员会报告可复用，整个 <code>/optstrat</code> 流程能在 1 分钟内跑完。</p>
+<h3 id="自上而下低估标的发现从宏观漏斗到个股裁定">自上而下低估标的发现：从宏观漏斗到个股裁定</h3>
+<p><code>/scout</code> 是唯一一个不需要你先给出候选标的的 skill，它自己从宏观往下筛：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>宏观体制定开关 → 质量筛选定底线 → 估值筛选定标的 → AI 委员会定信心</span></span>
+<span class="line"><span>  VIX/收益率曲线      FCF/ROE/ROIC       DCF/PEG/EV      多头/空头/宏观/裁判四角色委员会</span></span></code></pre>
+<p>具体分四层：</p>
+<ol>
+<li><strong>宏观层</strong>：VIX 分位、收益率曲线、美元指数、SPX 相对 200 日均线的位置，判断当前对哪类资产有利</li>
+<li><strong>行业层</strong>：用跑输大盘幅度、距 5 年高点回撤等量化指标找出”最便宜”的几个行业，再用新闻验证——是”周期性错杀”该保留，还是”结构性衰退”该剔除。被剔除的行业也会写明原因，不是悄悄消失</li>
+<li><strong>公司层</strong>：DCF 折价率、FCF 收益率、ROIC 等硬指标一票否决制，不达标直接出局，不浪费算力做深度分析</li>
+<li><strong>裁定层</strong>：通过硬门槛的候选并行做深度分析，最终落在「建议关注」「持续观察」「一票否决」三档之一</li>
+</ol>
+<p>更关键的是它有记忆：每次的裁定都写进本地数据库，满 90 天自动回访，看当初的判断到底兑现没兑现，累积出一个命中率。这个命中率不会去改动任何硬性数字门槛，只用来提醒下一次”你以前是不是老把周期性下跌误判成结构性衰退”。最后还会拿候选清单跟你的实际持仓交叉检查，看看你手里的仓位有没有命中或者踩坑。单次运行大约 3-6 分钟，取决于扫多少个行业。</p>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li>已经在自己动手做美股波段/中长线投资，希望有个”参谋团”帮忙审视多空双方论点、而不是单一模型一言堂的人</li>
+<li>想系统性做期权但懒得自己每次都手动核对 IV 环境和希腊字母的人</li>
+<li>想要一套”不追热点、按纪律筛选”的选股流程，而不是凭感觉抄底的人</li>
+<li>习惯在终端里工作、不想在各种 App 和网页之间来回切换查行情看图下单的人</li>
+</ul>
+<h2 id="如何使用">如何使用</h2>
+<h3 id="终端里看k线不用截图不用开浏览器">终端里看K线，不用截图不用开浏览器</h3>
+<p><code>/kline</code> 是这套系统里最有意思的细节之一：它用等宽字符直接在对话里”画”出K线图，不是图片。因为输出要经过”跑命令→转述回聊天”这条链路，颜色转义码会被过滤掉，所以整张图完全不靠颜色，靠字符的粗细和形状区分涨跌：</p>
+<ul>
+<li><code>▉</code> 实心方块：涨日的K线实体</li>
+<li><code>│</code> 细竖线：跌日实体，或者任意一天的上下影线</li>
+<li>折线模式下：<code>─</code> 平走、<code>╱</code> 上升、<code>╲</code> 下降，<code>·</code> 铺出面积阴影效果</li>
+<li><code>•</code> 实心圆点：MA50 均线描点；<code>×</code> 叉号：MA200 均线描点（仅日K显示，逐日描点不连线）</li>
+<li><code>┈</code> 横向虚线：如果你持有这只股票，这条线标出你的持仓成本价，贯穿整个价格区</li>
+</ul>
+<p>下面是一张 QQQ 日K的实际输出示例，能同时看到涨跌蜡烛、MA50/MA200 描点、成本价虚线和底部的成交量柱：</p>
+<p><img src="/assets/images/kline-QQQ-example.png" alt="QQQ K线图终端渲染示例"></p>
+<p>用法完全靠自然语言，不需要记参数名：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>/kline AAPL              → 日K，最近60根，蜡烛图（默认）</span></span>
+<span class="line"><span>/kline 看下 MU 的周K      → 周K线</span></span>
+<span class="line"><span>/kline TSLA 最近30天的折线图 → 折线风格，最近30根</span></span></code></pre>
+<h3 id="终端命令看实时波动行情">终端命令看实时波动行情</h3>
+<p><code>/quote AAPL TSLA</code> 是单次快照，适合”看一眼现在多少钱”。真要持续盯盘，得用独立的终端脚本（不是 Claude Code skill，因为 Claude Code 本质是”跑一条命令、等结束、返回结果”的一次性交互，没法呈现持续刷新的画面）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> scripts/watch_quotes.py</span><span style="color:#9ECBFF"> AAPL</span><span style="color:#9ECBFF"> TSLA</span><span style="color:#9ECBFF"> NVDA</span></span></code></pre>
+<p>基于 WebSocket 推送，维护一张持续更新的行情表格，Ctrl+C 退出；单连接最多同时订阅 10 支股票，断线会自动指数退避重连。</p>
+<h3 id="交易买入卖出一键止损">交易：买入卖出，一键止损</h3>
+<p><code>/trade</code> 支持自然语言解析下单，买卖两个方向的命令都不用记固定格式：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>/trade buy AAPL 5 shares at 190</span></span>
+<span class="line"><span>/trade buy 买入10股NVDA限价120</span></span>
+<span class="line"><span>/trade buy QQQ 1 market order</span></span>
+<span class="line"><span>/trade buy SPY 2 at 730 premarket</span></span>
+<span class="line"><span>/trade buy BOXX 10 at 117 GTC</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>/trade sell DRAM 全仓</span></span>
+<span class="line"><span>/trade sell SCHD 3 at 31.80</span></span>
+<span class="line"><span>/trade sell MU market</span></span>
+<span class="line"><span>/trade sell BOXX 5 afterhours</span></span>
+<span class="line"><span>/trade sell QQQ 1 at 720 limit</span></span></code></pre>
+<p>但任何写操作——买、卖、撤单——都必须先展示完整预览再等你确认，回一句”取消”就立刻中止，不会有任何订单被悄悄提交。以买入为例，系统会先并行拉实时报价和最大可买数量，再判断要不要用到融资额度（现金可买 vs 含融资可买），最后弹出预览框：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>┌─ 订单预览 ─────────────────────────────┐</span></span>
+<span class="line"><span>│  方向：买入                              │</span></span>
+<span class="line"><span>│  股票：AAPL                             │</span></span>
+<span class="line"><span>│  数量：5 股                             │</span></span>
+<span class="line"><span>│  委托价：$190.00（限价）                │</span></span>
+<span class="line"><span>│  估计金额：$950.00                      │</span></span>
+<span class="line"><span>│  最大可买（现金）：12 股                │</span></span>
+<span class="line"><span>│  时段：正常交易时段                      │</span></span>
+<span class="line"><span>│  有效期：当日（DAY）                    │</span></span>
+<span class="line"><span>│  当前价：$191.50 ▲ +0.3%              │</span></span>
+<span class="line"><span>│  当前持仓：0 股                         │</span></span>
+<span class="line"><span>└─────────────────────────────────────────┘</span></span>
+<span class="line"><span>确认下单？(yes / 确认 / no / 取消)</span></span></code></pre>
+<p>需要融资时会在预览框里追加醒目警告行。卖出预览额外多显示一项——持仓成本和预计盈亏，方便你在确认前就看清这笔卖出是止盈还是割肉：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>┌─ 订单预览 ─────────────────────────────┐</span></span>
+<span class="line"><span>│  方向：卖出                              │</span></span>
+<span class="line"><span>│  股票：DRAM                             │</span></span>
+<span class="line"><span>│  数量：2 股（全仓）                     │</span></span>
+<span class="line"><span>│  委托价：市价                            │</span></span>
+<span class="line"><span>│  持仓成本：$80.38 | 当前价：$70.19     │</span></span>
+<span class="line"><span>│  预计实现亏损：-$20.38（-12.7%）       │</span></span>
+<span class="line"><span>│  最大可卖：2 股整股 / 0 碎股            │</span></span>
+<span class="line"><span>│  时段：正常交易时段                      │</span></span>
+<span class="line"><span>└─────────────────────────────────────────┘</span></span>
+<span class="line"><span>确认下单？(yes / 确认 / no / 取消)</span></span></code></pre>
+<p>止损是这套系统里最直接的一个动作：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>/trade stop loss          → 扫描全部持仓，按亏损幅度降序列出，一次性确认</span></span>
+<span class="line"><span>/trade stop loss DRAM     → 只止损指定标的</span></span></code></pre>
+<p>它本质是”立即市价全部卖出”，不是挂着等触发的条件单——确认一次之后逐笔执行、逐笔报告结果，这就是”一键止损”的实际含义。止盈流程完全对称，还支持指定限价而不是市价。</p>
+<h3 id="两个典型的工作流">两个典型的工作流</h3>
+<p>止损方向，从发现问题到执行：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>/portfolio          → 看持仓状态和止损预警</span></span>
+<span class="line"><span>/analyze DRAM MU    → 对预警标的跑委员会分析</span></span>
+<span class="line"><span>/trade stop loss DRAM   → 根据分析结果执行止损</span></span></code></pre>
+<p>建仓方向，从看好一只票到实际买入：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>/analyze NVDA               → 先跑委员会分析，看四方论点和裁判评分</span></span>
+<span class="line"><span>/trade buy NVDA 3 at 120    → 预览确认后买入</span></span>
+<span class="line"><span>/portfolio                  → 确认持仓已更新</span></span></code></pre>
+<p>两条链路的共同点是：分析和执行分属不同 skill，中间隔着一次人工确认，AI 负责判断和拟单，最终下单的决定权始终在你手里。全程留在一个终端窗口里，不用来回切换 App。</p>
+<hr>
+<p><em>本系统输出的所有内容仅供个人投资研究参考，不构成投资建议。AI 模型的分析存在局限性，任何投资决策请自行判断并承担风险。</em></p>  </article> <aside class="post-sidebar" data-astro-cid-bvzihdzo> <div class="sidebar-block" data-astro-cid-bvzihdzo> <p class="sidebar-label" data-astro-cid-bvzihdzo>Robin</p> <p class="sidebar-author" data-astro-cid-bvzihdzo>Robin</p> <p class="sidebar-author-desc" data-astro-cid-bvzihdzo>自由职业者</p> </div> <div class="sidebar-block" data-astro-cid-bvzihdzo> <p class="sidebar-label" data-astro-cid-bvzihdzo>标签</p> <div class="sidebar-tags" data-astro-cid-bvzihdzo> <span class="sidebar-tag" data-astro-cid-bvzihdzo>AI投研</span><span class="sidebar-tag" data-astro-cid-bvzihdzo>美股交易</span> </div> </div> </aside> </div> <div class="post-nav" data-astro-cid-bvzihdzo> <a href="/blog/write-once-publish-everywhere" class="post-nav-link post-nav-prev" data-astro-cid-bvzihdzo> ← 上一篇 write-once-publish-everywhere </a> <a href="/blog/pi-more-than-coding-universal-agent-framework" class="post-nav-link post-nav-next" data-astro-cid-bvzihdzo> pi-more-than-coding-universal-agent-framework 下一篇 → </a> </div>  </main> <footer class="site-footer" data-astro-cid-sz7xmlte> <span class="copy" data-astro-cid-sz7xmlte>© 2026 Robin</span> <span class="motto" data-astro-cid-sz7xmlte>总想折腾点啥</span> </footer>  </div> <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --> </body></html> 
