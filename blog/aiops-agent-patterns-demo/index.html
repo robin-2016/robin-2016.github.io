@@ -1,75 +1,75 @@
-<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/aiops-agent-patterns-demo/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/aiops-agent-patterns-demo/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/aiops-agent-patterns-demo/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/aiops-agent-patterns-demo/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/aiops-agent-patterns-demo/"><meta property="og:title" content="aiops-agent-patterns-demo — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="aiops-agent-patterns-demo — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>aiops-agent-patterns-demo — Robin</title><style>.post-header[data-astro-cid-bvzihdzo]{padding:24px 24px 20px;border-bottom:var(--rule-thick) solid var(--ink)}.post-meta[data-astro-cid-bvzihdzo]{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}.post-title[data-astro-cid-bvzihdzo]{font-size:clamp(22px,4vw,32px);font-weight:900;letter-spacing:-.5px;line-height:1.25;margin-bottom:12px}.post-tags[data-astro-cid-bvzihdzo]{display:flex;flex-wrap:wrap;gap:6px}.post-body[data-astro-cid-bvzihdzo]{display:grid;grid-template-columns:1fr 200px}.post-content[data-astro-cid-bvzihdzo]{padding:28px 24px;border-right:var(--rule-thin) solid var(--gray-light);font-size:16px;line-height:1.8;color:#333;min-width:0}.post-content[data-astro-cid-bvzihdzo] h2,.post-content[data-astro-cid-bvzihdzo] h3{font-size:18px;font-weight:800;margin:32px 0 12px;padding-left:10px;border-left:2.5px solid var(--accent)}.post-content[data-astro-cid-bvzihdzo] h3{font-size:16px}.post-content[data-astro-cid-bvzihdzo] p{margin-bottom:16px}.post-content[data-astro-cid-bvzihdzo] ul,.post-content[data-astro-cid-bvzihdzo] ol{padding-left:24px;margin-bottom:16px}.post-content[data-astro-cid-bvzihdzo] li{margin-bottom:6px}.post-content[data-astro-cid-bvzihdzo] pre{background:#f4f4f4;padding:16px;overflow-x:auto;margin:20px 0;border-radius:2px;font-size:14px}.post-content[data-astro-cid-bvzihdzo] code{font-size:14px;background:#f4f4f4;padding:1px 5px;border-radius:2px}.post-content[data-astro-cid-bvzihdzo] pre code{background:none;padding:0}.post-content[data-astro-cid-bvzihdzo] img{max-width:100%;margin:20px auto;border:var(--rule-thin) solid var(--gray-light)}.post-content[data-astro-cid-bvzihdzo] blockquote{border-left:3px solid var(--accent);padding-left:16px;color:var(--gray);margin:20px 0}.post-content[data-astro-cid-bvzihdzo] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-bvzihdzo]{padding:28px 20px}.sidebar-block[data-astro-cid-bvzihdzo]{margin-bottom:24px}.sidebar-label[data-astro-cid-bvzihdzo]{font-size:10px;letter-spacing:2px;color:var(--gray);margin-bottom:8px}.sidebar-author[data-astro-cid-bvzihdzo]{font-size:14px;font-weight:800;margin-bottom:2px}.sidebar-author-desc[data-astro-cid-bvzihdzo]{font-size:12px;color:var(--gray)}.sidebar-tags[data-astro-cid-bvzihdzo]{display:flex;flex-direction:column;gap:6px}.sidebar-tag[data-astro-cid-bvzihdzo]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-bvzihdzo]{display:flex;justify-content:space-between;padding:16px 24px;border-top:var(--rule-thick) solid var(--ink);gap:16px}.post-nav-link[data-astro-cid-bvzihdzo]{font-size:13px;font-weight:700;border-bottom:1px solid var(--ink)}.post-nav-next[data-astro-cid-bvzihdzo]{margin-left:auto;text-align:right}@media(max-width:768px){.post-body[data-astro-cid-bvzihdzo]{grid-template-columns:1fr}.post-header[data-astro-cid-bvzihdzo]{padding:16px}.post-content[data-astro-cid-bvzihdzo]{padding:20px 16px}.post-sidebar[data-astro-cid-bvzihdzo]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-bvzihdzo]{padding:12px 16px;flex-wrap:wrap}.post-nav-next[data-astro-cid-bvzihdzo]{margin-left:0;text-align:left}}
-.site-nav[data-astro-cid-dmqpwcec]{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;border-bottom:var(--rule-thick) solid var(--ink)}.site-logo[data-astro-cid-dmqpwcec]{font-size:14px;font-weight:900;letter-spacing:3px;color:var(--ink)}.nav-right[data-astro-cid-dmqpwcec]{display:flex;align-items:center}.nav-links[data-astro-cid-dmqpwcec]{display:flex}.lang-switch[data-astro-cid-dmqpwcec]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media(max-width:480px){.site-nav[data-astro-cid-dmqpwcec]{padding:10px 16px}.nav-links[data-astro-cid-dmqpwcec] a[data-astro-cid-dmqpwcec]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-dmqpwcec]{margin-left:8px}}@media(max-width:360px){.site-nav[data-astro-cid-dmqpwcec]{padding:10px 12px}.nav-links[data-astro-cid-dmqpwcec] a[data-astro-cid-dmqpwcec]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-dmqpwcec]{margin-left:6px}}.site-footer[data-astro-cid-sz7xmlte]{background:var(--ink);padding:14px 24px;display:flex;justify-content:space-between;align-items:center}.copy[data-astro-cid-sz7xmlte]{font-size:12px;color:#ffffff4d}.motto[data-astro-cid-sz7xmlte]{font-size:12px;color:var(--accent);font-weight:700}:root{--ink: #0a2540;--accent: #f8c400;--bg: #ffffff;--bg-warm: #fafaf8;--gray: #888888;--gray-light: #eeeeee;--white: #ffffff;--rule-thick: 2.5px;--rule-grid: 1.5px;--rule-thin: 1px;--font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,*:before,*:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}img{display:block;max-width:100%;height:auto}a{color:inherit;text-decoration:none}.text-meta{font-size:11px;letter-spacing:.08em;font-weight:700;color:var(--gray)}.text-label{font-size:12px;letter-spacing:.05em;color:var(--gray)}.tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;padding:2px 8px;line-height:1.6}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{display:inline-block;border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;letter-spacing:.06em;padding:4px 14px;cursor:pointer;background:transparent;transition:background .15s,color .15s}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{min-height:100vh;display:flex;flex-direction:column}.site-main{flex:1}.breadcrumb{display:flex;align-items:center;gap:8px;padding:10px 24px;border-bottom:var(--rule-thin) solid var(--gray-light);font-size:12px}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media(max-width:768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
-</style></head> <body> <div class="site-wrapper"> <nav class="site-nav" data-astro-cid-dmqpwcec> <a href="/" class="site-logo" data-astro-cid-dmqpwcec>ROBIN</a> <div class="nav-right" data-astro-cid-dmqpwcec> <div class="nav-links" data-astro-cid-dmqpwcec> <a href="/" class="box-btn" data-astro-cid-dmqpwcec> 产品 </a> <a href="/blog" class="box-btn active" data-astro-cid-dmqpwcec> 博客 </a> <a href="/about" class="box-btn" data-astro-cid-dmqpwcec> 关于 </a> </div> <a href="/en/blog/aiops-agent-patterns-demo/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-dmqpwcec> EN </a> </div> </nav> <script type="module">document.querySelector(".lang-switch")?.addEventListener("click",e=>{const t=e.currentTarget;localStorage.setItem("robin-lang",t.dataset.otherLang??"zh")});</script>  <main class="site-main">  <div class="breadcrumb" data-astro-cid-bvzihdzo> <a href="/blog" data-astro-cid-bvzihdzo>博客</a> <span class="sep" data-astro-cid-bvzihdzo>/</span><span class="cur" data-astro-cid-bvzihdzo>AI</span> </div> <div class="post-header" data-astro-cid-bvzihdzo> <div class="post-meta" data-astro-cid-bvzihdzo> <span class="tag tag-ink" data-astro-cid-bvzihdzo>AI</span> <span class="text-meta" data-astro-cid-bvzihdzo>2026 / 07 / 05</span> <span class="text-meta" data-astro-cid-bvzihdzo>约 16 分钟阅读</span> </div> <h1 class="post-title" data-astro-cid-bvzihdzo>aiops-agent-patterns-demo</h1> <div class="post-tags" data-astro-cid-bvzihdzo> <span class="tag-outline" data-astro-cid-bvzihdzo>AI Agent</span><span class="tag-outline" data-astro-cid-bvzihdzo>AIOps</span> </div> </div> <div class="post-body" data-astro-cid-bvzihdzo> <article class="post-content" data-astro-cid-bvzihdzo>  <h1 id="跟着-claude-code-学完-agent-开发后我做了一个-aiops-架构模式全家桶">跟着 Claude Code 学完 Agent 开发后，我做了一个 AIOps 架构模式全家桶</h1>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/aiops-agent-patterns-demo/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/aiops-agent-patterns-demo/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/aiops-agent-patterns-demo/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/aiops-agent-patterns-demo/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/aiops-agent-patterns-demo/"><meta property="og:title" content="aiops-agent-patterns-demo — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="aiops-agent-patterns-demo — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>aiops-agent-patterns-demo — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/aiops-agent-patterns-demo/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 07 / 05</span><span class="text-meta" data-astro-cid-tldeq5d5>约 16 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>aiops-agent-patterns-demo</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>AI Agent</span><span class="tag-outline" data-astro-cid-tldeq5d5>AIOps</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="跟着-claude-code-学完-agent-开发后我做了一个-aiops-架构模式全家桶">跟着 Claude Code 学完 Agent 开发后，我做了一个 AIOps 架构模式全家桶</h1>
 <p><img src="/assets/images/aiops-agent-patterns-demo-summary.png" alt="知识点总结"></p>
 <h2 id="摘要">摘要</h2>
 <p>学 AI Agent 开发最大的困扰,往往不是学不会某一个框架,而是网上的教程东一榔头西一棒子——今天看一篇 RAG 的博客,明天看一个 LangGraph 的 demo,始终拼不出一张完整的技术地图。跟着 Claude Code 系统学习了一段时间 Agent 开发之后,我用 IT 运维/SRE(AIOps)场景做了一个练手项目——<strong>AIOps-example</strong>,把从最基础的 RAG 到企业级多智能体网关的 9 种架构模式,全部放在同一套业务场景、同一套基础设施上,做成了 9 个可以独立跑起来的例子。项目已经开源:<a href="https://github.com/robin-2016/AIOps-example">github.com/robin-2016/AIOps-example</a>。</p>
 <h2 id="是什么">是什么</h2>
-<p>AIOps-example 是一个”AI 工程架构模式展示仓库”,场景选的是模拟的 IT 运维/SRE 场景:故障处置手册(runbook)、历史工单、告警、变更记录——这些数据全部是确定性生成的模拟数据,不连接任何真实生产系统,可以放心跑、放心改。</p>
+<p>AIOps-example 是一个“AI 工程架构模式展示仓库”,场景选的是模拟的 IT 运维/SRE 场景:故障处置手册(runbook)、历史工单、告警、变更记录——这些数据全部是确定性生成的模拟数据,不连接任何真实生产系统,可以放心跑、放心改。</p>
 <p>仓库按照架构复杂度递进,分成 9 个顶层目录,每一个都是独立可运行的示例:</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>目录</th><th>架构模式</th><th>亮点</th></tr></thead><tbody><tr><td><code>00-shared</code></td><td>共享库</td><td>配置、Ollama LLM/Embedding 客户端、Qdrant 客户端封装、Langfuse+Prometheus+structlog 可观测性、确定性模拟数据生成器</td></tr><tr><td><code>01-foundations-rag</code></td><td>LCEL + 朴素 RAG</td><td><code>RunnableParallel</code>/<code>RunnablePassthrough</code> 组合链,单 collection 检索,FastAPI 服务</td></tr><tr><td><code>02-advanced-rag</code></td><td>进阶 RAG</td><td>向量+BM25 混合检索(RRF 融合),Cross-Encoder 重排,查询改写,基于 RAGAS 的忠实度/相关性/精确率评估</td></tr><tr><td><code>03-langgraph-agents</code></td><td>LangGraph 智能体</td><td>Adaptive RAG(自我纠错检索)、基于真实 Postgres checkpoint 的人工审批(HITL)、在多个子智能体间路由的 Supervisor</td></tr><tr><td><code>04-mcp-integration</code></td><td>MCP 协议集成</td><td>两个通过 stdio 传输的 FastMCP 服务,LangGraph agent 通过持久化 session 消费 MCP 工具</td></tr><tr><td><code>05-agent-patterns</code></td><td>Agent 编排模式对比</td><td>同一个告警诊断场景分别用 ReAct、Plan-and-Execute、Planner-Generator-Evaluator 三种模式实现,最终收敛成带 HITL 审批和事故报告生成的完整运维 Agent</td></tr><tr><td><code>06-enterprise-gateway</code></td><td>企业级 API 网关</td><td>RBAC、Redis 滑动窗口限速、Postgres 审计日志、多租户 RAG(部门级隔离)、SSE 流式输出</td></tr><tr><td><code>07-framework-comparison</code></td><td>多智能体框架对比</td><td>同一个工单诊断任务分别用 LangGraph、Smolagents、CrewAI、AutoGen 实现,输出延迟/Token 数/代码量的横向对比报告</td></tr><tr><td><code>08-code-sandbox-agent</code></td><td>沙箱代码执行</td><td>LLM 生成诊断脚本,在网络隔离、只读文件系统、资源受限的临时 Docker 容器里真实执行,替代直接跑不可信生成代码</td></tr></tbody></table>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>架构模式</th>
+<th>亮点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>00-shared</code></td>
+<td>共享库</td>
+<td>配置、Ollama LLM/Embedding 客户端、Qdrant 客户端封装、Langfuse+Prometheus+structlog 可观测性、确定性模拟数据生成器</td>
+</tr>
+<tr>
+<td><code>01-foundations-rag</code></td>
+<td>LCEL + 朴素 RAG</td>
+<td><code>RunnableParallel</code>/<code>RunnablePassthrough</code> 组合链,单 collection 检索,FastAPI 服务</td>
+</tr>
+<tr>
+<td><code>02-advanced-rag</code></td>
+<td>进阶 RAG</td>
+<td>向量+BM25 混合检索(RRF 融合),Cross-Encoder 重排,查询改写,基于 RAGAS 的忠实度/相关性/精确率评估</td>
+</tr>
+<tr>
+<td><code>03-langgraph-agents</code></td>
+<td>LangGraph 智能体</td>
+<td>Adaptive RAG(自我纠错检索)、基于真实 Postgres checkpoint 的人工审批(HITL)、在多个子智能体间路由的 Supervisor</td>
+</tr>
+<tr>
+<td><code>04-mcp-integration</code></td>
+<td>MCP 协议集成</td>
+<td>两个通过 stdio 传输的 FastMCP 服务,LangGraph agent 通过持久化 session 消费 MCP 工具</td>
+</tr>
+<tr>
+<td><code>05-agent-patterns</code></td>
+<td>Agent 编排模式对比</td>
+<td>同一个告警诊断场景分别用 ReAct、Plan-and-Execute、Planner-Generator-Evaluator 三种模式实现,最终收敛成带 HITL 审批和事故报告生成的完整运维 Agent</td>
+</tr>
+<tr>
+<td><code>06-enterprise-gateway</code></td>
+<td>企业级 API 网关</td>
+<td>RBAC、Redis 滑动窗口限速、Postgres 审计日志、多租户 RAG(部门级隔离)、SSE 流式输出</td>
+</tr>
+<tr>
+<td><code>07-framework-comparison</code></td>
+<td>多智能体框架对比</td>
+<td>同一个工单诊断任务分别用 LangGraph、Smolagents、CrewAI、AutoGen 实现,输出延迟/Token 数/代码量的横向对比报告</td>
+</tr>
+<tr>
+<td><code>08-code-sandbox-agent</code></td>
+<td>沙箱代码执行</td>
+<td>LLM 生成诊断脚本,在网络隔离、只读文件系统、资源受限的临时 Docker 容器里真实执行,替代直接跑不可信生成代码</td>
+</tr>
+</tbody>
+</table>
 <p>每个子项目都是独立的 uv workspace member,有自己的 <code>pyproject.toml</code>、Python 包和 <code>tests/</code>,子项目之间从不互相 import 代码——即便有可复用的逻辑,也是刻意复制而不是共享,让每个目录保持独立、可以单独读懂。</p>
 <h2 id="核心优势">核心优势</h2>
-<p>比起零散的单点教程,这个仓库的价值在于把”架构模式的差异”做成了可以直接对比的东西,而不是停留在概念层面:</p>
+<p>比起零散的单点教程,这个仓库的价值在于把“架构模式的差异”做成了可以直接对比的东西,而不是停留在概念层面:</p>
 <ul>
-<li><strong>同一场景,横向可比</strong>:所有 9 个模式共享同一个 IT 运维业务领域和同一套基础设施,想知道”朴素 RAG 和混合检索到底差多少""LangGraph 和 CrewAI 写同一个任务代码量差多少”,直接跑一遍、看对比报告就知道,不用脑补。</li>
-<li><strong>不是玩具代码,有完整工程规范</strong>:每个 FastAPI 服务都遵循同一套 DI 模式——<code>create_app(资源) -> FastAPI</code> 纯函数负责测试注入,<code>create_default_app()</code> 单独负责构造真实的 Qdrant/Ollama/Langfuse/Postgres 客户端;异常处理统一返回固定中文提示,绝不向客户端泄露原始异常(包括绝不把沙箱里 LLM 生成的代码泄露出去)。</li>
-<li><strong>可观测性一路贯穿</strong>:所有 LLM/Agent 调用接入 <strong>Langfuse</strong> 追踪,服务级指标接入 <strong>Prometheus + Grafana</strong>,不是”能跑就行”,而是能看到每一跳发生了什么、花了多少 token、多少延迟。</li>
+<li><strong>同一场景,横向可比</strong>:所有 9 个模式共享同一个 IT 运维业务领域和同一套基础设施,想知道“朴素 RAG 和混合检索到底差多少”“LangGraph 和 CrewAI 写同一个任务代码量差多少”,直接跑一遍、看对比报告就知道,不用脑补。</li>
+<li><strong>不是玩具代码,有完整工程规范</strong>:每个 FastAPI 服务都遵循同一套 DI 模式——<code>create_app(资源) -&gt; FastAPI</code> 纯函数负责测试注入,<code>create_default_app()</code> 单独负责构造真实的 Qdrant/Ollama/Langfuse/Postgres 客户端;异常处理统一返回固定中文提示,绝不向客户端泄露原始异常(包括绝不把沙箱里 LLM 生成的代码泄露出去)。</li>
+<li><strong>可观测性一路贯穿</strong>:所有 LLM/Agent 调用接入 <strong>Langfuse</strong> 追踪,服务级指标接入 <strong>Prometheus + Grafana</strong>,不是“能跑就行”,而是能看到每一跳发生了什么、花了多少 token、多少延迟。</li>
 <li><strong>完全本地化,没有 API Key 门槛</strong>:全部使用本地 <strong>Ollama</strong> 做 LLM 推理和 embedding,不依赖任何外部大模型 API,适合边学边跑、反复实验而不用担心账单。</li>
 <li><strong>测试哲学清晰</strong>:单元测试 mock 掉 LLM/Qdrant/Postgres,CI 只跑这部分(<code>pytest -m "not integration"</code>);每个子项目额外有一组 <code>@pytest.mark.integration</code> 测试验证真实基础设施下的端到端行为,只能手动跑,职责分得很干净。</li>
 <li><strong>从简单到复杂,循序渐进</strong>:目录编号本身就是一条学习路径——从 LCEL 基础链,到混合检索,到有状态多智能体,到协议化工具集成,到框架横向对比,到沙箱化代码执行,每一步的复杂度增量都是可感知的。</li>
@@ -78,10 +78,10 @@
 <ul>
 <li><strong>正在系统学习 AI Agent 工程实践的开发者</strong>:想要一张完整的技术地图,而不是被动接受东拼西凑的知识碎片。</li>
 <li><strong>想选型的技术负责人</strong>:需要在 LangGraph、Smolagents、CrewAI、AutoGen 之间做选择,<code>07-framework-comparison</code> 直接给出同一任务下的定量对比。</li>
-<li><strong>关注生产可用性的工程师</strong>:关心 HITL 人工审批、多租户隔离、限速审计、沙箱执行这些”上生产前必须想清楚”的问题,而不只是”模型能不能回答对”。</li>
+<li><strong>关注生产可用性的工程师</strong>:关心 HITL 人工审批、多租户隔离、限速审计、沙箱执行这些“上生产前必须想清楚”的问题,而不只是“模型能不能回答对”。</li>
 <li><strong>不想为学习成本买单的个人开发者</strong>:全套本地 Ollama 推理,不需要 OpenAI/Anthropic API key 就能把 9 个模式全部跑起来。</li>
 </ul>
-<p>不太适合只想”复制粘贴一段 RAG 代码就跑”的场景——这个仓库的价值恰恰在于把架构差异讲清楚,如果只需要最简单的检索链,直接看 <code>01-foundations-rag</code> 一个目录就够了。</p>
+<p>不太适合只想“复制粘贴一段 RAG 代码就跑”的场景——这个仓库的价值恰恰在于把架构差异讲清楚,如果只需要最简单的检索链,直接看 <code>01-foundations-rag</code> 一个目录就够了。</p>
 <h2 id="如何使用">如何使用</h2>
 <h3 id="环境准备">环境准备</h3>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 前置条件:Python 3.12+、uv、Docker + Docker Compose、本地运行的 Ollama</span></span>
@@ -101,11 +101,11 @@
 <h3 id="跑一个具体子项目">跑一个具体子项目</h3>
 <p>每个子项目都遵循同样的三步套路:启动它需要的 <code>docker compose</code> 服务 → 如果有索引/数据生成脚本就先跑一遍 → 启动它的 FastAPI 服务。以 <code>03-langgraph-agents</code>(LangGraph 智能体,含人工审批)为例:</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> compose</span><span style="color:#9ECBFF"> up</span><span style="color:#79B8FF"> -d</span><span style="color:#9ECBFF"> qdrant</span><span style="color:#9ECBFF"> agent-state</span></span>
-<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> 03-langgraph-agents</span><span style="color:#E1E4E8"> &#x26;&#x26; </span><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> python</span><span style="color:#9ECBFF"> scripts/index.py</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> 03-langgraph-agents</span><span style="color:#E1E4E8"> &amp;&amp; </span><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> python</span><span style="color:#9ECBFF"> scripts/index.py</span></span>
 <span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> uvicorn</span><span style="color:#9ECBFF"> langgraph_agents.app:create_default_app</span><span style="color:#79B8FF"> --factory</span><span style="color:#79B8FF"> --port</span><span style="color:#79B8FF"> 8003</span></span></code></pre>
 <p>如果想看多智能体框架的横向对比,<code>07-framework-comparison</code> 直接跑脚本即可:</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> compose</span><span style="color:#9ECBFF"> up</span><span style="color:#79B8FF"> -d</span><span style="color:#9ECBFF"> qdrant</span></span>
-<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> 07-framework-comparison</span><span style="color:#E1E4E8"> &#x26;&#x26; </span><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> python</span><span style="color:#9ECBFF"> scripts/index.py</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> 07-framework-comparison</span><span style="color:#E1E4E8"> &amp;&amp; </span><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> python</span><span style="color:#9ECBFF"> scripts/index.py</span></span>
 <span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> python</span><span style="color:#9ECBFF"> compare.py</span><span style="color:#6A737D">   # 输出 LangGraph/Smolagents/CrewAI/AutoGen 的延迟、Token 数、代码量对比</span></span></code></pre>
 <h3 id="打开可观测性面板">打开可观测性面板</h3>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Langfuse:追踪每一次 LLM/Agent 调用</span></span>
@@ -115,4 +115,5 @@
 <span class="line"><span style="color:#6A737D"># Grafana:服务级指标可视化(数据源和 dashboard 已通过 provisioning 自动配置)</span></span>
 <span class="line"><span style="color:#6A737D"># UI: http://localhost:3001，Prometheus UI: http://localhost:9092</span></span></code></pre>
 <p>每个子项目具体的端口、curl 示例和详细说明,仓库里的 <code>docs/RUNNING_CN.md</code> 都有完整记录;每个子项目的设计文档和实施计划也分别保存在 <code>docs/superpowers/specs/</code> 和 <code>docs/superpowers/plans/</code> 下,想了解某个模式的设计取舍,直接翻对应文档就行。</p>
-<p>项目完全开源,License 是 MIT,欢迎 star、fork、提 issue:<a href="https://github.com/robin-2016/AIOps-example">github.com/robin-2016/AIOps-example</a></p>  </article> <aside class="post-sidebar" data-astro-cid-bvzihdzo> <div class="sidebar-block" data-astro-cid-bvzihdzo> <p class="sidebar-label" data-astro-cid-bvzihdzo>Robin</p> <p class="sidebar-author" data-astro-cid-bvzihdzo>Robin</p> <p class="sidebar-author-desc" data-astro-cid-bvzihdzo>自由职业者</p> </div> <div class="sidebar-block" data-astro-cid-bvzihdzo> <p class="sidebar-label" data-astro-cid-bvzihdzo>标签</p> <div class="sidebar-tags" data-astro-cid-bvzihdzo> <span class="sidebar-tag" data-astro-cid-bvzihdzo>AI Agent</span><span class="sidebar-tag" data-astro-cid-bvzihdzo>AIOps</span> </div> </div> </aside> </div> <div class="post-nav" data-astro-cid-bvzihdzo> <a href="/blog/headroom-context-compression" class="post-nav-link post-nav-prev" data-astro-cid-bvzihdzo> ← 上一篇 headroom-context-compression </a> <a href="/blog/small-model-beat-giant-llm" class="post-nav-link post-nav-next" data-astro-cid-bvzihdzo> small-model-beat-giant-llm 下一篇 → </a> </div>  </main> <footer class="site-footer" data-astro-cid-sz7xmlte> <span class="copy" data-astro-cid-sz7xmlte>© 2026 Robin</span> <span class="motto" data-astro-cid-sz7xmlte>总想折腾点啥</span> </footer>  </div> <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --> </body></html> 
+<p>项目完全开源,License 是 MIT,欢迎 star、fork、提 issue:<a href="https://github.com/robin-2016/AIOps-example">github.com/robin-2016/AIOps-example</a></p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>AI Agent</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>AIOps</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/headroom-context-compression" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 headroom-context-compression</a><a href="/blog/small-model-beat-giant-llm" class="post-nav-link post-nav-next" data-astro-cid-tldeq5d5>small-model-beat-giant-llm 下一篇 →</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
