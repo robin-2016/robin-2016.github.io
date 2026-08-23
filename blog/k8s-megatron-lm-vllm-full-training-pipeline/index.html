@@ -1,0 +1,351 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/k8s-megatron-lm-vllm-full-training-pipeline/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/k8s-megatron-lm-vllm-full-training-pipeline/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/k8s-megatron-lm-vllm-full-training-pipeline/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/k8s-megatron-lm-vllm-full-training-pipeline/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/k8s-megatron-lm-vllm-full-training-pipeline/"><meta property="og:title" content="k8s-megatron-lm-vllm-full-training-pipeline — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="k8s-megatron-lm-vllm-full-training-pipeline — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>k8s-megatron-lm-vllm-full-training-pipeline — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/k8s-megatron-lm-vllm-full-training-pipeline/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 08 / 23</span><span class="text-meta" data-astro-cid-tldeq5d5>约 56 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>k8s-megatron-lm-vllm-full-training-pipeline</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>Megatron-LM</span><span class="tag-outline" data-astro-cid-tldeq5d5>Kubernetes</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="k8smegatron-lmvllm打通超大模型训练全链路">K8s+Megatron-LM+vLLM打通超大模型训练全链路</h1>
+<p><img src="/assets/images/k8s-megatron-lm-vllm-full-training-pipeline-summary.png" alt="知识点总结"></p>
+<h2 id="摘要">摘要</h2>
+<p>Megatron-LM 是 NVIDIA 开源的大模型训练库，核心是张量并行（TP）、流水线并行（PP）等模型并行技术——和前两篇讲的 <a href="https://github.com/ray-project/ray">Ray</a>、<a href="https://github.com/deepspeedai/DeepSpeed">DeepSpeed</a> 不同，它解决的不是“怎么调度”或“怎么省显存”，而是“单个模型本身大到一张卡、甚至一台机器都装不下”这个更底层的问题。这篇文章先讲清楚 Megatron-LM 怎么装、怎么用，再把它和上一篇 DeepSpeed 的 ZeRO 方案做正面对比，最后同样给出一条能在 K8s 上跑通的企业级链路：Kubeflow Trainer 编排张量并行预训练 → Megatron Bridge 转换 checkpoint → vLLM 部署上线，命令和 API 都对照 <a href="https://github.com/NVIDIA/Megatron-LM">Megatron-LM</a>、<a href="https://github.com/kubeflow/trainer">Kubeflow Trainer</a>、<a href="https://github.com/NVIDIA-NeMo/Megatron-Bridge">Megatron Bridge</a> 官方文档核实过。</p>
+<h2 id="背景与问题">背景与问题</h2>
+<p><strong>Megatron-LM 解决的是“模型本身切不开就装不下”这个问题。</strong> 上一篇讲 DeepSpeed 的 ZeRO 时提到过，数据并行训练里每张卡都要存一份完整的模型参数、梯度和优化器状态——ZeRO 的做法是把这些状态在逻辑上“去冗余”，按 GPU 数切分存储，但模型的计算路径本身没变，每张卡跑的还是完整的前向/反向。Megatron-LM 走的是另一条路：把模型的计算本身切开分布到多张卡上——张量并行把一层内部的矩阵乘法按行/列切给不同 GPU 各算一部分，流水线并行把不同的 Transformer 层分给不同 GPU 顺序执行。两者不是谁比谁更先进，而是切的对象不一样：ZeRO 切“状态”，Megatron 切“计算”。</p>
+<p>围绕它有两个容易搞混的点：</p>
+<p><strong>第一个误区：把 Megatron-LM 当成一个具体的模型架构。</strong> 名字里带“Megatron”容易让人以为它是某个特定模型（类似 GPT、LLaMA），但它实际上是一套训练系统：底层的 <a href="https://github.com/NVIDIA/Megatron-LM">Megatron-Core</a> 提供并行感知的可组合组件（<code>GPTModel</code>、<code>TransformerConfig</code> 等），上层的 Megatron-LM 仓库是 Megatron-Core 加一套参考训练脚本的完整实现，配套的 <a href="https://github.com/NVIDIA-NeMo/Megatron-Bridge">Megatron Bridge</a> 负责和 HuggingFace 生态做双向 checkpoint 转换。你完全可以用 Megatron-Core 训练 Qwen、LLaMA 或任何 Transformer 架构，“Megatron”指的是并行训练的方法论，不是某个具体模型。</p>
+<p><strong>第二个误区：认为 Megatron-LM 和 DeepSpeed 是互斥的二选一。</strong> 二者历史上其实被组合使用过——训练 5300 亿参数的 Megatron-Turing NLG 时，就是用 Megatron-LM 的张量并行在节点内切分模型，用 DeepSpeed 的流水线并行和 ZeRO-1 在跨节点场景做进一步优化，这也是“Megatron-DeepSpeed”这个组合仓库存在的原因。但组合方案会同时带上两边的复杂度，本文和上一篇一样只走一条干净的单一路径，方便直接对比两种编排哲学的边界，而不是教怎么把两者揉在一起。</p>
+<h2 id="核心思路与优势">核心思路与优势</h2>
+<h3 id="四层职责定位对比前两篇">四层职责定位（对比前两篇）</h3>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>组件</th>
+<th>具体职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>物理资源调度</td>
+<td>Kubernetes</td>
+<td>把 Pod 调度到具体节点，管理 GPU 配额、网络、存储卷</td>
+</tr>
+<tr>
+<td>训练任务编排</td>
+<td>Kubeflow Trainer（<code>torch-distributed</code> 运行时）</td>
+<td>Megatron-Core 原生用 <code>torchrun</code> 做分布式启动器，不需要专门的 Megatron 运行时，直接复用已有的 <code>torch-distributed</code> <code>ClusterTrainingRuntime</code></td>
+</tr>
+<tr>
+<td>分布式训练优化</td>
+<td>Megatron-Core</td>
+<td>张量并行（TP）、流水线并行（PP，含 interleaved 调度减少 pipeline bubble）、序列并行（SP）、上下文并行（CP，长序列场景）</td>
+</tr>
+<tr>
+<td>推理引擎</td>
+<td>vLLM</td>
+<td>PagedAttention + continuous batching 做高吞吐推理，提供 OpenAI 兼容 API</td>
+</tr>
+</tbody>
+</table>
+<p>三篇文章走到这里，编排层出现了三种不同的选择：Ray 是应用层调度器，负责把 Actor 动态分配到资源上；DeepSpeed 走 MPI 范式，靠 Kubeflow Trainer 的 <code>deepspeed-distributed</code> 运行时生成 hostfile 拉起 <code>mpirun</code>；Megatron-Core 则更“轻”——它本身就是标准的 PyTorch 分布式训练（<code>torchrun</code> + <code>torch.distributed</code>），不需要 MPI，也不需要专门的运行时适配层，<code>torch-distributed</code> 这个通用运行时就够用。训练优化层三条路径也各不相同：Ray 侧的优化落在 FSDP/verl 这类训练框架里，DeepSpeed 靠 ZeRO 切分状态，Megatron-Core 靠切分计算本身。三条路径殊途同归，最终都收敛到 vLLM 做推理服务化。</p>
+<h3 id="megatron-lm-与-deepspeed-正面对比">Megatron-LM 与 DeepSpeed 正面对比</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Megatron-LM（张量+流水线并行）</th>
+<th>DeepSpeed（ZeRO 显存切分）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>核心思路</td>
+<td>把模型计算本身切开分布到多卡</td>
+<td>模型计算不变，只把优化器状态/梯度/参数这些冗余存储按 rank 切分</td>
+</tr>
+<tr>
+<td>对模型代码的侵入性</td>
+<td>需要模型按 row/column-parallel 方式改造（<code>GPTModel</code> 这类组件已经内置了这套改造）</td>
+<td>对已有模型代码几乎无侵入，<code>deepspeed.initialize</code> 包一层即可</td>
+</tr>
+<tr>
+<td>依赖体积</td>
+<td>较重：需要编译 C++ 数据集 helper，生产配置通常还要装 Transformer Engine</td>
+<td>较轻：纯 Python 依赖为主，安装门槛低</td>
+</tr>
+<tr>
+<td>相同 batch size 下的显存占用</td>
+<td>更低（张量并行天然减少单卡显存压力）</td>
+<td>更高</td>
+</tr>
+<tr>
+<td>大 batch size 下的吞吐</td>
+<td>相对较弱</td>
+<td>通常更好</td>
+</tr>
+<tr>
+<td>长序列支持</td>
+<td>需要额外开启上下文并行（CP）</td>
+<td>Ulysses 序列并行在支持场景下普遍更优，能跑更长序列</td>
+</tr>
+<tr>
+<td>checkpoint 可移植性</td>
+<td>和训练时的 TP/PP/DP 具体切分方式绑定，换并行度需要 reshape 或用 Megatron Bridge 转换</td>
+<td>按 rank 数切分，可直接合并成单一 fp32 state_dict（见上一篇）</td>
+</tr>
+<tr>
+<td>典型适用场景</td>
+<td>单模型规模巨大、节点内有 NVLink/InfiniBand 高速互联支撑张量并行通信</td>
+<td>已有模型代码，想低成本加上显存优化，或需要灵活切换并行度</td>
+</tr>
+</tbody>
+</table>
+<p>结论不是“哪个更好”，而是两种方案在解决不同层面的约束：如果模型大到即使把 ZeRO stage 3 的 offload 都用上依然装不下，或者你有充足的节点内高速互联可以承受张量并行的通信开销，Megatron-LM 的模型并行是更合适的答案；如果模型规模在 ZeRO 能应付的范围内，且想尽量少改动已有训练代码，DeepSpeed 依然是更省事的选择。</p>
+<h3 id="安装配置">安装配置</h3>
+<p><strong>本地/开发环境安装 Megatron-Core：</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 轻量安装：不含 Transformer Engine 和 ModelOpt，够用于验证 TP/PP 逻辑</span></span>
+<span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> pip</span><span style="color:#9ECBFF"> install</span><span style="color:#79B8FF"> --no-build-isolation</span><span style="color:#9ECBFF"> "megatron-core[training,lts]"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 完整安装：含 Transformer Engine，生产训练推荐</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> clone</span><span style="color:#9ECBFF"> https://github.com/NVIDIA/Megatron-LM.git</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> Megatron-LM</span></span>
+<span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> pip</span><span style="color:#9ECBFF"> install</span><span style="color:#79B8FF"> --group</span><span style="color:#9ECBFF"> build</span></span>
+<span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> pip</span><span style="color:#9ECBFF"> install</span><span style="color:#79B8FF"> --no-build-isolation</span><span style="color:#79B8FF"> -e</span><span style="color:#9ECBFF"> ".[training,dev]"</span></span></code></pre>
+<p>完整安装依赖匹配版本的 CUDA/cuDNN/NCCL 和 Transformer Engine，从源码编译内存占用较大，如果编译过程 OOM，用 <code>MAX_JOBS=4</code> 这类环境变量限制并行编译任务数。生产环境不建议每次都从源码编译——NVIDIA 官方发布的 NGC PyTorch 容器已经预装好这套依赖，直接基于它构建训练镜像通常更省事。</p>
+<p><strong>安装 Megatron Bridge（用于和 HuggingFace 生态互转 checkpoint，训练前导入/训练后导出都要用到）：</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">pip</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> megatron-bridge</span></span></code></pre>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li>招聘要求里看到张量并行/流水线并行/Megatron-LM 关键词、想补一个能讲清楚完整实践项目的工程师</li>
+<li>正在评估该用 Megatron-LM 还是 DeepSpeed 做模型并行策略、需要一份对比依据的平台工程师</li>
+<li>想理解“为什么百亿参数以上的模型训练绕不开模型并行”这个问题本质、而不只是记住 TP/PP 这两个名词的技术决策者</li>
+</ul>
+<h2 id="实践步骤从张量并行预训练到推理上线">实践步骤：从张量并行预训练到推理上线</h2>
+<p>以下三个阶段接着覆盖 Kubeflow Trainer 配置→提交张量并行训练任务→checkpoint 转换→vLLM 上线，命令和 API 用法对照 <a href="https://trainer.kubeflow.org/en/latest/user-guides/megatron.html">Kubeflow Trainer Megatron 指南</a>、<a href="https://github.com/NVIDIA/Megatron-LM">Megatron-LM</a>、<a href="https://github.com/NVIDIA-NeMo/Megatron-Bridge">Megatron Bridge</a> 官方文档核实。和前两篇一样，受限于篇幅，训练阶段用的是能验证张量并行逻辑的最小示例（小模型 + mock 数据），而非真实的千卡预训练规模，但架构和命令是生产可直接复用的，把模型定义和 <code>num_nodes</code>/<code>resources_per_node</code> 换大就是生产配置。</p>
+<h3 id="阶段一安装-kubeflow-trainer--配置-megatron-专属依赖">阶段一：安装 Kubeflow Trainer + 配置 Megatron 专属依赖</h3>
+<p>Kubeflow Trainer 的安装步骤和上一篇 DeepSpeed 文章完全一样（同一个 Trainer 装一次，各种运行时可以共存），这里不重复贴命令。区别在于 Megatron-Core 不需要像 DeepSpeed 那样额外装一个专门的 <code>ClusterTrainingRuntime</code>——它原生用 <code>torchrun</code> 启动，直接复用内置的 <code>torch-distributed</code> 运行时：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#9ECBFF"> get</span><span style="color:#9ECBFF"> clustertrainingruntimes</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> grep</span><span style="color:#9ECBFF"> torch-distributed</span></span>
+<span class="line"><span style="color:#6A737D"># 应看到 torch-distributed，Kubeflow Trainer 默认自带，无需额外安装</span></span></code></pre>
+<p><strong>但有一个 Megatron 特有的坑：K8s Pod 默认 <code>/dev/shm</code> 只有 64MB。</strong> Megatron-Core 会为每一个并行维度（TP、DP……）各创建一个独立的 NCCL 通信组，通信组一多，默认的 64MB 共享内存很容易不够用而报错。需要把 <code>/dev/shm</code> 挂载成内存盘扩容，可以用 <code>runtimePatches</code> 只对单次训练任务生效，不影响集群里跑其他运行时的任务：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">runtimePatches</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">  - </span><span style="color:#85E89D">manager</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">trainer.kubeflow.org/kubeflow-sdk</span></span>
+<span class="line"><span style="color:#85E89D">    trainingRuntimeSpec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      template</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">          replicatedJobs</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">node</span></span>
+<span class="line"><span style="color:#85E89D">              template</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">                spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">                  template</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">                    spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">                      volumes</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">                        - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">dshm</span></span>
+<span class="line"><span style="color:#85E89D">                          emptyDir</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">                            medium</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Memory</span></span>
+<span class="line"><span style="color:#85E89D">                      containers</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">                        - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">node</span></span>
+<span class="line"><span style="color:#85E89D">                          volumeMounts</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">                            - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">dshm</span></span>
+<span class="line"><span style="color:#85E89D">                              mountPath</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">/dev/shm</span></span></code></pre>
+<p>另外，Megatron 的数据集加载会先编译一段 C++ helper（<code>compile_helpers</code>），这段编译需要 <code>make</code>/<code>g++</code>，而官方默认的 <code>pytorch/pytorch:*-runtime</code> 系列镜像不带 C/C++ 工具链。官方示例的做法不是重新构建镜像，而是直接在训练函数里运行时安装：<code>apt-get install -y make g++</code>，再从 Megatron-LM 仓库拉取 <code>Makefile</code>/<code>helpers.cpp</code> 源文件放到本地 <code>megatron.core.datasets</code> 目录下，最后只让 rank 0 跑一次 <code>compile_helpers()</code>、其余 rank 用 <code>torch.distributed.barrier()</code> 等它编译完——这样就不用为了一段 C++ helper 单独维护一个自定义镜像。</p>
+<h3 id="阶段二提交张量并行训练任务kubeflow-trainer-sdk">阶段二：提交张量并行训练任务（Kubeflow Trainer SDK）</h3>
+<p>下面这段训练函数改编自 Kubeflow Trainer 官方 <a href="https://github.com/kubeflow/trainer/blob/master/examples/megatron/tensor-parallelism/megatron-core-gpt-tp.ipynb">Megatron TP 示例 notebook</a>，该 notebook 本身又是基于 Megatron-LM 仓库的 <a href="https://github.com/NVIDIA/Megatron-LM/blob/main/examples/run_simple_mcore_train_loop.py">run_simple_mcore_train_loop.py</a> 改的：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> kubeflow.trainer </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> TrainerClient, CustomTrainer</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> train_megatron_gpt_tp</span><span style="color:#E1E4E8">():</span></span>
+<span class="line"><span style="color:#F97583">    import</span><span style="color:#E1E4E8"> os</span></span>
+<span class="line"><span style="color:#F97583">    import</span><span style="color:#E1E4E8"> subprocess</span></span>
+<span class="line"><span style="color:#F97583">    import</span><span style="color:#E1E4E8"> urllib.request</span></span>
+<span class="line"><span style="color:#F97583">    from</span><span style="color:#E1E4E8"> functools </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> partial</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    import</span><span style="color:#E1E4E8"> torch</span></span>
+<span class="line"><span style="color:#F97583">    from</span><span style="color:#E1E4E8"> torch.optim </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> Adam</span></span>
+<span class="line"><span style="color:#F97583">    from</span><span style="color:#E1E4E8"> torch.utils.data </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> DataLoader</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    from</span><span style="color:#E1E4E8"> megatron.core </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> parallel_state</span></span>
+<span class="line"><span style="color:#F97583">    from</span><span style="color:#E1E4E8"> megatron.core.pipeline_parallel.schedules </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> get_forward_backward_func</span></span>
+<span class="line"><span style="color:#F97583">    from</span><span style="color:#E1E4E8"> megatron.core.tensor_parallel.random </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> model_parallel_cuda_manual_seed</span></span>
+<span class="line"><span style="color:#F97583">    from</span><span style="color:#E1E4E8"> megatron.core.transformer.transformer_config </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> TransformerConfig</span></span>
+<span class="line"><span style="color:#F97583">    from</span><span style="color:#E1E4E8"> megatron.core.models.gpt.gpt_model </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> GPTModel</span></span>
+<span class="line"><span style="color:#F97583">    from</span><span style="color:#E1E4E8"> megatron.core.models.gpt.gpt_layer_specs </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> get_gpt_layer_local_spec</span></span>
+<span class="line"><span style="color:#F97583">    from</span><span style="color:#E1E4E8"> megatron.core.datasets.utils </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> compile_helpers</span></span>
+<span class="line"><span style="color:#F97583">    from</span><span style="color:#E1E4E8"> megatron.core.datasets.blended_megatron_dataset_builder </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> BlendedMegatronDatasetBuilder</span></span>
+<span class="line"><span style="color:#F97583">    from</span><span style="color:#E1E4E8"> megatron.core.datasets.gpt_dataset </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> GPTDatasetConfig, MockGPTDataset</span></span>
+<span class="line"><span style="color:#F97583">    from</span><span style="color:#E1E4E8"> megatron.core.distributed </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> DistributedDataParallel, DistributedDataParallelConfig</span></span>
+<span class="line"><span style="color:#F97583">    from</span><span style="color:#E1E4E8"> megatron.core.distributed.finalize_model_grads </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> finalize_model_grads</span></span>
+<span class="line"><span style="color:#F97583">    from</span><span style="color:#E1E4E8"> megatron.core.tokenizers </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> MegatronTokenizer</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    seq_length </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 64</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    # 第一步：初始化 torch.distributed 和 Megatron 的模型并行分组</span></span>
+<span class="line"><span style="color:#E1E4E8">    parallel_state.destroy_model_parallel()</span></span>
+<span class="line"><span style="color:#E1E4E8">    rank, world_size, local_rank </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">int</span><span style="color:#E1E4E8">(os.environ[k]) </span><span style="color:#F97583">for</span><span style="color:#E1E4E8"> k </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> (</span><span style="color:#9ECBFF">"RANK"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"WORLD_SIZE"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"LOCAL_RANK"</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#E1E4E8">    torch.cuda.set_device(local_rank)</span></span>
+<span class="line"><span style="color:#E1E4E8">    torch.distributed.init_process_group(</span><span style="color:#FFAB70">backend</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"nccl"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">rank</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">rank, </span><span style="color:#FFAB70">world_size</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">world_size)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    tp_size </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> int</span><span style="color:#E1E4E8">(os.environ[</span><span style="color:#9ECBFF">"TP_SIZE"</span><span style="color:#E1E4E8">])  </span><span style="color:#6A737D"># TP_SIZE 就是要把每层切成几份，由外面 env 传入</span></span>
+<span class="line"><span style="color:#E1E4E8">    parallel_state.initialize_model_parallel(tp_size, </span><span style="color:#FFAB70">pipeline_model_parallel_size</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    model_parallel_cuda_manual_seed(</span><span style="color:#79B8FF">123</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    # 第二步：搭一个小规模 GPT，验证 TP 逻辑而非真实训练</span></span>
+<span class="line"><span style="color:#E1E4E8">    transformer_config </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> TransformerConfig(</span></span>
+<span class="line"><span style="color:#FFAB70">        num_layers</span><span style="color:#F97583">=</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">hidden_size</span><span style="color:#F97583">=</span><span style="color:#79B8FF">12</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">num_attention_heads</span><span style="color:#F97583">=</span><span style="color:#79B8FF">4</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">        use_cpu_initialization</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">pipeline_dtype</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">torch.float32,</span></span>
+<span class="line"><span style="color:#E1E4E8">    )</span></span>
+<span class="line"><span style="color:#E1E4E8">    gpt_model </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> GPTModel(</span></span>
+<span class="line"><span style="color:#FFAB70">        config</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">transformer_config, </span><span style="color:#FFAB70">transformer_layer_spec</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">get_gpt_layer_local_spec(),</span></span>
+<span class="line"><span style="color:#FFAB70">        vocab_size</span><span style="color:#F97583">=</span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">max_sequence_length</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">seq_length,</span></span>
+<span class="line"><span style="color:#E1E4E8">    ).to(</span><span style="color:#9ECBFF">"cuda"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    ddp_config </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> DistributedDataParallelConfig(</span></span>
+<span class="line"><span style="color:#FFAB70">        grad_reduce_in_fp32</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">overlap_grad_reduce</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">use_distributed_optimizer</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    )</span></span>
+<span class="line"><span style="color:#E1E4E8">    gpt_model </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> DistributedDataParallel(</span><span style="color:#FFAB70">config</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">transformer_config, </span><span style="color:#FFAB70">ddp_config</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">ddp_config, </span><span style="color:#FFAB70">module</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">gpt_model)</span></span>
+<span class="line"><span style="color:#E1E4E8">    optim </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Adam(gpt_model.parameters())</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    # 第三步：准备 mock 数据集——数据集加载依赖一段 C++ helper，运行时现装现编译，</span></span>
+<span class="line"><span style="color:#6A737D">    # 不需要为此单独维护一个自定义镜像</span></span>
+<span class="line"><span style="color:#E1E4E8">    subprocess.run([</span><span style="color:#9ECBFF">"apt-get"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"update"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"-qq"</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">capture_output</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    subprocess.run([</span><span style="color:#9ECBFF">"apt-get"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"install"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"-y"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"-qq"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"make"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"g++"</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">capture_output</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    datasets_dir </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> os.path.dirname(compile_helpers.</span><span style="color:#79B8FF">__code__</span><span style="color:#E1E4E8">.co_filename)</span></span>
+<span class="line"><span style="color:#E1E4E8">    base_url </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "https://raw.githubusercontent.com/NVIDIA/Megatron-LM/main/megatron/core/datasets/"</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> f </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> [</span><span style="color:#9ECBFF">"Makefile"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"helpers.cpp"</span><span style="color:#E1E4E8">]:</span></span>
+<span class="line"><span style="color:#E1E4E8">        urllib.request.urlretrieve(base_url </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> f, os.path.join(datasets_dir, f))</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> torch.distributed.get_rank() </span><span style="color:#F97583">==</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        compile_helpers()</span></span>
+<span class="line"><span style="color:#E1E4E8">    torch.distributed.barrier()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    dataset_config </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> GPTDatasetConfig(</span></span>
+<span class="line"><span style="color:#FFAB70">        random_seed</span><span style="color:#F97583">=</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">sequence_length</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">seq_length,</span></span>
+<span class="line"><span style="color:#FFAB70">        reset_position_ids</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">reset_attention_mask</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">eod_mask_loss</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">        tokenizer</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">MegatronTokenizer.from_pretrained(</span><span style="color:#FFAB70">metadata_path</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span><span style="color:#9ECBFF">"library"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"null-text"</span><span style="color:#E1E4E8">}, </span><span style="color:#FFAB70">vocab_size</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">seq_length),</span></span>
+<span class="line"><span style="color:#FFAB70">        mid_level_dataset_surplus</span><span style="color:#F97583">=</span><span style="color:#79B8FF">0.005</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    )</span></span>
+<span class="line"><span style="color:#E1E4E8">    datasets </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> BlendedMegatronDatasetBuilder(MockGPTDataset, [</span><span style="color:#79B8FF">1000</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">None</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">None</span><span style="color:#E1E4E8">], </span><span style="color:#F97583">lambda</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">, dataset_config).build()</span></span>
+<span class="line"><span style="color:#E1E4E8">    train_iterator </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> iter</span><span style="color:#E1E4E8">(DataLoader(datasets[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">batch_size</span><span style="color:#F97583">=</span><span style="color:#79B8FF">8</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">shuffle</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    # 第四步：定义 forward_step_func——Megatron 的流水线调度器要求这个签名</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> forward_step_func</span><span style="color:#E1E4E8">(data_iterator, model):</span></span>
+<span class="line"><span style="color:#F97583">        def</span><span style="color:#B392F0"> loss_func</span><span style="color:#E1E4E8">(loss_mask, output_tensor):</span></span>
+<span class="line"><span style="color:#E1E4E8">            losses </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> output_tensor.float()</span></span>
+<span class="line"><span style="color:#E1E4E8">            loss_mask </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> loss_mask.view(</span><span style="color:#F97583">-</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">).float()</span></span>
+<span class="line"><span style="color:#E1E4E8">            loss </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> torch.sum(losses.view(</span><span style="color:#F97583">-</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> loss_mask) </span><span style="color:#F97583">/</span><span style="color:#E1E4E8"> loss_mask.sum()</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#E1E4E8"> loss, {</span><span style="color:#9ECBFF">"lm loss"</span><span style="color:#E1E4E8">: loss}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        data </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> next</span><span style="color:#E1E4E8">(data_iterator)</span></span>
+<span class="line"><span style="color:#E1E4E8">        tokens, attention_mask, position_ids, labels, loss_mask </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E1E4E8">            data[k].to(</span><span style="color:#9ECBFF">"cuda"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">for</span><span style="color:#E1E4E8"> k </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> (</span><span style="color:#9ECBFF">"tokens"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"attention_mask"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"position_ids"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"labels"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"loss_mask"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        )</span></span>
+<span class="line"><span style="color:#E1E4E8">        output_tensor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> model(tokens, position_ids, attention_mask, </span><span style="color:#FFAB70">labels</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">labels)</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> output_tensor, partial(loss_func, loss_mask)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    # 第五步：跑 5 轮训练循环</span></span>
+<span class="line"><span style="color:#E1E4E8">    forward_backward_func </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> get_forward_backward_func()</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> iteration </span><span style="color:#F97583">in</span><span style="color:#79B8FF"> range</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">5</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#E1E4E8">        optim.zero_grad()</span></span>
+<span class="line"><span style="color:#E1E4E8">        losses_reduced </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> forward_backward_func(</span></span>
+<span class="line"><span style="color:#FFAB70">            forward_step_func</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">forward_step_func, </span><span style="color:#FFAB70">data_iterator</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">train_iterator, </span><span style="color:#FFAB70">model</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">gpt_model,</span></span>
+<span class="line"><span style="color:#FFAB70">            num_microbatches</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">seq_length</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">seq_length, </span><span style="color:#FFAB70">micro_batch_size</span><span style="color:#F97583">=</span><span style="color:#79B8FF">8</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">            decoder_seq_length</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">seq_length, </span><span style="color:#FFAB70">forward_only</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        )</span></span>
+<span class="line"><span style="color:#E1E4E8">        finalize_model_grads([gpt_model])  </span><span style="color:#6A737D"># 同步 TP 和 DP 分组间的梯度</span></span>
+<span class="line"><span style="color:#E1E4E8">        optim.step()</span></span>
+<span class="line"><span style="color:#79B8FF">        print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"iteration </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">iteration</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">: losses_reduced=</span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">losses_reduced</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    torch.distributed.destroy_process_group()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">num_nodes, num_gpu, tensor_model_parallel_size </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">job_name </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> TrainerClient().train(</span></span>
+<span class="line"><span style="color:#FFAB70">    runtime</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"torch-distributed"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    trainer</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">CustomTrainer(</span></span>
+<span class="line"><span style="color:#FFAB70">        func</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">train_megatron_gpt_tp,</span></span>
+<span class="line"><span style="color:#FFAB70">        num_nodes</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">num_nodes,</span></span>
+<span class="line"><span style="color:#FFAB70">        resources_per_node</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span><span style="color:#9ECBFF">"memory"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"16Gi"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"gpu"</span><span style="color:#E1E4E8">: num_gpu},</span></span>
+<span class="line"><span style="color:#FFAB70">        packages_to_install</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">"megatron-core"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"pybind11"</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#FFAB70">        env</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span><span style="color:#9ECBFF">"TP_SIZE"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">str</span><span style="color:#E1E4E8">(tensor_model_parallel_size)},</span></span>
+<span class="line"><span style="color:#E1E4E8">    ),</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">client </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> TrainerClient()</span></span>
+<span class="line"><span style="color:#E1E4E8">client.wait_for_job_status(</span><span style="color:#FFAB70">name</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">job_name, </span><span style="color:#FFAB70">status</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span><span style="color:#9ECBFF">"Running"</span><span style="color:#E1E4E8">})</span></span>
+<span class="line"><span style="color:#F97583">for</span><span style="color:#E1E4E8"> c </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> client.get_job(</span><span style="color:#FFAB70">name</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">job_name).steps:</span></span>
+<span class="line"><span style="color:#79B8FF">    print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"Step: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">c.name</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">, Status: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">c.status</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">, Devices: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">c.device</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF"> x </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">c.device_count</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p><code>RANK</code>/<code>WORLD_SIZE</code>/<code>LOCAL_RANK</code> 由 <code>torch-distributed</code> 运行时自动注入到每个 Pod，<code>TP_SIZE</code> 则是通过 <code>CustomTrainer</code> 的 <code>env</code> 参数传进去的自定义变量，必须等于总 GPU 数（<code>num_nodes * num_gpu</code>，这里是 2×1=2）——张量并行是把每一层切成 TP 份分别放到不同 GPU 上算，卡数和切分份数必须对齐。<strong>所有 import 和依赖安装都写在训练函数内部</strong>不是随手的代码风格，而是硬性要求——<code>CustomTrainer</code> 会把这个函数序列化后分发到每个节点单独执行，写在函数外的代码在远端进程里根本不会被执行到。对比上一篇 DeepSpeed 版本：那边训练函数里调的是 <code>deepspeed.initialize</code>，这里调的是标准 PyTorch 的 <code>torch.distributed.init_process_group</code> 加 Megatron 自己的 <code>parallel_state.initialize_model_parallel</code>，没有 MPI、没有 hostfile，两条编排路径在这一步的差异清晰可见。</p>
+<h3 id="阶段三checkpoint-转换megatron-bridge">阶段三：Checkpoint 转换（Megatron Bridge）</h3>
+<p>Megatron-Core 训练产出的原生 checkpoint 是按训练时的 TP/PP/DP 具体切分方式存储的分片，既不能直接给 vLLM 加载，也不能像上一篇 DeepSpeed 的 ZeRO checkpoint 那样简单地做“物理去冗余合并”——这里的分片本来就是模型计算的一部分，合并的本质是按 TP/PP 的切分顺序把权重重新拼接排列成标准的 dense 权重。用 <a href="https://github.com/NVIDIA-NeMo/Megatron-Bridge">Megatron Bridge</a> 做这一步转换：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> megatron.bridge </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> AutoBridge</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">bridge </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> AutoBridge.from_hf_pretrained(</span><span style="color:#9ECBFF">"Qwen/Qwen2.5-7B"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">bridge.export_ckpt(</span></span>
+<span class="line"><span style="color:#9ECBFF">    "/mnt/shared/megatron_checkpoints/qwen25_7b"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">    "/mnt/shared/hf_exports/qwen25_7b"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span></code></pre>
+<p><code>export_ckpt</code> 整个转换过程可以在 CPU 上单进程完成，不需要像训练那样拉起多进程——这一点和上一篇的 checkpoint 合并 Job 思路一致：另起一个只申请 CPU/内存、不占 GPU 的一次性 <code>Job</code>，挂载和训练 Pod 相同的共享 PVC 跑这段转换代码，跑完自动退出：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">batch/v1</span></span>
+<span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Job</span></span>
+<span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">megatron-checkpoint-export</span></span>
+<span class="line"><span style="color:#85E89D">spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  template</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      restartPolicy</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Never</span></span>
+<span class="line"><span style="color:#85E89D">      containers</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">export</span></span>
+<span class="line"><span style="color:#85E89D">          image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&lt;和训练用的同一个镜像，已装好 megatron-bridge&gt;</span></span>
+<span class="line"><span style="color:#85E89D">          command</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">"python"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"/scripts/export_checkpoint.py"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#85E89D">          resources</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">            requests</span><span style="color:#E1E4E8">: { </span><span style="color:#85E89D">cpu</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"4"</span><span style="color:#E1E4E8">, </span><span style="color:#85E89D">memory</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"32Gi"</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#85E89D">            limits</span><span style="color:#E1E4E8">: { </span><span style="color:#85E89D">cpu</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"8"</span><span style="color:#E1E4E8">, </span><span style="color:#85E89D">memory</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"48Gi"</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#85E89D">          volumeMounts</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">            - { </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">shared</span><span style="color:#E1E4E8">, </span><span style="color:#85E89D">mountPath</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">/mnt/shared</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#85E89D">      volumes</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">shared</span></span>
+<span class="line"><span style="color:#85E89D">          persistentVolumeClaim</span><span style="color:#E1E4E8">: { </span><span style="color:#85E89D">claimName</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">shared-checkpoint-pvc</span><span style="color:#E1E4E8"> }</span></span></code></pre>
+<p>转换完的 <code>/mnt/shared/hf_exports/qwen25_7b</code> 是一个标准 HuggingFace 格式目录，和上一篇 DeepSpeed 合并出来的 <code>merged-model</code> 目录形态完全一致——两条不同的训练路径，在“交给 vLLM 之前”这一步殊途同归。</p>
+<h3 id="阶段四用-vllm-部署到-k8s">阶段四：用 vLLM 部署到 K8s</h3>
+<p>这一步和上一篇 DeepSpeed 文章的阶段四几乎一样，只是模型路径换成了 Megatron Bridge 转换出来的目录：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">apps/v1</span></span>
+<span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Deployment</span></span>
+<span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">vllm-megatron-qwen-server</span></span>
+<span class="line"><span style="color:#85E89D">spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  replicas</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2</span></span>
+<span class="line"><span style="color:#85E89D">  selector</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    matchLabels</span><span style="color:#E1E4E8">: { </span><span style="color:#85E89D">app</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">vllm-megatron-qwen</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#85E89D">  template</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    metadata</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      labels</span><span style="color:#E1E4E8">: { </span><span style="color:#85E89D">app</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">vllm-megatron-qwen</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#85E89D">    spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      containers</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">vllm</span></span>
+<span class="line"><span style="color:#85E89D">          image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">vllm/vllm-openai:v0.27.1</span><span style="color:#6A737D">   # 部署前去 https://github.com/vllm-project/vllm/releases 确认是否有更新的稳定版</span></span>
+<span class="line"><span style="color:#85E89D">          args</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#9ECBFF">--model=/models/qwen25_7b</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#9ECBFF">--served-model-name=qwen2.5-7b-megatron</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#9ECBFF">--tensor-parallel-size=1</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#9ECBFF">--gpu-memory-utilization=0.9</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#9ECBFF">--max-model-len=8192</span></span>
+<span class="line"><span style="color:#85E89D">          resources</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">            limits</span><span style="color:#E1E4E8">: { </span><span style="color:#85E89D">nvidia.com/gpu</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#85E89D">          readinessProbe</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">            httpGet</span><span style="color:#E1E4E8">: { </span><span style="color:#85E89D">path</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">/health</span><span style="color:#E1E4E8">, </span><span style="color:#85E89D">port</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">8000</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#85E89D">            initialDelaySeconds</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">30</span></span>
+<span class="line"><span style="color:#85E89D">            periodSeconds</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">10</span></span>
+<span class="line"><span style="color:#85E89D">          volumeMounts</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">            - { </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">model-storage</span><span style="color:#E1E4E8">, </span><span style="color:#85E89D">mountPath</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">/models</span><span style="color:#E1E4E8">, </span><span style="color:#85E89D">readOnly</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#85E89D">      volumes</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">model-storage</span></span>
+<span class="line"><span style="color:#85E89D">          persistentVolumeClaim</span><span style="color:#E1E4E8">: { </span><span style="color:#85E89D">claimName</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">shared-checkpoint-pvc</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#B392F0">---</span></span>
+<span class="line"><span style="color:#85E89D">apiVersion</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">v1</span></span>
+<span class="line"><span style="color:#85E89D">kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Service</span></span>
+<span class="line"><span style="color:#85E89D">metadata</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">vllm-megatron-qwen-svc</span></span>
+<span class="line"><span style="color:#85E89D">spec</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  selector</span><span style="color:#E1E4E8">: { </span><span style="color:#85E89D">app</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">vllm-megatron-qwen</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#85E89D">  ports</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    - { </span><span style="color:#85E89D">port</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">8000</span><span style="color:#E1E4E8">, </span><span style="color:#85E89D">targetPort</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">8000</span><span style="color:#E1E4E8"> }</span></span></code></pre>
+<p><strong>这里有个容易搞混的地方：<code>--tensor-parallel-size</code> 这个 vLLM 参数和阶段二训练时的 <code>TP_SIZE=2</code> 没有任何绑定关系。</strong> 训练时的张量并行是为了把模型塞进有限的训练显存里，切分方式已经在阶段三被 Megatron Bridge 转换成标准 dense 权重时“抹平”了；推理时用几张卡做张量并行，完全是根据推理阶段自己的显存和吞吐需求重新决定的独立参数——这也是为什么阶段三的 checkpoint 转换是必要的一步，而不是可以跳过的形式主义。部署后验证：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">kubectl</span><span style="color:#9ECBFF"> port-forward</span><span style="color:#9ECBFF"> svc/vllm-megatron-qwen-svc</span><span style="color:#9ECBFF"> 8000:8000</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#9ECBFF"> http://localhost:8000/v1/chat/completions</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -H</span><span style="color:#9ECBFF"> "Content-Type: application/json"</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -d</span><span style="color:#9ECBFF"> '{"model": "qwen2.5-7b-megatron", "messages": [{"role": "user", "content": "你好"}]}'</span></span></code></pre>
+<p>到这里，三篇文章的链路在同一个终点会合：Ray 那条路径靠动态调度让训练推理反复切换，DeepSpeed 那条路径靠 ZeRO 切分显存状态、MPI 编排多机训练，Megatron-LM 这条路径靠张量/流水线并行直接切分模型计算本身——三种截然不同的分布式训练哲学，最后都在 vLLM 这一层收敛成同一种推理服务化方式。</p>
+<h2 id="小结">小结</h2>
+<p>Megatron-LM 在这三篇系列里补上的是“模型本身太大切不开就装不下”这一类问题的答案：K8s 管物理资源不变，<code>torch-distributed</code> 运行时接手编排（不需要像 DeepSpeed 那样引入专门的运行时，因为 Megatron-Core 原生就是标准 PyTorch 分布式），Megatron-Core 负责把模型计算切分到多卡，Megatron Bridge 负责把训练产出的切分 checkpoint 转换回标准格式，vLLM 依旧负责推理服务化。三篇文章走完一遍：训练推理要反复切换选 Ray，已有模型代码想低成本上显存优化选 DeepSpeed，模型规模大到必须做模型并行、且有高速互联支撑通信开销选 Megatron-LM——三条路径没有绝对的优劣，只是解决的约束层面不同，选型时先看清楚自己卡在哪一层，再决定往下走哪条编排路径。</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>Megatron-LM</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>Kubernetes</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/k8s-deepspeed-vllm-training-to-deployment-pipeline" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 k8s-deepspeed-vllm-training-to-deployment-pipeline</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
