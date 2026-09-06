@@ -1,0 +1,248 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/how-rocev2-supports-large-model-training-networks/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/how-rocev2-supports-large-model-training-networks/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/how-rocev2-supports-large-model-training-networks/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/how-rocev2-supports-large-model-training-networks/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/how-rocev2-supports-large-model-training-networks/"><meta property="og:title" content="how-rocev2-supports-large-model-training-networks — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="how-rocev2-supports-large-model-training-networks — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>how-rocev2-supports-large-model-training-networks — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/how-rocev2-supports-large-model-training-networks/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 09 / 06</span><span class="text-meta" data-astro-cid-tldeq5d5>约 55 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>how-rocev2-supports-large-model-training-networks</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>网络</span><span class="tag-outline" data-astro-cid-tldeq5d5>RDMA</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="rocev2如何扛起大模型训练网络">RoCEv2如何扛起大模型训练网络</h1>
+<p><img src="/assets/images/how-rocev2-supports-large-model-training-networks-summary.png" alt="知识点总结"></p>
+<h2 id="摘要">摘要</h2>
+<p>大模型训练早已不是“堆 GPU”就能解决的问题：成百上千张卡之间的梯度同步（All-Reduce、All-Gather）对网络的带宽、时延和丢包率极度敏感，网络反而成了压榨算力的最后一道瓶颈。RoCEv2（RDMA over Converged Ethernet v2）把 RDMA 的低时延、低 CPU 开销能力搬到了标准以太网和 IP 网络之上，配合 PFC、ECN、DCQCN 三大机制构建“无损网络”，已经成为千卡乃至万卡级大模型训练集群的主流互联方案之一。本文从原理讲起，梳理网络规划思路，并给出从交换机、网卡到应用层的完整配置流程，交换机以华为设备为例，网卡以主流的 NVIDIA/Mellanox ConnectX 系列智能网卡为例。</p>
+<h2 id="背景与问题">背景与问题</h2>
+<p>大模型训练的分布式并行（数据并行、张量并行、流水线并行）需要 GPU 之间频繁交换梯度和中间激活值，这些通信集中在训练的每一步里发生，稍有延迟就会让整卡整卡的算力干等。</p>
+<p>问题在于：以太网天生是“有损”的——一旦交换机队列拥塞，就会直接丢包，而 TCP/IP 协议栈的拷贝和中断开销又会进一步放大时延。RDMA（远程直接内存访问）可以绕过操作系统内核和 CPU，让网卡直接读写对端内存，把时延压到微秒级；但 RDMA 原本运行在 InfiniBand 这种专用网络上，价格贵、生态封闭。</p>
+<p>RoCEv2 的意义就是把 RDMA 的能力“嫁接”到大家更熟悉、更便宜、更开放的以太网和 IP 网络上：它把 RDMA 报文封装进 UDP/IP，使用 IANA 保留的 4791 端口，这样报文既能享受 RDMA 的高效传输，又能像普通 IP 报文一样被三层路由转发，具备了跨机架、跨 Pod 组网的能力（这也是 RoCEv2 相对只能在二层工作的 RoCEv1 的关键进步）。</p>
+<p>但代价是：以太网本身不保证不丢包，而 RDMA 协议栈对丢包极其敏感——在 400G 链路上，哪怕只丢一个包，都可能触发整个发送窗口的重传，造成以秒级计的 GPU 空闲。所以要在以太网上跑好 RoCEv2，必须先把网络改造成事实上的“无损网络”。</p>
+<h2 id="核心思路与优势">核心思路与优势</h2>
+<p>无损网络主要依赖三个互相配合的机制，可以理解成“三道防线”：</p>
+<p><strong>PFC（Priority Flow Control，基于优先级的流量控制）</strong>：当某个优先级队列快满的时候，接收端向发送端逐跳发送“暂停”帧，让上游先别发了，从而避免丢包。它的问题是作用比较“粗暴”——一暂停就是整条链路上该优先级的所有流量都停，容易把拥塞逐跳向上游传导，甚至在环形依赖下引发死锁。</p>
+<p><strong>ECN（Explicit Congestion Notification，显式拥塞通知）</strong>：在交换机队列长度触达阈值时，不直接丢包，而是在报文头打上“拥塞发生”标记；接收端网卡看到标记后，会给发送端回一个拥塞通知包（CNP），提示对方主动降速。相比 PFC 的一刀切，ECN 更早、更精细地介入。</p>
+<p><strong>DCQCN（Data Center Quantized Congestion Notification）</strong>：这是端到端的闭环拥塞控制算法，发送端网卡收到 CNP 后，按算法量化调整发送速率，之后再逐步恢复。可以理解为 ECN 负责“发现问题”，DCQCN 负责“解决问题”，而 PFC 是兜底的最后一道安全网——理想状态下 ECN+DCQCN 就能把拥塞控制住，PFC 极少真正触发。</p>
+<p>三者配合的关键在于阈值设计：ECN 的标记阈值必须明显低于 PFC 的暂停阈值（Xoff），这样才能留出时间让 DCQCN 先把发送速率降下来，避免每次拥塞都直接触发 PFC 暂停、甚至造成暂停帧在多台交换机间循环等待的死锁。</p>
+<p>和 InfiniBand 相比，RoCEv2 的优势是生态更开放、交换机和网卡选择更多、单端口成本更低；短板是配置和运维复杂度更高、多租户隔离和故障定位工具链的成熟度目前还有差距。所以现阶段的经验规律大致是：千卡级集群用 RoCEv2 性价比更高，追求万卡级极致规模和稳定性时，InfiniBand 仍是更成熟的选择——但这个边界正随着 RoCEv2 生态的演进不断被推高。</p>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li>负责规划和搭建 AI 训练集群网络的基础设施工程师、网络工程师</li>
+<li>需要为大模型训练/推理集群选型（RoCEv2 vs InfiniBand）的架构师</li>
+<li>已经用上 RoCEv2 但训练吞吐上不去、想系统排查 PFC/ECN 配置的运维人员</li>
+<li>希望系统了解无损以太网原理的后端/AI Infra 工程师</li>
+</ul>
+<h2 id="实践步骤">实践步骤</h2>
+<h3 id="一网络规划">一、网络规划</h3>
+<p><strong>1. 拓扑选型：三层无收敛 CLOS</strong></p>
+<p>大规模训练网络普遍采用 Spine-Leaf（或加一层 SuperSpine 的三层 CLOS）架构：服务器接入 Leaf 交换机，Leaf 再全连接到 Spine。规划时要重点关注收敛比——即交换机下行（连服务器）带宽与上行（连 Spine）带宽的比例。训练网络通常要求做到 1:1 无收敛，避免多台服务器同时往上游打流量时在 Spine 层产生拥塞热点。</p>
+<p><strong>2. Rail-optimized 设计</strong></p>
+<p>单台 GPU 服务器一般配备多张网卡（比如 8 张，与 8 张 GPU 一一对应）。Rail-optimized 的做法是：所有服务器上编号相同的网卡（比如都是 0 号网卡）接入同一台 Leaf/ToR 交换机，编号为 1 的网卡接入另一台，以此类推。这样同号 GPU 之间的跨机通信只需要经过同一台 Leaf 交换机，跳数最少、延迟最低，也天然把不同“轨道”（Rail）的流量隔离开，减少互相争抢。</p>
+<p><strong>3. 双网分离</strong></p>
+<p>GPU 间 RDMA 通信流量和业务/管理流量（SSH、监控、存储访问等）建议物理或逻辑分离，各走各的网络平面，避免管理流量的突发抢占训练流量的缓存和带宽，也方便分别做 QoS 和故障定位。</p>
+<p><strong>4. ToR 双归与可靠性</strong></p>
+<p>有条件的话，服务器网卡可以双归到两台 ToR 交换机，任意一台故障只影响一半带宽而不是整机下线；GPU Server 内的多张网卡全部下联同一台 ToR，即使这台 ToR 故障，受影响的服务器数量也是可控的，反而比“打散接入多台 ToR”更容易做故障隔离和快速定位。</p>
+<p><strong>5. 端到端一致性</strong></p>
+<p>无损网络能不能生效，取决于从服务器网卡、Leaf、Spine 到所有中间设备的 DSCP/优先级映射、PFC 优先级、ECN 阈值是否完全一致。只要有一段链路没有正确配置，无损链路就会在那个节点“破功”，所以规划阶段就要把优先级和阈值方案写成统一的标准，交换机和网卡两侧对齐执行。</p>
+<h3 id="二交换机配置以华为交换机为例">二、交换机配置（以华为交换机为例）</h3>
+<blockquote>
+<p><strong>重要提示</strong>：不同型号、不同软件版本的华为交换机，命令关键字和支持范围可能存在差异（例如 <code>dcb pfc dscp-mapping enable</code> 仅部分单板支持）。以下流程是对照华为官方《智能无损网络配置指南》《命令参考》的功能描述，并与多份独立技术资料交叉核对整理得出，<strong>不是凭记忆臆造</strong>；但在生产环境执行前，仍必须打开你所用设备型号、软件版本对应的官方命令参考逐条核实语法和取值范围，并先在测试环境验证一遍，再上生产。</p>
+</blockquote>
+<p><strong>第 1 步：创建 ECN（WRED）拥塞控制模板</strong></p>
+<p>在系统视图下创建一个 drop-profile，定义队列在什么长度区间开始按百分比标记 ECN：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>system-view</span></span>
+<span class="line"><span>drop-profile dcqcn</span></span>
+<span class="line"><span> color green low-limit 1 high-limit 30 discard-percentage 2</span></span>
+<span class="line"><span>commit</span></span></code></pre>
+<p>这条 <code>color</code> 命令有两种写法：上面用的是<strong>百分比</strong>形式，<code>low-limit 1 high-limit 30</code> 表示队列缓存占用从 1% 涨到 30% 这个区间内，按 <code>discard-percentage</code> 指定的 2% 概率对绿色报文做 ECN 标记（队列越满，标记越密）；另一种是绝对值形式，写成 <code>color green buffer-size low-limit &lt;低阈值&gt; high-limit &lt;高阈值&gt; discard-percentage &lt;概率&gt;</code>，直接指定缓存大小。具体取值需要结合网卡缓存、链路带宽时延积去压测调优，不能照抄。</p>
+<p><strong>第 2 步：为 RDMA 流量分配 PFC 优先级</strong></p>
+<p>在全局的 PFC 视图下，指定用于 RoCEv2 流量的优先级队列（示例中用优先级 3）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>dcb pfc</span></span>
+<span class="line"><span> priority 3</span></span></code></pre>
+<p><strong>第 3 步：在接口上信任 DSCP 并绑定 ECN 模板</strong></p>
+<p>进入连接 GPU 服务器/其他交换机的接口视图，让接口按 DSCP 值映射优先级，并把队列 3 绑定到刚才创建的 ECN 模板：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>interface 100GE1/0/1</span></span>
+<span class="line"><span> trust dscp</span></span>
+<span class="line"><span> qos queue 3 wred dcqcn</span></span>
+<span class="line"><span> qos queue 3 ecn</span></span>
+<span class="line"><span>commit</span></span></code></pre>
+<p>注意 <code>qos queue ecn</code> 在不同系列/版本上有两种形态：一种是这里用的“先用 <code>qos queue &lt;n&gt; wred &lt;模板名&gt;</code> 绑定模板、再用 <code>qos queue &lt;n&gt; ecn</code> 打开 ECN”；另一种是把模板名直接写进 ECN 命令，形如 <code>qos queue &lt;n&gt; ecn &lt;模板名&gt;</code>。执行前用 <code>?</code> 补全看一下自己设备支持哪种写法，不要两种混着敲。另外，如果设备上启用了 AI ECN（动态阈值）功能，它与这里的静态 ECN 阈值是互斥的，不能同时配在同一个队列上。</p>
+<p><strong>第 4 步：在接口上使能 PFC，并设置缓存阈值</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>interface 100GE1/0/1</span></span>
+<span class="line"><span> dcb pfc enable mode manual</span></span>
+<span class="line"><span> dcb pfc buffer 3 xoff dynamic 6 hdrm 330</span></span>
+<span class="line"><span>commit</span></span></code></pre>
+<p>这条命令的完整语法是 <code>dcb pfc buffer &lt;队列号&gt; { xoff static &lt;值&gt; | xoff dynamic &lt;权重&gt; | xon offset &lt;值&gt; | hdrm &lt;值&gt; }</code>，几个阈值的含义：</p>
+<ul>
+<li><code>xoff</code>：触发发送 PFC 暂停帧的队列水位阈值。它有两种写法，<strong>必须二选一，不能省略关键字</strong>——<code>xoff static &lt;值&gt;</code> 是写死的绝对阈值，<code>xoff dynamic &lt;权重&gt;</code> 是按当前可用共享缓存动态计算（权重越大，允许占用的缓存越多）。大规模训练网络里更常用 <code>dynamic</code>，因为多端口同时拥塞时它能自适应分配缓存。</li>
+<li><code>xon offset</code>：注意不是直接写“恢复阈值”，而是相对 <code>xoff</code> 的<strong>回差偏移量</strong>，实际的停止反压阈值取 <code>xon</code> 与 <code>xoff 减去该偏移量</code>两者中较大的那个。</li>
+<li><code>hdrm</code>（headroom）：从发出暂停帧到对端真正停下来这段时间里，为了不丢在途报文而预留的缓存空间，和链路长度、端口速率直接相关。</li>
+</ul>
+<p>这几个值后面还可以跟 <code>cells</code>/<code>bytes</code>/<code>kbytes</code>/<code>mbytes</code> 指定单位（不写则用设备默认单位，通常是 cell），例如 <code>dcb pfc buffer 3 xoff dynamic 4 hdrm 75 kbytes</code>。具体数值必须结合端口速率、线缆长度带来的时延、芯片缓存大小重新计算，示例数值只是示意，不能直接套用到不同型号的交换机上。</p>
+<p><strong>第 5 步（可选）：让 PFC 按 DSCP 映射后的优先级反压</strong></p>
+<p>如果希望 PFC 的背压依据 DSCP 映射后的优先级而不是原始 802.1p 优先级生效，可以在支持的单板上全局开启：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>dcb pfc dscp-mapping enable</span></span></code></pre>
+<p>执行前请先确认自己的单板型号是否在支持列表内，不支持的单板执行会失败或不生效。</p>
+<p><strong>第 6 步：配置 PFC 死锁检测与恢复</strong></p>
+<p>PFC 逐跳暂停的机制在环形拓扑或配置不当的情况下有死锁风险，建议同步开启死锁检测：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>dcb pfc</span></span>
+<span class="line"><span> deadlock-detect interval 10</span></span>
+<span class="line"><span> priority 3 deadlock-detect time 10</span></span>
+<span class="line"><span> priority 3 deadlock-recovery time 10</span></span>
+<span class="line"><span> priority 3 turn-off threshold 5</span></span></code></pre>
+<p><code>deadlock-detect time</code> 用于设置检测周期、<code>deadlock-recovery time</code> 设置恢复周期，<code>turn-off threshold</code> 设置连续检测到死锁多少次后临时关闭该优先级的 PFC 以打破死锁循环。这几个参数的默认值和取值范围因设备型号和软件版本差异较大，务必对照命令参考核实。</p>
+<p><strong>第 7 步：交换机侧初步检查</strong></p>
+<p>交换机配置下发后，先做一轮设备自身的检查，再往下配网卡和应用层：</p>
+<ul>
+<li>用 <code>display dcb pfc statistics</code> 一类命令（具体命令名以设备命令参考为准）查看端口是否出现异常频繁的 PFC 暂停计数；</li>
+<li>检查 Leaf、Spine 全链路的 DSCP 映射、PFC 优先级、ECN 阈值是否完全一致，任何一跳配置不一致都可能让无损链路在那一跳“破功”。</li>
+</ul>
+<p>只有交换机侧配置自洽，才有必要往下配置网卡——网络规划里强调的“端到端一致性”，接下来就体现在交换机与网卡的参数要严格对应。</p>
+<h3 id="三网卡配置以-nvidiamellanox-connectx-系列智能网卡为例">三、网卡配置（以 NVIDIA/Mellanox ConnectX 系列智能网卡为例）</h3>
+<blockquote>
+<p>目前大模型训练集群的 GPU 服务器上，绝大多数使用 NVIDIA（原 Mellanox）ConnectX 系列智能网卡做 RDMA 网卡。下面命令以 Linux 下的 <code>mlnx_qos</code>（属于 <code>mlnx-tools</code> / MLNX_OFED 驱动包）和标准 sysfs 接口为例，交叉核对自网卡厂商文档描述与多篇独立技术资料。不同代际网卡（ConnectX-5/6/7）、不同驱动版本的参数细节可能有出入，执行前请对照自己网卡的厂商文档和 <code>--help</code> 输出核实，并先在单机/测试环境跑通，再批量下发到训练集群。</p>
+</blockquote>
+<p><strong>第 1 步：确认网卡型号与当前 RoCE 模式</strong></p>
+<p>先确认这张卡跑的是 RoCEv2 而不是 RoCEv1（如果误留在 v1，交换机侧再怎么配置也不会生效）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>cma_roce_mode -d mlx5_0 -p 1</span></span>
+<span class="line"><span># 需要设置为 RoCE v2 时：</span></span>
+<span class="line"><span>cma_roce_mode -d mlx5_0 -p 1 -m 2</span></span></code></pre>
+<p><code>mlx5_0</code> 是网卡设备名，需要替换成 <code>ibdev2netdev</code> 或 <code>ibstat</code> 查出来的实际设备名；<code>-p 1</code> 是端口号，多端口网卡要按实际端口调整。</p>
+<p><strong>第 2 步：设置 DSCP 信任模式和 PFC</strong></p>
+<p>对应网口（用 <code>ibdev2netdev</code> 查出网卡对应的 Linux 网口名，如 <code>enp216s0f1np1</code>）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>mlnx_qos -i &lt;网口名&gt; --trust dscp</span></span>
+<span class="line"><span>mlnx_qos -i &lt;网口名&gt; --pfc 0,0,0,1,0,0,0,0</span></span></code></pre>
+<p><code>--pfc</code> 后面 8 个数字依次对应优先级 0~7 是否开启 PFC，这里把第 4 位（优先级 3）设为 1，要与前面交换机侧 <code>dcb pfc priority 3</code> 的优先级编号保持一致，两边任何一边选错优先级号，PFC 都无法端到端生效。</p>
+<p>这里补充一个很多人没搞清楚的对应关系：为什么业界习惯用 <strong>DSCP 26 配优先级 3</strong> 这一组？因为网卡默认的 DSCP→优先级映射就是按 <code>DSCP / 8</code> 分组的，DSCP 24~31 这一档默认全部落到优先级 3，而 DSCP 26（即 AF31）正好在这一档里，所以用 26 时不需要额外配映射就能落到优先级 3，省掉一处容易配错的地方。如果你的规划里要用别的 DSCP 值，或者想显式写死这个映射关系，可以用：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>mlnx_qos -i &lt;网口名&gt; --dscp2prio set,26,3</span></span></code></pre>
+<p>反过来，如果交换机侧信任的 DSCP 值和网卡这边落到的优先级对不上，流量就会走到没配 PFC/ECN 的普通队列里——这是排障时最常见的“配置都做了但就是不生效”的原因之一。</p>
+<p><strong>第 3 步：设置 RoCE 流量的 ToS/Traffic Class，与交换机 DSCP 对齐</strong></p>
+<p>RDMA 连接建立时使用的 ToS 字段需要和交换机侧信任、匹配的 DSCP 值对应（IP 报文里 ToS 字段高 6 位就是 DSCP，换算关系是 <code>ToS ≈ DSCP × 4</code>，如果网卡/驱动的 ECN 能力位也参与编码，实际数值可能是 <code>DSCP × 4 + 2</code> 这样的形式，需要用抓包或厂商工具实测确认，不要直接按公式硬套）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>cma_roce_tos -d mlx5_0 -t 106</span></span></code></pre>
+<p>例子中的 <code>106</code> 对应交换机侧配置的 DSCP 26（即前面 drop-profile/PFC 优先级 3 那条链路），实际值必须和交换机、其他所有节点保持一致，否则会落到错误的队列，PFC/ECN 配置形同虚设。</p>
+<p><strong>第 4 步：开启 ECN（配合交换机侧完成 DCQCN 闭环）</strong></p>
+<p>ConnectX 系列网卡把 ECN 拆成两个方向：<code>roce_np</code>（Notification Point，收到拥塞标记后生成 CNP 的接收端逻辑）和 <code>roce_rp</code>（Reaction Point，收到 CNP 后执行 DCQCN 降速的发送端逻辑），两个方向都要按优先级打开：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>echo 1 &gt; /sys/class/net/&lt;网口名&gt;/ecn/roce_np/enable/3</span></span>
+<span class="line"><span>echo 1 &gt; /sys/class/net/&lt;网口名&gt;/ecn/roce_rp/enable/3</span></span></code></pre>
+<p>这里的 <code>3</code> 同样对应优先级 3，需要跟交换机、PFC 配置的优先级一致。</p>
+<p><strong>第 5 步：查找 RoCEv2 对应的 GID Index</strong></p>
+<p>网卡的 RDMA 子系统会给每种地址类型（IB 原生、RoCEv1、RoCEv2 IPv4/IPv6）分配不同的 GID Index：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>show_gids</span></span></code></pre>
+<p>在输出里找 <code>RoCE v2</code> 且地址类型匹配你训练网络所用协议（一般是 IPv4）的那一行，记下它的 <code>GID Index</code> 列。如果系统没有 <code>show_gids</code> 命令，通常是缺少 <code>mlnx-tools</code> 包，需要先安装。</p>
+<p>这个值有两个用途：一是下一节用 <code>ib_write_bw -x &lt;索引&gt;</code> 做裸链路测试时要用；二是作为<strong>核对基准</strong>——现在的 NCCL 已经能自动选出正确的 RoCEv2 GID，不需要手工指定，但你需要知道正确答案是几，才能在看 <code>NCCL_DEBUG=INFO</code> 日志时判断它自动选的对不对（详见下一节）。</p>
+<p><strong>第 6 步：网卡侧验证</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>mlnx_qos -i &lt;网口名&gt;</span></span>
+<span class="line"><span>ethtool -S &lt;网口名&gt; | grep prio3</span></span>
+<span class="line"><span>cat /sys/class/infiniband/mlx5_0/ports/1/hw_counters/np_cnp_sent</span></span></code></pre>
+<p>第一条确认 trust/PFC 配置已生效，第二条看优先级 3 队列有没有异常的暂停计数，第三条看这张卡有没有在发送 CNP（拥塞通知包）——如果长时间为 0，可能是 ECN 没生效或者压根没跑到拥塞的流量。</p>
+<blockquote>
+<p>这些配置默认不是持久化的，重启机器或重新加载驱动后通常需要重新执行（也可以写成开机脚本），是否支持持久化保存请查阅具体驱动版本的文档。</p>
+</blockquote>
+<h3 id="四应用层配置以-nccl-为例">四、应用层配置（以 NCCL 为例）</h3>
+<p>大模型训练框架（PyTorch、Megatron-LM 等）底层通常都用 NCCL 做 GPU 间集合通信，NCCL 通过一组环境变量来决定怎么用底层的 RDMA 网卡，这一层配置错了，即便交换机和网卡都配置正确，实际训练也可能走了错误的队列或退化到 TCP。</p>
+<p><strong>第 1 步：确认走 RDMA 而不是回退到 TCP</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>export NCCL_IB_DISABLE=0</span></span></code></pre>
+<p><code>NCCL_IB_DISABLE=0</code> 是默认值，明确写出来是为了防止有人在排障时临时设成 1（强制退化到 TCP Socket）之后忘记改回来——这种情况下训练能跑但完全没用上 RDMA，吞吐会断崖式下降，却不容易第一时间发现。</p>
+<p><strong>第 2 步：设置一组针对 RoCEv2 的核心变量</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>export NCCL_IB_HCA==mlx5_0,=mlx5_1,=mlx5_2,=mlx5_3,=mlx5_4,=mlx5_5,=mlx5_6,=mlx5_7</span></span>
+<span class="line"><span>export NCCL_IB_TC=106</span></span>
+<span class="line"><span>export NCCL_IB_SL=0</span></span>
+<span class="line"><span>export NCCL_SOCKET_IFNAME=eth0</span></span>
+<span class="line"><span>export NCCL_NET_GDR_LEVEL=SYS</span></span>
+<span class="line"><span>export NCCL_DEBUG=INFO</span></span></code></pre>
+<ul>
+<li><code>NCCL_IB_HCA</code>：显式列出参与通信的 RDMA 网卡设备名（用 <code>ibdev2netdev</code> 或 <code>ibstat</code> 查出实际设备名后填入），避免 NCCL 自动探测时选错卡——一台服务器上如果同时有管理网卡和多张 RoCE 网卡，不显式指定很容易选错。这里有个容易踩的坑：不加 <code>=</code> 前缀时，写的值是<strong>前缀匹配</strong>，<code>mlx5_1</code> 会同时匹配到 <code>mlx5_1</code> 和 <code>mlx5_10</code>；加上 <code>=</code> 才是精确匹配，所以卡多的机器建议按上面这样逐个写 <code>=mlx5_N</code>。需要指定端口时可以写成 <code>=mlx5_0:1</code> 这种形式。</li>
+<li><code>NCCL_IB_TC</code>：对应网卡侧 <code>cma_roce_tos</code> 设置的 ToS 值（本文示例中对应交换机侧 DSCP 26），必须和网卡、交换机三方完全一致，否则流量不会进入之前配置好 PFC/ECN 的那个队列。</li>
+<li><code>NCCL_IB_SL</code>：InfiniBand/RoCE 的 Service Level 字段，默认 0，多数场景保持默认即可，只有网络规划里明确划分了多个服务等级才需要调整。</li>
+<li><code>NCCL_SOCKET_IFNAME</code>：注意这个变量控制的是 NCCL 建链阶段的带外（out-of-band）控制通道走哪张网卡，不是训练时的大流量数据通道——数据面走的是上面 <code>NCCL_IB_HCA</code> 指定的 RDMA 网卡，两者不要混淆。同样支持 <code>=</code> 精确匹配和 <code>^</code> 排除写法（比如 <code>^docker</code> 排除容器网桥）。</li>
+<li><code>NCCL_NET_GDR_LEVEL</code>：控制 GPUDirect RDMA（网卡直接读写 GPU 显存，跳过 CPU 内存拷贝）在 GPU 与网卡相隔多远的 PCIe 拓扑距离内还允许启用，可选值从严到宽依次是 <code>LOC</code>（从不启用）、<code>PIX</code>（同一 PCIe 交换芯片下）、<code>PXB</code>（跨多级 PCIe 交换芯片）、<code>PHB</code>（同一 NUMA 节点）、<code>SYS</code>（跨 CPU 之间的互联总线也允许）。<code>SYS</code> 是最宽松的一档，在 Rail-optimized、网卡与 GPU 已经按亲和性配对的机型上通常没问题，但如果机型的 GPU 和网卡分属不同 CPU、跨 UPI/SMP 总线通信，放到 <code>SYS</code> 反而可能比走主机内存更慢，建议对照机型的 PCIe 拓扑（<code>nvidia-smi topo -m</code>）实测比较后再定。</li>
+<li><code>NCCL_DEBUG=INFO</code>：让 NCCL 在启动时打印实际选用的网卡、GID Index、传输方式等信息，是确认上面几个变量真正生效的关键手段；排障之外不建议长期开启，日志量会比较大（可选值还有 <code>VERSION</code>、<code>WARN</code>、<code>TRACE</code>）。</li>
+</ul>
+<p><strong>关于 <code>NCCL_IB_GID_INDEX</code>：新版本不要再手动写死。</strong> 很多流传的配置模板里都有一句 <code>export NCCL_IB_GID_INDEX=3</code>，那是早期版本的经验做法。这个变量的默认值是 <code>-1</code>，即由 NCCL 自动根据网卡链路层类型选择——识别到以太网（RoCE）时会自动挑选支持 RoCEv2 的那个 GID（在多数驱动/固件组合下恰好就是 3，但并不总是）。从 NCCL 2.21 起自动选择已经能覆盖绝大多数 RoCEv2 环境，硬编码 3 反而可能在某些驱动版本上选到错误的地址类型、导致建链失败。正确做法是：<strong>先不设这个变量</strong>，用 <code>NCCL_DEBUG=INFO</code> 看日志里 NCCL 实际选中的 GID Index 是不是第三节 <code>show_gids</code> 里那个 RoCEv2 条目，只有在确认自动选择选错了的时候，才显式覆盖它。</p>
+<p>同理，<code>NCCL_IB_ADDR_FAMILY</code>（可选 <code>AF_INET</code>/<code>AF_INET6</code>，默认 <code>AF_INET</code>）只在 <strong><code>NCCL_IB_GID_INDEX</code> 未设置</strong>、由 NCCL 自动挑 GID 时才起作用——它用来告诉 NCCL 自动选择时优先挑哪个地址族的 GID。如果你已经显式写死了 GID Index，这个变量就不会生效，两个一起设是自相矛盾的。IPv6 组网时才需要把它设成 <code>AF_INET6</code>。</p>
+<p><strong>第 3 步：在真正的多机启动命令里带上这些变量</strong></p>
+<p>如果用 OpenMPI 风格的 <code>mpirun</code> 启动（Megatron-LM、许多自建训练框架的常见方式），变量要通过 <code>-x</code> 逐个显式导出给远端进程，而不是只在本机 <code>export</code>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>mpirun --allow-run-as-root \</span></span>
+<span class="line"><span>  --hostfile hostfile \</span></span>
+<span class="line"><span>  -np 64 -N 8 \</span></span>
+<span class="line"><span>  --bind-to none \</span></span>
+<span class="line"><span>  -x LD_LIBRARY_PATH -x PATH \</span></span>
+<span class="line"><span>  -x NCCL_DEBUG=INFO \</span></span>
+<span class="line"><span>  -x NCCL_IB_DISABLE=0 \</span></span>
+<span class="line"><span>  -x NCCL_IB_HCA==mlx5_0,=mlx5_1,=mlx5_2,=mlx5_3,=mlx5_4,=mlx5_5,=mlx5_6,=mlx5_7 \</span></span>
+<span class="line"><span>  -x NCCL_IB_TC=106 \</span></span>
+<span class="line"><span>  -x NCCL_SOCKET_IFNAME=eth0 \</span></span>
+<span class="line"><span>  -x NCCL_NET_GDR_LEVEL=SYS \</span></span>
+<span class="line"><span>  python train.py</span></span></code></pre>
+<p>（注意 <code>-x NCCL_IB_HCA==mlx5_0,...</code> 里的两个等号不是笔误：第一个是 <code>-x</code> 传参的赋值符号，第二个是 NCCL 用来表示“精确匹配设备名”的前缀。）</p>
+<p>其中 <code>hostfile</code> 是一个文本文件，每行一台机器加上这台机器要用的进程数（对应 GPU 数），格式类似：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>10.0.0.1 slots=8</span></span>
+<span class="line"><span>10.0.0.2 slots=8</span></span>
+<span class="line"><span>...</span></span></code></pre>
+<p><code>-np 64 -N 8</code> 表示总共 64 个进程、每台机器 8 个（对应 8 张 GPU），需要按集群实际的机器数和单机 GPU 数调整。</p>
+<p>如果用 <code>torchrun</code>（PyTorch 原生分布式启动器，DeepSpeed/Megatron-DeepSpeed 也常用）拉起，环境变量按标准 shell <code>export</code> 传给每个节点即可，PyTorch 会读取这些环境变量交给底层 NCCL：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>export NCCL_DEBUG=INFO</span></span>
+<span class="line"><span>export NCCL_IB_DISABLE=0</span></span>
+<span class="line"><span>export NCCL_IB_HCA==mlx5_0,=mlx5_1,=mlx5_2,=mlx5_3,=mlx5_4,=mlx5_5,=mlx5_6,=mlx5_7</span></span>
+<span class="line"><span>export NCCL_IB_TC=106</span></span>
+<span class="line"><span>export NCCL_SOCKET_IFNAME=eth0</span></span>
+<span class="line"><span>export NCCL_NET_GDR_LEVEL=SYS</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>torchrun \</span></span>
+<span class="line"><span>  --nnodes=8 --nproc_per_node=8 \</span></span>
+<span class="line"><span>  --node_rank=$NODE_RANK \</span></span>
+<span class="line"><span>  --master_addr=$MASTER_ADDR --master_port=29500 \</span></span>
+<span class="line"><span>  train.py</span></span></code></pre>
+<p><code>$NODE_RANK</code>、<code>$MASTER_ADDR</code> 通常由集群调度系统（Slurm、Kubernetes 训练算子等）在拉起每个节点的进程时自动注入，具体取值方式以所用的调度框架文档为准。如果用的是 DeepSpeed 的启动器，也可以把这些变量写进 <code>~/.deepspeed_env</code>（每行一个 <code>变量名=值</code>），DeepSpeed 会自动把这个文件里的变量连同 NCCL 相关的环境变量一起透传给所有节点，不需要在每台机器上手动 <code>export</code>。</p>
+<p>不管用哪种启动方式，具体版本的 NCCL 支持的变量名和默认值会随版本演进（比如更早期版本没有 <code>NCCL_IB_ADDR_FAMILY</code>），执行前建议对照当前安装的 NCCL 版本文档逐条确认，而不是照抄某个特定版本的示例。</p>
+<h3 id="五端到端验证">五、端到端验证</h3>
+<p>单独测通某一层不代表整条链路真的无损，建议按从底层到应用层的顺序逐层验证：</p>
+<p><strong>1. RDMA 裸链路测试（perftest / <code>ib_write_bw</code>）</strong></p>
+<p>先跳过 GPU 和 NCCL，只测网卡到网卡之间纯 RDMA 的带宽和时延，把硬件、驱动、交换机层面的问题排除掉，再往上排查应用层。<code>ib_write_bw</code> 是 <code>perftest</code> 工具包（多数发行版可以直接 <code>yum install perftest</code> / <code>apt install perftest</code> 安装，或者随 MLNX_OFED 驱动一起装好）里的 RDMA 写带宽测试工具，在两台机器上分别执行：</p>
+<p>服务器端（先启动，等待客户端连接）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>ib_write_bw -d mlx5_0 -x 3 -F --report_gbits -q 4 -s 1048576 -D 30</span></span></code></pre>
+<p>客户端（连接到服务器 IP）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>ib_write_bw -d mlx5_0 -x 3 -F --report_gbits -q 4 -s 1048576 -D 30 &lt;服务器IP&gt;</span></span></code></pre>
+<p>参数说明：</p>
+<ul>
+<li><code>-d mlx5_0</code>：使用的 RDMA 设备名（不指定时默认用找到的第一个设备），与前面网卡配置里的设备名保持一致；</li>
+<li><code>-x 3</code>：GID Index，同样要填第三节 <code>show_gids</code> 查到的 RoCEv2 那一行的索引值，两台机器要选同一类型（不能一边选 RoCEv2 一边选 RoCEv1）；</li>
+<li><code>-F</code>：即使系统开着 CPU 变频（<code>cpufreq_ondemand</code> 之类的调频策略）也不因此报错退出。perftest 用 CPU 周期计时，变频会让时延测量不准，所以默认会直接报错拒绝跑；加 <code>-F</code> 是“我知道有变频，先跑起来”。<strong>如果你要的是准确的时延数字，正确做法是把 CPU 调成 performance 固定频率，而不是用 <code>-F</code> 把告警压下去</strong>；只测带宽时影响相对小；</li>
+<li><code>--report_gbits</code>：结果按 Gbit/s 汇报，方便直接和网卡线速（比如 100G/200G/400G）对比（不加时默认按 MB/s 汇报）；</li>
+<li><code>-q 4</code>：并发的 QP（Queue Pair）数量，默认 1，多 QP 通常更容易跑满大带宽链路，具体数值可以从 1 开始逐步加大观察变化；</li>
+<li><code>-s 1048576</code>：单次传输的消息大小（字节），这里是 1MB，测大包吞吐用大一些的值，测小包时延可以换成 <code>ib_write_lat</code> 工具并用更小的 <code>-s</code>；</li>
+<li><code>-D 30</code>：测试持续 30 秒，时间太短容易被瞬时波动干扰，看不出稳定态的表现。</li>
+</ul>
+<p>另外有一个在 RoCE 场景下很实用的参数 <code>-R</code>（<code>--rdma_cm</code>）：加上它之后，两端改用 RDMA CM 来建立连接，由 CM 自己完成地址解析和 GID 选择，不用手工指定 <code>-x</code>。当你不确定该填哪个 GID Index、或者想验证“应用不手工指定时会协商成什么”时，用 <code>-R</code> 跑一遍更贴近 NCCL 等上层应用的实际行为：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span># 服务器端</span></span>
+<span class="line"><span>ib_write_bw -d mlx5_0 -R -F --report_gbits -q 4 -s 1048576 -D 30</span></span>
+<span class="line"><span># 客户端</span></span>
+<span class="line"><span>ib_write_bw -d mlx5_0 -R -F --report_gbits -q 4 -s 1048576 -D 30 &lt;服务器IP&gt;</span></span></code></pre>
+<p>还有一点要注意：服务器端和客户端的参数（<code>-q</code>、<code>-s</code>、<code>-D</code> 等）必须写成一致，否则两端协商不上会直接报错；两端默认监听/连接的是 18515 端口，被占用时可以用 <code>-p</code> 换一个。</p>
+<p>正常情况下，实测带宽应该能跑到链路线速的 90% 以上；如果明显偏低，先怀疑网卡 PCIe 插槽/带宽是否够、线缆/光模块是否有问题、交换机端口是否协商到了预期速率，而不是急着去改 PFC/ECN 参数。</p>
+<p><strong>2. 制造拥塞、观察 PFC/ECN 是否按预期工作</strong></p>
+<p>裸链路带宽正常之后，用多条并发的 <code>ib_write_bw</code>（比如同时对多个目的地跑、或者用更大的 <code>-q</code> 把单端口打满）制造持续拥塞，分别在交换机和网卡两侧观察计数器：</p>
+<ul>
+<li>交换机侧：用前面第 7 步提到的 <code>display dcb pfc statistics</code> 类命令看 PFC 暂停帧计数；</li>
+<li>网卡侧：</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>watch -n 1 'ethtool -S &lt;网口名&gt; | grep -i pfc; cat /sys/class/infiniband/mlx5_0/ports/1/hw_counters/np_cnp_sent /sys/class/infiniband/mlx5_0/ports/1/hw_counters/np_ecn_marked_roce_packets 2&gt;/dev/null'</span></span></code></pre>
+<p>健康的状态是：能看到一定量的 ECN 标记（<code>np_ecn_marked_roce_packets</code>，具体计数器名称因驱动版本而异，需要用 <code>ls /sys/class/infiniband/mlx5_0/ports/1/hw_counters/</code> 自行确认实际存在哪些文件）和 CNP 发送（<code>np_cnp_sent</code>）在持续增长，但 PFC 暂停计数增长很慢甚至不动——说明 ECN/DCQCN 在拥塞早期就把发送端降速了，PFC 只是很少触发的最后一道保险；如果 PFC 暂停计数快速持续增长，说明 ECN 阈值设置得比 PFC Xoff 阈值高（或者太接近），拥塞控制没有提前介入，需要回头调低 ECN 标记阈值。</p>
+<p><strong>3. 集合通信压测（nccl-tests / <code>all_reduce_perf</code>）</strong></p>
+<p>裸链路和拥塞控制都验证过之后，再上到 NCCL 这一层，用 NVIDIA 官方的 <code>nccl-tests</code> 项目做贴近真实训练通信模式的压测。先编译（需要已经装好 CUDA、NCCL 和一个 MPI 实现，比如 OpenMPI）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>git clone https://github.com/NVIDIA/nccl-tests.git</span></span>
+<span class="line"><span>cd nccl-tests</span></span>
+<span class="line"><span>make MPI=1 MPI_HOME=/usr/local/openmpi CUDA_HOME=/usr/local/cuda -j$(nproc)</span></span></code></pre>
+<p>单机内先测一遍（比如单台 8 卡机器，只走机内 NVLink/PCIe，不经过网络，作为跨机测试的参照基线）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>./build/all_reduce_perf -b 8 -e 8G -f 2 -g 8 -w 10 -n 20</span></span></code></pre>
+<p>确认单机结果符合预期后，再做跨机测试。用前面提到的 <code>hostfile</code>（每行 <code>IP slots=单机GPU数</code>），结合上一步配置好的 NCCL 环境变量一起跑：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>mpirun --allow-run-as-root \</span></span>
+<span class="line"><span>  --hostfile hostfile \</span></span>
+<span class="line"><span>  -np 64 -N 8 \</span></span>
+<span class="line"><span>  --bind-to none \</span></span>
+<span class="line"><span>  -x LD_LIBRARY_PATH -x PATH \</span></span>
+<span class="line"><span>  -x NCCL_DEBUG=INFO \</span></span>
+<span class="line"><span>  -x NCCL_IB_DISABLE=0 \</span></span>
+<span class="line"><span>  -x NCCL_IB_HCA==mlx5_0,=mlx5_1,=mlx5_2,=mlx5_3,=mlx5_4,=mlx5_5,=mlx5_6,=mlx5_7 \</span></span>
+<span class="line"><span>  -x NCCL_IB_TC=106 \</span></span>
+<span class="line"><span>  -x NCCL_SOCKET_IFNAME=eth0 \</span></span>
+<span class="line"><span>  -x NCCL_NET_GDR_LEVEL=SYS \</span></span>
+<span class="line"><span>  ./build/all_reduce_perf -b 8 -e 8G -f 2 -g 1 -w 10 -n 100</span></span></code></pre>
+<p>参数说明：<code>-b</code>/<code>-e</code> 是测试的最小/最大消息大小（这里从 8 字节到 8GB），<code>-f 2</code> 表示每次按 2 倍递增，<code>-g 1</code> 表示每个 MPI 进程对应 1 张 GPU（因为已经用 <code>-np</code>/<code>-N</code> 把进程数和每机进程数定好了，这种“一进程一卡”的写法是多机场景下的标准用法，不要和单机测试里 <code>-g 8</code>、单进程管多卡的写法混用），<code>-w</code> 是预热（不计入统计）的迭代次数，<code>-n</code> 是正式统计的迭代次数。</p>
+<p>输出里重点看两列：<code>busbw</code>（总线带宽，已经按 All-Reduce 的通信量模型折算过，可以直接和网卡理论线速对比，是否达到线速的 70%~90% 以上是判断网络是否健康的一个粗略参考区间，具体应该达到的比例因拓扑、GPU 数、消息大小而异）和 <code>time</code>（对应消息大小下的平均耗时，看是否随节点数增加而异常膨胀）。同时打开的 <code>NCCL_DEBUG=INFO</code> 日志里要确认实际选用的网卡列表、GID Index 和前面配置的一致，如果日志显示走的是 <code>Socket</code> 而不是 <code>IB</code>/<code>NET/IB</code>，说明前面某一步配置没生效，NCCL 悄悄退化到了 TCP。</p>
+<p><strong>4. 真实训练任务观察</strong></p>
+<p>最终以一次小规模的真实训练任务收尾，观察每步（step）耗时是否稳定、GPU 利用率是否维持在高位。如果 <code>nccl-tests</code> 跑分正常但真实训练还是有周期性的耗时抖动，通常说明问题不在网络本身，而是训练任务的通信模式（比如某种并行策略下的额外同步点）和纯 All-Reduce 压测的流量模式不完全一样，需要结合训练框架自带的 profiling 工具进一步定位。</p>
+<p>检查交换机、网卡、应用层三处的日志和计数器，把它们对照着看，比只看某一层的输出更容易定位问题出在哪一跳、哪一层。</p>
+<p>RoCEv2 的价值不在于某一条命令本身，而在于把交换机的 PFC/ECN、网卡的 DCQCN、应用层的 NCCL 参数，结合网络拓扑，端到端调成一套自洽的系统——任何一层配置遗漏或者参数对不上，前面几层再正确也无法体现出无损网络的效果。理解原理、按规范规划拓扑、逐层逐项核实配置命令，比照抄任何一份“标准答案”都更重要。</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>网络</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>RDMA</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/godot-open-source-game-engine-quietly-rising" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 godot-open-source-game-engine-quietly-rising</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
