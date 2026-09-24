@@ -1,0 +1,145 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/write-rust-extensions-for-godot-with-godot-rust/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/write-rust-extensions-for-godot-with-godot-rust/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/write-rust-extensions-for-godot-with-godot-rust/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/write-rust-extensions-for-godot-with-godot-rust/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/write-rust-extensions-for-godot-with-godot-rust/"><meta property="og:title" content="write-rust-extensions-for-godot-with-godot-rust — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="write-rust-extensions-for-godot-with-godot-rust — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>write-rust-extensions-for-godot-with-godot-rust — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/write-rust-extensions-for-godot-with-godot-rust/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 09 / 23</span><span class="text-meta" data-astro-cid-tldeq5d5>约 17 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>write-rust-extensions-for-godot-with-godot-rust</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>Godot</span><span class="tag-outline" data-astro-cid-tldeq5d5>Rust</span><span class="tag-outline" data-astro-cid-tldeq5d5>游戏引擎</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="用-godot-rust-给-godot-写-rust-扩展">用 godot-rust 给 Godot 写 Rust 扩展</h1>
+<p><img src="/assets/images/write-rust-extensions-for-godot-with-godot-rust-summary.png" alt="知识点总结"></p>
+<h2 id="摘要">摘要</h2>
+<p>godot-rust（代号 gdext）是 Godot 4 的 Rust 绑定，通过官方的 GDExtension 接口，让你用 Rust 写游戏逻辑、编辑器插件和自定义节点，不用改引擎源码，也不用重新编译 Godot。今年 3 月发布的 v0.5 带来了类型化字典、非空对象参数和随处可用的 Rust 枚举，之后的 0.5.x 补丁一路更新到 8 月的 v0.5.5，并加入了 Godot 4.7 的 API 支持，已经可以用在真实项目里。</p>
+<h2 id="背景与问题">背景与问题</h2>
+<p>Godot 的 GDScript 上手快，但游戏做大之后，常见的痛点是这几个：</p>
+<ul>
+<li>寻路、物理、程序化生成这类热点代码，脚本语言跑不动</li>
+<li>项目变大后，动态类型让重构变得提心吊胆</li>
+<li>想复用 Rust 生态里现成的库，比如网络、序列化、ECS</li>
+</ul>
+<p>以前的办法是改 C++ 模块，要自己编译整个引擎，维护成本很高。Godot 4 引入 GDExtension 之后，扩展被编译成独立的动态库，由编辑器在运行时加载，引擎本身不用动。</p>
+<p>GDExtension 本身是一套 C API，直接写并不舒服。gdext 做的事，就是把它包成符合 Rust 习惯的类型安全接口。它是社区驱动的开源项目，许可证是 MPL-2.0，可以用于商业和闭源游戏，只有改动 godot-rust 本身时才需要公开修改。</p>
+<p>注意区分：老的 gdnative 面向 Godot 3，已经不再积极维护，新项目直接用 gdext。</p>
+<h2 id="核心思路与优势">核心思路与优势</h2>
+<p><strong>1. 类型安全，贴近 Rust 写法</strong></p>
+<p>用派生宏声明一个类，用属性宏暴露方法和信号，继承关系通过 <code>Base&lt;T&gt;</code> 表达。覆盖引擎虚函数时，实现对应的 trait 即可，比如 <code>ISprite2D</code>。</p>
+<p><strong>2. 和 GDScript 无缝互通</strong></p>
+<p>Rust 写的类注册后，在编辑器里和内置节点一样出现，可以直接拖进场景，GDScript 也能调用它的方法、连接它的信号。所以不必整个项目重写，只把热点部分换成 Rust。</p>
+<p><strong>3. 热重载</strong></p>
+<p>官方在持续集成里测试热重载，改完 Rust 代码重新编译，编辑器不必重启就能加载新库。这项能力从 Godot 4.2 开始才有，正好也是当前 gdext 的最低版本要求。</p>
+<p><strong>4. v0.5 这一轮的关键更新</strong></p>
+<p>下面是官方 v0.5 发布说明里集中介绍的内容，其中安全防护分档和自定义单例其实在 0.4.3、0.4.4 补丁里就已先行上线：</p>
+<ul>
+<li>安全防护分三档：Strict（Debug 构建默认，尽可能多地抓错）、Balanced（Release 构建默认，快且安全）、Disengaged（牺牲安全换极致性能，出错即未定义行为，官方不建议轻易使用）</li>
+<li>类型化字典 <code>Dictionary&lt;K, V&gt;</code>，新增 <code>dict!</code> 和 <code>idict!</code> 宏</li>
+<li>去掉了 <code>Gd&lt;T&gt;</code> 内部的互斥锁，对象访问更快；<code>Callable::from_fn()</code> 也做了明显优化</li>
+<li>引擎 API 中标注为非空的对象参数和返回值直接用 <code>Gd&lt;T&gt;</code>，不再是 <code>Option&lt;Gd&lt;T&gt;&gt;</code></li>
+<li>Rust 枚举可以用在 <code>#[func]</code>、<code>#[signal]</code> 和 <code>#[var]</code> 上</li>
+<li>用 <code>#[class(singleton)]</code> 定义自己的单例</li>
+<li>一个 Rust 扩展可以作为 rlib 依赖另一个 Rust 扩展</li>
+<li>对齐 Godot 4.6 的 API，并支持 Rust 2024 Edition</li>
+<li>破坏性变更：<code>#[var]</code> 生成的 getter/setter 默认不再能在 Rust 里直接调用，需要写成 <code>#[var(pub)]</code></li>
+</ul>
+<p>v0.5 之后的补丁同样值得关注：v0.5.4（6 月）新增 <code>api-4-7</code> 特性以支持 Godot 4.7，v0.5.5（8 月）让 <code>#[func(virtual)]</code> 支持 <code>async fn</code>，并缓存了单例、降低了引用计数开销。</p>
+<p><strong>5. 版本兼容规则清晰</strong></p>
+<p>扩展可以被任意 Godot 版本加载，前提是运行时版本不低于编译时选定的 API 版本。用 4.2 编译的扩展能在 4.2.1 和 4.3 上跑，用 4.3 编译的则不能在 4.2.1 上跑。所以想兼容更多用户，就选较低的 API 版本编译。gdext 0.4 及之后的版本，最低要求 Godot 4.2。</p>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li>已经在用 Godot，但被 GDScript 性能卡住的开发者</li>
+<li>熟悉 Rust，想用它做 2D、3D 游戏，又不想从零搭引擎的人</li>
+<li>想做编辑器插件、自动化工具或程序化生成器的开发者</li>
+<li>看过 Bevy 与 Godot 的路线之争，想要“Godot 成熟工具链加 Rust 类型系统”折中方案的人</li>
+</ul>
+<p>需要提前知道的是：目前 Linux、Windows、macOS 这三个桌面平台是主力支持的，Wasm（Web 导出）、Android、iOS 还属于实验性，文档和工具链都不完善。以 Web 导出为例，目前还没有预构建产物，需要 nightly Rust、Emscripten 和自定义 API 配置，门槛不低。项目也会不定期引入破坏性变更，通常改动不大，并附有迁移指南。</p>
+<h2 id="实践步骤">实践步骤</h2>
+<p>下面走一遍最小可运行的流程。</p>
+<p><strong>第一步：创建 Rust 库</strong></p>
+<p>在 Godot 项目旁边新建一个 Rust 工程，<code>Cargo.toml</code> 里把库类型设为 <code>cdylib</code>，并添加 godot 依赖：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="toml"><code><span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">package</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">name = </span><span style="color:#9ECBFF">"rust_project"</span></span>
+<span class="line"><span style="color:#E1E4E8">version = </span><span style="color:#9ECBFF">"0.1.0"</span></span>
+<span class="line"><span style="color:#E1E4E8">edition = </span><span style="color:#9ECBFF">"2021"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">lib</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">crate-type = [</span><span style="color:#9ECBFF">"cdylib"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">dependencies</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">godot = </span><span style="color:#9ECBFF">"0.5"</span></span></code></pre>
+<p><code>cdylib</code> 表示编译成 C 风格的动态库，Godot 才能加载它。</p>
+<p><strong>第二步：写入口</strong></p>
+<p><code>src/lib.rs</code> 里只需要注册一个扩展入口：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#F97583">use</span><span style="color:#B392F0"> godot</span><span style="color:#F97583">::</span><span style="color:#B392F0">prelude</span><span style="color:#F97583">::*</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">struct</span><span style="color:#B392F0"> MyExtension</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">#[gdextension]</span></span>
+<span class="line"><span style="color:#F97583">unsafe</span><span style="color:#F97583"> impl</span><span style="color:#B392F0"> ExtensionLibrary</span><span style="color:#F97583"> for</span><span style="color:#B392F0"> MyExtension</span><span style="color:#E1E4E8"> {}</span></span></code></pre>
+<p><strong>第三步：写一个自定义节点</strong></p>
+<p>下面这个 <code>Player</code> 继承自 <code>Sprite2D</code>，每个物理帧旋转一点，并提供一个能加速的方法和一个信号：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#F97583">use</span><span style="color:#B392F0"> godot</span><span style="color:#F97583">::</span><span style="color:#B392F0">prelude</span><span style="color:#F97583">::*</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">use</span><span style="color:#B392F0"> godot</span><span style="color:#F97583">::</span><span style="color:#B392F0">classes</span><span style="color:#F97583">::</span><span style="color:#E1E4E8">{</span><span style="color:#B392F0">ISprite2D</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">Sprite2D</span><span style="color:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">#[derive(</span><span style="color:#B392F0">GodotClass</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#E1E4E8">#[class(base</span><span style="color:#F97583">=</span><span style="color:#B392F0">Sprite2D</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">struct</span><span style="color:#B392F0"> Player</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    speed</span><span style="color:#F97583">:</span><span style="color:#B392F0"> f64</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    angular_speed</span><span style="color:#F97583">:</span><span style="color:#B392F0"> f64</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    base</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Base</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">Sprite2D</span><span style="color:#E1E4E8">&gt;,</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">#[godot_api]</span></span>
+<span class="line"><span style="color:#F97583">impl</span><span style="color:#B392F0"> ISprite2D</span><span style="color:#F97583"> for</span><span style="color:#B392F0"> Player</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    fn</span><span style="color:#B392F0"> init</span><span style="color:#E1E4E8">(base</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Base</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">Sprite2D</span><span style="color:#E1E4E8">&gt;) </span><span style="color:#F97583">-&gt;</span><span style="color:#79B8FF"> Self</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">        Self</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">            speed</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> 400.0</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">            angular_speed</span><span style="color:#F97583">:</span><span style="color:#B392F0"> std</span><span style="color:#F97583">::</span><span style="color:#B392F0">f64</span><span style="color:#F97583">::</span><span style="color:#B392F0">consts</span><span style="color:#F97583">::</span><span style="color:#79B8FF">PI</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">            base,</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    fn</span><span style="color:#B392F0"> physics_process</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">&amp;mut</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">, delta</span><span style="color:#F97583">:</span><span style="color:#B392F0"> f64</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">        let</span><span style="color:#E1E4E8"> radians </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">self</span><span style="color:#F97583">.</span><span style="color:#E1E4E8">angular_speed </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> delta) </span><span style="color:#F97583">as</span><span style="color:#B392F0"> f32</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#F97583">.</span><span style="color:#B392F0">base_mut</span><span style="color:#E1E4E8">()</span><span style="color:#F97583">.</span><span style="color:#B392F0">rotate</span><span style="color:#E1E4E8">(radians);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">#[godot_api]</span></span>
+<span class="line"><span style="color:#F97583">impl</span><span style="color:#B392F0"> Player</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    #[func]</span></span>
+<span class="line"><span style="color:#F97583">    fn</span><span style="color:#B392F0"> increase_speed</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">&amp;mut</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">, amount</span><span style="color:#F97583">:</span><span style="color:#B392F0"> f64</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#F97583">.</span><span style="color:#E1E4E8">speed </span><span style="color:#F97583">+=</span><span style="color:#E1E4E8"> amount;</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#F97583">.</span><span style="color:#B392F0">signals</span><span style="color:#E1E4E8">()</span><span style="color:#F97583">.</span><span style="color:#B392F0">speed_increased</span><span style="color:#E1E4E8">()</span><span style="color:#F97583">.</span><span style="color:#B392F0">emit</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    #[signal]</span></span>
+<span class="line"><span style="color:#F97583">    fn</span><span style="color:#B392F0"> speed_increased</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>几个要点：</p>
+<ul>
+<li><code>#[derive(GodotClass)]</code> 加 <code>#[class(base=Sprite2D)]</code> 声明这是一个 Godot 类及其基类</li>
+<li>字段 <code>base: Base&lt;Sprite2D&gt;</code> 是访问基类的入口，通过 <code>base_mut()</code> 调用父类方法</li>
+<li><code>impl ISprite2D</code> 是覆盖引擎虚函数的地方，这里实现了 <code>init</code> 和 <code>physics_process</code></li>
+<li><code>#[func]</code> 把方法暴露给 GDScript 和编辑器，<code>#[signal]</code> 声明信号，用 <code>self.signals()</code> 发射</li>
+</ul>
+<p><strong>第四步：写 .gdextension 文件</strong></p>
+<p>在 Godot 项目里新建一个 <code>.gdextension</code> 文件，告诉引擎去哪里找动态库：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ini"><code><span class="line"><span style="color:#B392F0">[configuration]</span></span>
+<span class="line"><span style="color:#F97583">entry_symbol</span><span style="color:#E1E4E8"> = </span><span style="color:#9ECBFF">"gdext_rust_init"</span></span>
+<span class="line"><span style="color:#F97583">compatibility_minimum</span><span style="color:#E1E4E8"> = 4.2</span></span>
+<span class="line"><span style="color:#F97583">reloadable</span><span style="color:#E1E4E8"> = true</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">[libraries]</span></span>
+<span class="line"><span style="color:#F97583">linux.debug.x86_64</span><span style="color:#E1E4E8"> = </span><span style="color:#9ECBFF">"res://../rust/target/debug/librust_project.so"</span></span>
+<span class="line"><span style="color:#F97583">linux.release.x86_64</span><span style="color:#E1E4E8"> = </span><span style="color:#9ECBFF">"res://../rust/target/release/librust_project.so"</span></span>
+<span class="line"><span style="color:#F97583">windows.debug.x86_64</span><span style="color:#E1E4E8"> = </span><span style="color:#9ECBFF">"res://../rust/target/debug/rust_project.dll"</span></span>
+<span class="line"><span style="color:#F97583">windows.release.x86_64</span><span style="color:#E1E4E8"> = </span><span style="color:#9ECBFF">"res://../rust/target/release/rust_project.dll"</span></span>
+<span class="line"><span style="color:#F97583">macos.debug</span><span style="color:#E1E4E8"> = </span><span style="color:#9ECBFF">"res://../rust/target/debug/librust_project.dylib"</span></span>
+<span class="line"><span style="color:#F97583">macos.release</span><span style="color:#E1E4E8"> = </span><span style="color:#9ECBFF">"res://../rust/target/release/librust_project.dylib"</span></span></code></pre>
+<p>库名要和 <code>Cargo.toml</code> 里的包名一致。<code>reloadable = true</code> 打开热重载，路径按你的目录结构调整。</p>
+<p><strong>第五步：编译并在编辑器里使用</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">cargo</span><span style="color:#9ECBFF"> build</span></span></code></pre>
+<p>编译完成后打开 Godot 项目，在“创建节点”对话框里就能搜到 <code>Player</code>，和内置节点用法完全一样。以后每次修改 Rust 代码，重新执行 <code>cargo build</code>，切回编辑器窗口时它会自动重新加载扩展。</p>
+<h2 id="什么时候该用什么时候不必">什么时候该用，什么时候不必</h2>
+<p><strong>适合用 Rust 的部分</strong>：寻路、碰撞、程序化地图、大量单位的逻辑更新、需要长期维护的核心系统。</p>
+<p><strong>继续用 GDScript 的部分</strong>：UI 逻辑、关卡脚本、一次性的小玩法、需要快速试错的原型。</p>
+<p>比较务实的做法是混合使用：GDScript 负责胶水和内容迭代，Rust 负责性能和稳定性要求高的核心。两者可以在同一个项目里自由互调，不必二选一。</p>
+<h2 id="我的看法">我的看法</h2>
+<p>在 Godot 和 Bevy 的选择里，godot-rust 给出了第三条路：保留 Godot 的编辑器、场景系统和导出流程，同时把最吃性能、最需要类型约束的部分交给 Rust。</p>
+<p>不过也要认清现状：它还没有到 1.0，API 会继续调整，移动端和 Web 端还在完善。如果你的项目主要面向桌面平台，并且团队愿意投入学习 Rust，现在就是很好的时机。如果目标是尽快上手做原型，先用 GDScript，等真正遇到性能瓶颈再把那一块换成 Rust 也不迟。</p>
+<h2 id="项目地址">项目地址</h2>
+<p>github.com/godot-rust/gdext</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>Godot</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>Rust</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>游戏引擎</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/e2b-lets-ai-agents-execute-code-safely" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 e2b-lets-ai-agents-execute-code-safely</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
