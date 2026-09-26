@@ -1,0 +1,275 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/understand-deepspeed-zero3-and-moe-training/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/understand-deepspeed-zero3-and-moe-training/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/understand-deepspeed-zero3-and-moe-training/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/understand-deepspeed-zero3-and-moe-training/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/understand-deepspeed-zero3-and-moe-training/"><meta property="og:title" content="understand-deepspeed-zero3-and-moe-training — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="understand-deepspeed-zero3-and-moe-training — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>understand-deepspeed-zero3-and-moe-training — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/understand-deepspeed-zero3-and-moe-training/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 09 / 25</span><span class="text-meta" data-astro-cid-tldeq5d5>约 34 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>understand-deepspeed-zero3-and-moe-training</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>DeepSpeed</span><span class="tag-outline" data-astro-cid-tldeq5d5>ZeRO</span><span class="tag-outline" data-astro-cid-tldeq5d5>MoE</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="一文看懂-deepspeed-zero-3-与-moe-训练">一文看懂 DeepSpeed ZeRO-3 与 MoE 训练</h1>
+<p><img src="/assets/images/understand-deepspeed-zero3-and-moe-training-summary.png" alt="知识点总结"></p>
+<h2 id="摘要">摘要</h2>
+<p>训练大模型，最先撞墙的不是算力，而是显存。ZeRO-3 的思路很朴素：别让每张卡都背一整份模型，把参数、梯度、优化器状态都切开，各卡只管自己那一份，用到别人的再临时借。MoE 则从另一个方向下手，把模型做得很大，但每个 token 只用其中几个“专家”。这篇文章用最通俗的方式讲清两者的原理，并一步一步带你把配置、代码、存档和 MoE 层都跑通，顺便讲清一个容易踩的坑：DeepSpeed 自带的 MoE 层目前不能和 ZeRO-3 一起用。</p>
+<h2 id="背景与问题">背景与问题</h2>
+<h3 id="显存到底被谁吃掉了">显存到底被谁吃掉了</h3>
+<p>先做一道小学算术题。假设你要训练一个有 Ψ 个参数的模型，用最常见的混合精度加 Adam 优化器，每个参数要占这些显存：</p>
+<ul>
+<li>半精度参数：2 字节</li>
+<li>半精度梯度：2 字节</li>
+<li>优化器状态：12 字节（32 位的参数副本 4 字节，一阶动量 4 字节，二阶动量 4 字节）</li>
+</ul>
+<p>加起来是每个参数 16 字节。一个 75 亿参数的模型，光这三样就要 120GB，一张卡根本装不下。而且这还没算训练时的中间激活值。</p>
+<h3 id="普通数据并行为什么浪费">普通数据并行为什么浪费</h3>
+<p>最常见的数据并行（DDP）是这样做的：每张卡都存一整份完整的 16Ψ，各自算不同的数据，再把梯度平均。</p>
+<p>想象四个同学合租，每人都买了一整套同样的教材，只是各自做不同的习题。教材是一模一样的，四份里有三份纯属重复。这种“重复”，就是 ZeRO 要消灭的东西。ZeRO 的全称是 Zero Redundancy Optimizer，意思就是零冗余优化器。</p>
+<h3 id="另一个方向稀疏化">另一个方向：稀疏化</h3>
+<p>还有一条思路是：模型总参数可以很多，但每次计算只用一小部分。这就是 MoE（Mixture of Experts，混合专家）。它本身不省显存（所有专家的参数都得存下来），省的是计算量，让“很大的模型”训练起来不至于慢到无法接受。</p>
+<p>ZeRO 管“怎么装得下”，MoE 管“怎么算得动”，两者可以搭配使用。</p>
+<h2 id="核心思路与优势">核心思路与优势</h2>
+<h3 id="zero-的三级切分">ZeRO 的三级切分</h3>
+<p>ZeRO 把上面三类东西，按从易到难分三级切开，分给数据并行的所有卡：</p>
+<ul>
+<li><strong>Stage 1</strong>：只切优化器状态。</li>
+<li><strong>Stage 2</strong>：再切梯度。每张卡只保留自己那份优化器状态对应的梯度。</li>
+<li><strong>Stage 3</strong>：再切参数本身。前向和反向过程中，用到哪一层就临时收集哪一层，用完立刻丢掉。</li>
+</ul>
+<p>还是用合租的比喻，把“教材”对应参数，“批改意见”对应梯度，“复习笔记”对应优化器状态：Stage 1 是复习笔记不再每人抄一整份，四个人各记四分之一；Stage 2 是批改意见也各收各的那一部分；Stage 3 是连教材也拆成四份，每人只留四分之一，讲到哪一章，大家就把手里那一部分凑到一起、临时拼成完整的一章，用完各自只留回自己那份。</p>
+<h3 id="到底省多少一张对照表">到底省多少：一张对照表</h3>
+<p>设参数量为 Ψ，数据并行的卡数为 N。以 ZeRO 论文和官方博客里的经典例子为准：75 亿参数，64 张卡。</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>每卡显存公式</th>
+<th>75 亿参数、64 卡</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>普通数据并行</td>
+<td>16Ψ</td>
+<td>120GB</td>
+</tr>
+<tr>
+<td>ZeRO Stage 1</td>
+<td>4Ψ + 12Ψ/N</td>
+<td>约 31.4GB</td>
+</tr>
+<tr>
+<td>ZeRO Stage 2</td>
+<td>2Ψ + 14Ψ/N</td>
+<td>约 16.6GB</td>
+</tr>
+<tr>
+<td>ZeRO Stage 3</td>
+<td>16Ψ/N</td>
+<td>约 1.9GB</td>
+</tr>
+</tbody>
+</table>
+<p>注意 Stage 3 这一行，显存占用随卡数线性下降：卡越多，每张卡越轻松。这些数字只包含模型状态，不含激活值。</p>
+<h3 id="代价通信量多了一半">代价：通信量多了一半</h3>
+<p>天下没有免费的午餐。Stage 1 和 Stage 2 的通信量和普通数据并行一样，而 Stage 3 需要在前向、反向两次收集参数，再加一次梯度归约，通信量大约是普通数据并行的 1.5 倍。</p>
+<p>所以 Stage 3 适合的场景是：模型装不下，或者你想用更大的批次。如果单卡能装下，用 Stage 1 或 Stage 2 往往更快。</p>
+<h3 id="moe让模型大而不重">MoE：让模型“大而不重”</h3>
+<p>普通的 Transformer 里，每个 token 都要经过同一个前馈网络（FFN）。MoE 把这一个 FFN 换成多个并列的 FFN，每一个叫一个“专家”，再加一个“路由器”，负责决定每个 token 交给哪几个专家。</p>
+<ul>
+<li>路由器给每个 token 打分，选出得分最高的 k 个专家（k 常常是 1 或 2）。</li>
+<li>其他专家这次不参与计算。</li>
+</ul>
+<p>好处很直观：总参数量可以随专家数增加而暴涨，但每个 token 的计算量基本不变。比喻成医院：科室很多（模型很大），但你挂号后只去看相关的一两个科室（计算量小）。</p>
+<h3 id="专家并行把专家分给不同的卡">专家并行：把专家分给不同的卡</h3>
+<p>专家太多，一张卡放不下，就把它们分开放。这叫专家并行，DeepSpeed 用参数 <code>ep_size</code> 表示专家并行组的大小。比如 8 个专家，<code>ep_size=2</code>，就是每组 2 张卡，每张卡放 4 个专家。</p>
+<p>训练时，token 要“搬家”：路由器决定后，通过一次全员通信（all-to-all）把 token 送到装有对应专家的卡上，算完再送回来。</p>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li>想微调或预训练大模型，却总被“显存溢出”劝退的算法工程师</li>
+<li>已经会用 DDP，想进一步理解 ZeRO 分片原理的开发者</li>
+<li>想弄清 MoE 模型怎么训练的同学</li>
+<li>需要给团队选训练框架，想搞明白 ZeRO 各阶段该怎么选的技术负责人</li>
+</ul>
+<h2 id="实践步骤">实践步骤</h2>
+<p>下面以“用 ZeRO-3 训练一个装不下的模型”为主线，最后再加上 MoE 层（这一部分要换成 Stage 2，原因到时候细说）。示例以写作时的最新稳定版 DeepSpeed 0.19.7 为准。</p>
+<h3 id="第一步安装环境">第一步：安装环境</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">pip</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> deepspeed</span></span>
+<span class="line"><span style="color:#B392F0">ds_report</span></span></code></pre>
+<p><code>ds_report</code> 会检查 CUDA、编译环境和各个算子是否可用，先跑一遍，能提前发现大半环境问题。</p>
+<h3 id="第二步写-zero-3-配置文件">第二步：写 ZeRO-3 配置文件</h3>
+<p>新建 <code>ds_config.json</code>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  "train_micro_batch_size_per_gpu"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  "gradient_accumulation_steps"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">8</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  "bf16"</span><span style="color:#E1E4E8">: { </span><span style="color:#79B8FF">"enabled"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#79B8FF">  "optimizer"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">    "type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"AdamW"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">    "params"</span><span style="color:#E1E4E8">: { </span><span style="color:#79B8FF">"lr"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2e-5</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"weight_decay"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">0.01</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">  },</span></span>
+<span class="line"><span style="color:#79B8FF">  "zero_optimization"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">    "stage"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">    "overlap_comm"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">    "contiguous_gradients"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">    "reduce_bucket_size"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">5e8</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">    "stage3_prefetch_bucket_size"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">5e7</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">    "stage3_param_persistence_threshold"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1e5</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">    "stage3_gather_16bit_weights_on_model_save"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>逐项解释，都是初学者最容易困惑的：</p>
+<ul>
+<li><code>stage: 3</code>：开启参数切分。</li>
+<li><code>train_micro_batch_size_per_gpu</code> 和 <code>gradient_accumulation_steps</code>：每张卡每次算多少条数据，攒多少次再更新一次。总批次 = 单卡批次 × 累积步数 × 卡数。</li>
+<li><code>overlap_comm</code>：让通信和计算重叠进行，尽量不让 GPU 干等。Stage 3 下它默认就是开启的，这里写出来只是为了看得清楚。</li>
+<li><code>contiguous_gradients</code>：把梯度拷到连续内存，减少显存碎片。</li>
+<li><code>reduce_bucket_size</code>：梯度归约时一批处理多少个元素，调大更省通信次数，调小更省显存。</li>
+<li><code>stage3_prefetch_bucket_size</code>：提前预取多少参数。预取得越多越不容易等，但占用显存越多。</li>
+<li><code>stage3_param_persistence_threshold</code>：小于这个数量的参数不切分，一直驻留在每张卡上，因为切它们省不了多少显存，反而增加通信。</li>
+<li><code>stage3_gather_16bit_weights_on_model_save</code>：保存模型时先把各卡的分片聚合成一份完整的 16 位权重。Stage 3 下每张卡的 <code>state_dict</code> 里只有碎片，不聚合就拿不到能直接用的模型；但聚合既费时间又费显存，所以它默认是关闭的，需要手动打开。</li>
+</ul>
+<h3 id="第三步把模型接入-deepspeed">第三步：把模型接入 DeepSpeed</h3>
+<p>训练脚本 <code>train.py</code> 的核心只有几行：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> deepspeed</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> torch</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> transformers </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> AutoModelForCausalLM</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">model </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> AutoModelForCausalLM.from_pretrained(</span><span style="color:#9ECBFF">"your-model-name"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">engine, optimizer, _, _ </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> deepspeed.initialize(</span></span>
+<span class="line"><span style="color:#FFAB70">    model</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">model,</span></span>
+<span class="line"><span style="color:#FFAB70">    model_parameters</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">model.parameters(),</span></span>
+<span class="line"><span style="color:#FFAB70">    config</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"ds_config.json"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># dataloader 需要你自己准备，并用 DistributedSampler 让每张卡读到不同的数据</span></span>
+<span class="line"><span style="color:#F97583">for</span><span style="color:#E1E4E8"> batch </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> dataloader:</span></span>
+<span class="line"><span style="color:#E1E4E8">    batch </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {k: v.to(engine.device) </span><span style="color:#F97583">for</span><span style="color:#E1E4E8"> k, v </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> batch.items()}</span></span>
+<span class="line"><span style="color:#E1E4E8">    loss </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> engine(</span><span style="color:#F97583">**</span><span style="color:#E1E4E8">batch).loss</span></span>
+<span class="line"><span style="color:#E1E4E8">    engine.backward(loss)</span></span>
+<span class="line"><span style="color:#E1E4E8">    engine.step()</span></span></code></pre>
+<p>三点要记牢：</p>
+<ol>
+<li>反向传播必须用 <code>engine.backward(loss)</code>，不能再写 <code>loss.backward()</code>，因为 DeepSpeed 要接管梯度的切分和累积。</li>
+<li>更新参数用 <code>engine.step()</code>，它会按 <code>gradient_accumulation_steps</code> 自动判断这一步要不要真的更新。</li>
+<li>优化器写在配置文件里时，不需要自己再创建。</li>
+</ol>
+<h3 id="第四步启动多卡训练">第四步：启动多卡训练</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">deepspeed</span><span style="color:#79B8FF"> --num_gpus</span><span style="color:#79B8FF"> 8</span><span style="color:#9ECBFF"> train.py</span></span></code></pre>
+<p>在一台 8 卡机器上，每张卡只会持有约八分之一的模型状态。启动器会给脚本自动传一个 <code>--local_rank</code> 参数，如果你的脚本用 argparse 解析参数，记得声明它（或者启动时加上 <code>--no_local_rank</code>）。多机训练时，再加上主机文件和节点参数即可，原理不变。</p>
+<h3 id="第五步超大模型要在出生时就切分">第五步：超大模型要在“出生时”就切分</h3>
+<p>如果模型大到连“加载进内存再切分”都做不到，就要用 <code>deepspeed.zero.Init</code>，让参数在创建的那一刻就被切开：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> deepspeed</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">with</span><span style="color:#E1E4E8"> deepspeed.zero.Init(</span><span style="color:#FFAB70">config_dict_or_path</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"ds_config.json"</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#E1E4E8">    model </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> MyLargeModel()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">engine, _, _, _ </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> deepspeed.initialize(</span></span>
+<span class="line"><span style="color:#FFAB70">    model</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">model,</span></span>
+<span class="line"><span style="color:#FFAB70">    config</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"ds_config.json"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>这样每个进程创建模型时，只会真正保留属于自己的那一份参数。这里没传 <code>model_parameters</code>，DeepSpeed 会默认使用模型的全部参数。</p>
+<p>如果用的是 Hugging Face 的 <code>from_pretrained</code>，不用自己写这个 <code>with</code>：在调用 <code>from_pretrained</code> 之前，先用同一份配置创建一个 <code>HfDeepSpeedConfig</code> 对象（从 <code>transformers.integrations</code> 导入），并让它一直存活，加载时就会自动按 ZeRO-3 切分。</p>
+<h3 id="第六步显存还不够就往内存和硬盘借">第六步：显存还不够，就往内存和硬盘借</h3>
+<p>ZeRO-3 加上卸载功能，就是 ZeRO-Infinity。在配置里加上：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#9ECBFF">"zero_optimization"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">  "stage"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  "offload_optimizer"</span><span style="color:#E1E4E8">: { </span><span style="color:#79B8FF">"device"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"cpu"</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#79B8FF">  "offload_param"</span><span style="color:#E1E4E8">: { </span><span style="color:#79B8FF">"device"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"cpu"</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>把优化器状态和参数放到 CPU 内存，<code>device</code> 也可以改成 <code>nvme</code>，放到固态硬盘上。代价是速度变慢，因为数据要在 GPU 和内存之间来回搬，所以应当作“最后的手段”：先调小批次、开激活检查点，还不行再用卸载。</p>
+<h3 id="第七步保存和合并权重">第七步：保存和合并权重</h3>
+<p>训练中保存的是分片存档：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">engine.save_checkpoint(</span><span style="color:#9ECBFF">"./checkpoints"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">tag</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"step_1000"</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>每张卡会存自己那一份，之后用来恢复训练最方便。但如果要拿去推理或者分享，需要合并成完整权重。有两种办法：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># 办法一：训练结束时直接保存合并后的 16 位模型</span></span>
+<span class="line"><span style="color:#E1E4E8">engine.save_16bit_model(</span><span style="color:#9ECBFF">"./final_model"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 办法二：从分片存档离线合并成完整的 32 位权重</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> deepspeed.utils.zero_to_fp32 </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> get_fp32_state_dict_from_zero_checkpoint</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">state_dict </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> get_fp32_state_dict_from_zero_checkpoint(</span><span style="color:#9ECBFF">"./checkpoints"</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>办法一要求配置里打开了 <code>stage3_gather_16bit_weights_on_model_save</code>，这也是前面配置里我们把它设成 <code>true</code> 的原因；没打开的话，它会跳过保存并返回 <code>False</code>。另外，<code>save_checkpoint</code> 和 <code>save_16bit_model</code> 都必须在所有进程上一起调用，千万别套在“只在 0 号卡执行”的判断里，否则各卡互相等待，程序会卡死。</p>
+<p>办法二会把完整的 32 位权重一次性读进 CPU 内存，模型很大时要留足内存。</p>
+<h3 id="第八步给模型加上-moe-层">第八步：给模型加上 MoE 层</h3>
+<p>先理解一件事：MoE 层替换的是 Transformer 里的 FFN。DeepSpeed 提供了现成的 <code>MoE</code> 层。</p>
+<p>但要先打个预防针：<strong>DeepSpeed 自带的这个 <code>MoE</code> 层不能和 ZeRO-3 一起用</strong>。在当前最新的 0.19.7 版里，只要模型里有它、配置又是 Stage 3，<code>deepspeed.initialize</code> 会直接报错，提示改用 Stage 1/2 或者 AutoEP。所以从这一步开始，我们换一份 Stage 2 的配置，下一步会给出。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> torch</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> deepspeed.moe.layer </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> MoE</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> Expert</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">torch</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">nn</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Module</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#79B8FF"> __init__</span><span style="color:#E1E4E8">(self, hidden):</span></span>
+<span class="line"><span style="color:#79B8FF">        super</span><span style="color:#E1E4E8">().</span><span style="color:#79B8FF">__init__</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.net </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> torch.nn.Sequential(</span></span>
+<span class="line"><span style="color:#E1E4E8">            torch.nn.Linear(hidden, hidden </span><span style="color:#F97583">*</span><span style="color:#79B8FF"> 4</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E1E4E8">            torch.nn.GELU(),</span></span>
+<span class="line"><span style="color:#E1E4E8">            torch.nn.Linear(hidden </span><span style="color:#F97583">*</span><span style="color:#79B8FF"> 4</span><span style="color:#E1E4E8">, hidden),</span></span>
+<span class="line"><span style="color:#E1E4E8">        )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> forward</span><span style="color:#E1E4E8">(self, x):</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.net(x)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> Block</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">torch</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">nn</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Module</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#79B8FF"> __init__</span><span style="color:#E1E4E8">(self, hidden):</span></span>
+<span class="line"><span style="color:#79B8FF">        super</span><span style="color:#E1E4E8">().</span><span style="color:#79B8FF">__init__</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.moe </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> MoE(</span></span>
+<span class="line"><span style="color:#FFAB70">            hidden_size</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">hidden,</span></span>
+<span class="line"><span style="color:#FFAB70">            expert</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">Expert(hidden),</span></span>
+<span class="line"><span style="color:#FFAB70">            num_experts</span><span style="color:#F97583">=</span><span style="color:#79B8FF">8</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">            ep_size</span><span style="color:#F97583">=</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">            k</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> forward</span><span style="color:#E1E4E8">(self, x):</span></span>
+<span class="line"><span style="color:#E1E4E8">        out, l_aux, _ </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.moe(x)</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> out, l_aux</span></span></code></pre>
+<p>参数含义：</p>
+<ul>
+<li><code>expert</code>：一个专家的结构，DeepSpeed 会在每张卡上把它复制成“本卡该放的专家数”份，也就是 <code>num_experts / ep_size</code> 份。</li>
+<li><code>num_experts=8</code>：总共 8 个专家。</li>
+<li><code>ep_size=2</code>：专家并行组大小为 2，也就是每 2 张卡为一组，这 8 个专家平均分在这两张卡上，每张 4 个。<code>num_experts</code> 必须能被 <code>ep_size</code> 整除，总卡数也要能被 <code>ep_size</code> 整除。比如 8 卡机器上就会有 4 个这样的组，每组都有完整的 8 个专家，组和组之间再按数据并行同步专家的梯度。</li>
+<li><code>k=1</code>：每个 token 只送给得分最高的 1 个专家。</li>
+</ul>
+<p><code>MoE</code> 层会返回三样东西：输出、一个辅助损失 <code>l_aux</code>，以及各专家的负载计数。辅助损失的作用是逼着路由器把 token 均匀分给各个专家，避免“总有几个专家累死，其他专家闲死”。训练时，通常把它乘一个小系数加到主损失上，比如：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">loss </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> task_loss </span><span style="color:#F97583">+</span><span style="color:#79B8FF"> 0.01</span><span style="color:#F97583"> *</span><span style="color:#E1E4E8"> l_aux</span></span></code></pre>
+<h3 id="第九步换成-stage-2-配置并给参数分组">第九步：换成 Stage 2 配置，并给参数分组</h3>
+<p>前面说过，自带 <code>MoE</code> 层要配 Stage 1 或 Stage 2。新建一份 <code>ds_config_moe.json</code>，和官方 MoE 教程的思路一致，用 Stage 2，显存紧张时再把优化器状态卸载到 CPU：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  "train_micro_batch_size_per_gpu"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  "gradient_accumulation_steps"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">8</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  "bf16"</span><span style="color:#E1E4E8">: { </span><span style="color:#79B8FF">"enabled"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#79B8FF">  "optimizer"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">    "type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"AdamW"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">    "params"</span><span style="color:#E1E4E8">: { </span><span style="color:#79B8FF">"lr"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2e-5</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">"weight_decay"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">0.01</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">  },</span></span>
+<span class="line"><span style="color:#79B8FF">  "zero_optimization"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">    "stage"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">    "overlap_comm"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">    "contiguous_gradients"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">    "offload_optimizer"</span><span style="color:#E1E4E8">: { </span><span style="color:#79B8FF">"device"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"cpu"</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>然后是参数分组。专家的参数只在专家并行组内切分，普通参数则在所有数据并行的卡上共享，两者的梯度同步方式不同，所以优化器要把它们分成不同的组：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> deepspeed.moe.utils </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> split_params_into_different_moe_groups_for_optimizer</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">params </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span><span style="color:#9ECBFF">"params"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">list</span><span style="color:#E1E4E8">(model.parameters()), </span><span style="color:#9ECBFF">"name"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"parameters"</span><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">param_groups </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> split_params_into_different_moe_groups_for_optimizer(params)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">engine, optimizer, _, _ </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> deepspeed.initialize(</span></span>
+<span class="line"><span style="color:#FFAB70">    model</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">model,</span></span>
+<span class="line"><span style="color:#FFAB70">    model_parameters</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">param_groups,</span></span>
+<span class="line"><span style="color:#FFAB70">    config</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"ds_config_moe.json"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>补充一点：像这里这样把优化器写在配置文件里时，DeepSpeed 发现模型里有 MoE 层，会自动做这个分组，手动调用也不会出错；如果你是自己在代码里创建优化器（比如直接用 <code>torch.optim.AdamW</code>），就必须先用这个函数拆好再传进去。专家并行组同样由 DeepSpeed 在内部自动创建，不需要你手写通信组。</p>
+<h3 id="如果一定要-zero-3--moeautoep">如果一定要 ZeRO-3 + MoE：AutoEP</h3>
+<p>模型实在太大、必须上 ZeRO-3 时，DeepSpeed 给的路是 AutoEP（自动专家并行）。它不需要你手写 MoE 层，而是在 <code>deepspeed.initialize</code> 时自动识别 Hugging Face 模型里的 MoE 层，替换成支持专家并行的版本。截至 0.19.7，内置支持的模型家族有 Mixtral、Qwen3-MoE、Qwen3.5-MoE、DeepSeek-V2 和 DeepSeek-V3，并且要求 Transformers 5.0 及以上（Qwen3.5-MoE 要 5.2 及以上）。配置大致是这样：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#9ECBFF">"expert_parallel"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">  "enabled"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  "autoep_size"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">4</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  "preset_model"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"mixtral"</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>AutoEP 支持 Stage 0、1、2，以及“有条件的” Stage 3：Stage 3 下不能再同时用自带 <code>MoE</code> 层、自动张量并行、序列并行、梯度量化等功能。这部分功能更新很快，升级版本后最好重新看一眼官方的 AutoEP 文档。</p>
+<h2 id="常见问题排查">常见问题排查</h2>
+<ul>
+<li><strong>一开始就显存溢出</strong>：先把 <code>train_micro_batch_size_per_gpu</code> 降到 1，再考虑开激活检查点，最后才用卸载。</li>
+<li><strong>训练速度很慢</strong>：确认 <code>overlap_comm</code> 已开启；检查卡间带宽，Stage 3 对通信很敏感，跨机器训练时网络是瓶颈。</li>
+<li><strong>保存的模型加载不了</strong>：分片存档不能直接当普通权重用，要先合并。</li>
+<li><strong>加了 MoE 层后一初始化就报错</strong>：看看配置是不是还停在 Stage 3。自带 <code>MoE</code> 层只能配 Stage 1/2，要 Stage 3 就得换成 AutoEP。</li>
+<li><strong>MoE 训练不稳定</strong>：观察各专家的负载是否均衡，适当调整辅助损失的系数。</li>
+<li><strong>不确定该用哪一级</strong>：能用 Stage 1 或 2 装下，就不要上 Stage 3；Stage 3 是“装不下”时的选择。</li>
+</ul>
+<h2 id="我的看法">我的看法</h2>
+<p>ZeRO 和 MoE 其实解决的是同一个大问题的两个侧面：模型越来越大，一张卡装不下，也算不起。ZeRO 靠“分而治之”把冗余消掉，MoE 靠“按需激活”把计算省掉。</p>
+<p>对大多数团队来说，学习路径很清晰：先用 Stage 2 把训练跑起来，理解通信和显存的关系，再在装不下的时候切到 Stage 3，最后才是卸载和 MoE。要注意 MoE 这一步和 Stage 3 不能随便叠加：手写 MoE 层配 Stage 2，想要 Stage 3 就走 AutoEP。每一步都只多一个变量，出了问题也好定位。</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>DeepSpeed</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>ZeRO</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>MoE</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/write-rust-extensions-for-godot-with-godot-rust" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 write-rust-extensions-for-godot-with-godot-rust</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
