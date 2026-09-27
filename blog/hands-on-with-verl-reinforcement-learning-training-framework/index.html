@@ -1,0 +1,315 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/hands-on-with-verl-reinforcement-learning-training-framework/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/hands-on-with-verl-reinforcement-learning-training-framework/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/hands-on-with-verl-reinforcement-learning-training-framework/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/hands-on-with-verl-reinforcement-learning-training-framework/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/hands-on-with-verl-reinforcement-learning-training-framework/"><meta property="og:title" content="hands-on-with-verl-reinforcement-learning-training-framework — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="hands-on-with-verl-reinforcement-learning-training-framework — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>hands-on-with-verl-reinforcement-learning-training-framework — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/hands-on-with-verl-reinforcement-learning-training-framework/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 09 / 26</span><span class="text-meta" data-astro-cid-tldeq5d5>约 47 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>hands-on-with-verl-reinforcement-learning-training-framework</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>verl</span><span class="tag-outline" data-astro-cid-tldeq5d5>RLHF</span><span class="tag-outline" data-astro-cid-tldeq5d5>GRPO</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="手把手跑通-verl-强化学习训练框架">手把手跑通 verl 强化学习训练框架</h1>
+<p><img src="/assets/images/hands-on-with-verl-reinforcement-learning-training-framework-summary.png" alt="知识点总结"></p>
+<h2 id="摘要">摘要</h2>
+<p>让大模型学会“做对题”“说人话”，靠的是强化学习。但真把强化学习跑起来，麻烦一大堆：一个训练循环里要同时伺候好几个模型，还要在“生成”和“训练”两种完全不同的工作模式之间来回切换。verl 就是专门解决这件事的开源框架，它把复杂的流程拆开、编排好，你只需要改几行配置。这篇文章从最基础的概念讲起，一步一步带你在一张显卡上跑通第一个强化学习训练，再换成更省资源的 GRPO，最后讲怎么扩到多卡多机。</p>
+<h2 id="背景与问题">背景与问题</h2>
+<h3 id="先搞懂强化学习在训练什么">先搞懂：强化学习在训练什么</h3>
+<p>想象你在教一个学生做数学题：</p>
+<ol>
+<li>学生先做一遍题，写出答案。</li>
+<li>老师批改，对了给 1 分，错了给 0 分。</li>
+<li>学生根据分数调整自己的解题习惯：多用得分高的思路，少用得分低的思路。</li>
+<li>重复很多轮。</li>
+</ol>
+<p>这就是强化学习的全部想法。放到大模型上：</p>
+<ul>
+<li>学生是要训练的模型，叫<strong>策略模型</strong>（也叫 actor）。</li>
+<li>做题是让模型针对一个问题生成回答，这一步叫 <strong>rollout</strong>（生成）。</li>
+<li>老师批改是<strong>奖励</strong>。奖励可以来自一个专门训练的打分模型，也可以直接来自规则，比如数学题答案对不对。</li>
+<li>调整习惯是用奖励去更新模型参数。</li>
+</ul>
+<p>RLHF 的全称是基于人类反馈的强化学习，早期的奖励来自人类偏好。近两年更流行的是奖励可以自动验证的场景，比如数学题、代码能不能通过测试，思路一模一样。</p>
+<h3 id="为什么这件事这么难做">为什么这件事这么难做</h3>
+<p>用一句话概括：<strong>一个循环里，既要生成，又要训练，还要好几个模型一起上。</strong></p>
+<p>以最经典的 PPO 算法为例，一轮循环里要用到四个角色：</p>
+<ul>
+<li><strong>Actor</strong>：正在被训练的策略模型，负责生成回答，也负责被更新。</li>
+<li><strong>Reference（参考模型）</strong>：训练前模型的一份冻结副本。用来算“你现在和最初相比偏离了多少”，防止模型为了骗高分而学歪。</li>
+<li><strong>Critic（价值模型）</strong>：估计“照这样写下去，最后大概能拿多少分”。它对回答里的每个位置都给一个预估分，用来判断某一步写得比预期好还是差。它本身也是一个要训练的大模型。</li>
+<li><strong>Reward（奖励）</strong>：打分的那一方，可以是模型，也可以是一段规则代码。</li>
+</ul>
+<p>更麻烦的是，这些角色的工作模式差别很大：</p>
+<ul>
+<li>生成阶段需要专门的推理引擎（比如 vLLM），追求吞吐；</li>
+<li>训练阶段需要训练框架（比如 FSDP、Megatron-LM），要存梯度和优化器状态。</li>
+</ul>
+<p>同一份 actor 权重，一会儿要放在推理引擎里，一会儿要放在训练框架里，显存怎么切、权重怎么同步，处理不好就是显存爆炸或者 GPU 大量空转。而且你会发现，整个循环里<strong>生成往往是最慢的一步</strong>，后面的实际日志里就能看到。</p>
+<h3 id="以前的做法哪里不好">以前的做法哪里不好</h3>
+<p>如果用一个中心节点指挥所有事情（单控制器），灵活，但每个小操作都要经过它，调度开销很大。如果让所有节点各干各的（多控制器），效率高，但要改一个算法流程就得大动干戈。</p>
+<h2 id="核心思路与优势">核心思路与优势</h2>
+<h3 id="verl-是什么">verl 是什么</h3>
+<p>verl 是字节跳动 Seed 团队起头、现在由 verl 社区共同维护的开源强化学习训练库，是论文 HybridFlow 的开源实现，这篇论文发表在系统领域的顶会 EuroSys 2025 上。它的定位是灵活、高效、能用于生产环境的大模型强化学习框架。项目原来放在火山引擎的组织下，2026 年 1 月迁到了独立的 verl-project 组织，旧仓库地址会自动跳转到新地址。截至 2026 年 9 月，最新正式版是 v0.9.1（9 月 20 日发布）。</p>
+<h3 id="关键设计一混合控制器">关键设计一：混合控制器</h3>
+<p>verl 把两种思路结合起来：</p>
+<ul>
+<li><strong>全局控制器</strong>只负责“各角色之间的数据怎么流”，比如先让 actor 生成，再交给 reward 打分，再交给 critic 估值。这样算法流程写起来清晰，改起来也方便。</li>
+<li><strong>分布式控制器</strong>负责每个角色内部的并行计算，这部分效率高，不经过全局节点。</li>
+</ul>
+<p>好处是：想换个算法，只需要改数据流的那几行代码，不必碰底层的并行逻辑。</p>
+<h3 id="关键设计二3d-hybridengine">关键设计二：3D-HybridEngine</h3>
+<p>这是解决“同一份 actor 在训练和生成间切换”的办法。它负责在两种阶段之间，把 actor 的权重重新切分，做到内存零冗余，通信开销也小。论文报告，在不同的强化学习算法上，吞吐比当时的基线系统提升了 1.53 倍到 20.57 倍。</p>
+<h3 id="关键设计三即插即用的后端">关键设计三：即插即用的后端</h3>
+<p>verl 不自己重复造轮子，而是把成熟的组件接进来：</p>
+<ul>
+<li>训练后端：FSDP、FSDP2、Megatron-LM，另外还接入了 TorchTitan、VeOmni 等</li>
+<li>生成引擎：vLLM、SGLang、HF Transformers，0.8 版起还加入了 TensorRT-LLM</li>
+<li>支持的算法：PPO、GRPO、GSPO、RLOO、REINFORCE++、DAPO、DrGRPO 等一大批</li>
+<li>硬件：英伟达 GPU、AMD ROCm、昇腾</li>
+<li>模型：Qwen 系列、Llama 3.1、Gemma 2、DeepSeek 等</li>
+</ul>
+<p>这意味着：小模型用 FSDP，超大模型换成 Megatron-LM，生成部分选 vLLM 或 SGLang，都只是改一个配置项。</p>
+<h3 id="ppo-和-grpo先看懂这一张表">PPO 和 GRPO：先看懂这一张表</h3>
+<p>这是入门时最容易被绕晕的地方，用最简单的话对比：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>PPO</th>
+<th>GRPO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>要不要 Critic</td>
+<td>要，额外多一个模型</td>
+<td>不要</td>
+</tr>
+<tr>
+<td>每个问题生成几条回答</td>
+<td>通常 1 条</td>
+<td>多条（一组）</td>
+</tr>
+<tr>
+<td>怎么判断回答好不好</td>
+<td>让 Critic 估一个基准分</td>
+<td>和同组其他回答的平均分比</td>
+</tr>
+<tr>
+<td>KL 惩罚加在哪</td>
+<td>通常折算进奖励</td>
+<td>直接加进损失</td>
+</tr>
+<tr>
+<td>显存开销</td>
+<td>较大</td>
+<td>较小</td>
+</tr>
+</tbody>
+</table>
+<p>GRPO 的思路很朴素：同一道题让模型答 5 遍，得分比这 5 遍的平均分高的回答就“表扬”，低的就“批评”（默认还会再除以这组分数的标准差，让不同题目的分数尺度一致）。它省掉了 Critic 这个大模型，所以更省显存、更容易上手，在数学、代码这类奖励可验证的任务上特别流行。</p>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li>想给自己的模型做强化学习后训练，但不知道从哪里入手的算法工程师</li>
+<li>已经会做监督微调，想进一步提升推理、数学、代码能力的同学</li>
+<li>想弄明白 PPO、GRPO 到底怎么落地，而不是只看公式的学习者</li>
+<li>需要为团队选强化学习框架的技术负责人</li>
+</ul>
+<h2 id="实践步骤">实践步骤</h2>
+<p>我们分三段来走：先用官方的入门例子跑通 PPO，再换成 GRPO，最后讲怎么扩展。全程用的是数学应用题数据集 GSM8K 和一个 5 亿参数的小模型，一张显存 24GB 及以上的英伟达显卡就能跑（官方快速入门给出的最低要求）。</p>
+<h3 id="第一步准备环境">第一步：准备环境</h3>
+<p>先说清楚硬性条件：一台 Linux 机器，英伟达显卡，CUDA 12.8 及以上。官方的 uv 流程只支持 Linux，Mac 上跑不起来。</p>
+<p>官方给了两条路，任选其一。</p>
+<p><strong>路线一：uv（新版文档的主推方式）</strong></p>
+<p>verl 仓库里提交了一份锁定好所有依赖版本的 <code>uv.lock</code>，你不需要手动 <code>pip install</code> 一堆东西。第一次执行 <code>uv run</code> 时，uv 会按锁文件自动建好虚拟环境 <code>.venv</code>，之后直接复用：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -LsSf</span><span style="color:#9ECBFF"> https://astral.sh/uv/install.sh</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> sh</span><span style="color:#6A737D">   # 安装 uv，已装可跳过</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> clone</span><span style="color:#9ECBFF"> https://github.com/verl-project/verl.git</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> verl</span></span>
+<span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> run</span><span style="color:#79B8FF"> --frozen</span><span style="color:#79B8FF"> --all-packages</span><span style="color:#79B8FF"> --extra</span><span style="color:#9ECBFF"> vllm</span><span style="color:#79B8FF"> --extra</span><span style="color:#9ECBFF"> fsdp</span><span style="color:#9ECBFF"> python3</span><span style="color:#79B8FF"> -c</span><span style="color:#9ECBFF"> "import verl; print('ok')"</span></span></code></pre>
+<p>最后一行各部分的意思：</p>
+<ul>
+<li><code>--frozen</code>：严格按仓库里的锁文件装，不自己重新解析版本。</li>
+<li><code>--all-packages</code>：把仓库里的所有子包都装上。</li>
+<li><code>--extra vllm --extra fsdp</code>：选择“生成用 vLLM、训练用 FSDP”这套组合。生成引擎 vllm 和 sglang 只能二选一；训练后端在 fsdp 和 megatron 里选。</li>
+</ul>
+<p>看到输出 <code>ok</code>，环境就建好了。第一次会下载不少东西，要等一会儿。接着激活这个环境，后面所有 <code>python3</code> 命令都在里面执行：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#79B8FF">source</span><span style="color:#9ECBFF"> .venv/bin/activate</span></span></code></pre>
+<p><strong>路线二：Docker</strong></p>
+<p>快速入门文档推荐用 Docker 镜像，好处是 CUDA 驱动之外的依赖都已经装好。仓库里自带一份 uv 版的 Dockerfile，同样先 clone 仓库，然后在仓库根目录构建一次即可：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#E1E4E8">DOCKER_BUILDKIT</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">1</span><span style="color:#B392F0"> docker</span><span style="color:#9ECBFF"> build</span><span style="color:#79B8FF"> -f</span><span style="color:#9ECBFF"> docker/Dockerfile.uv.cu130</span><span style="color:#79B8FF"> -t</span><span style="color:#9ECBFF"> verl:uv-cu130</span><span style="color:#9ECBFF"> .</span></span>
+<span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> run</span><span style="color:#79B8FF"> --rm</span><span style="color:#79B8FF"> -it</span><span style="color:#79B8FF"> --gpus</span><span style="color:#9ECBFF"> all</span><span style="color:#9ECBFF"> verl:uv-cu130</span><span style="color:#9ECBFF"> bash</span></span></code></pre>
+<p>这个镜像里预先缓存好了所有依赖包，但还没有建好具体的环境。进入容器后，工作目录就是 verl 仓库，先执行一次路线一里那行 <code>uv run ... python3 -c "import verl; print('ok')"</code>，它会用镜像里的缓存离线建好 <code>.venv</code>，然后就可以往下走了。Docker Hub 上也有官方预构建的 <code>verlai/verl</code> 镜像，用的话要挑和你的 verl 版本匹配的标签。</p>
+<p>需要留意的是，生成引擎的版本要求很严格：verl 的版本更新会调整支持的 vLLM 范围，比如 0.9.0 起就不再支持 0.18.0 以前的 vLLM。所以请严格按照你所用版本的官方文档来，不要随手升级组件。</p>
+<h3 id="第二步准备数据">第二步：准备数据</h3>
+<p>GSM8K 是一个小学数学应用题数据集。verl 自带了预处理脚本，会把它转成 verl 需要的 parquet 格式：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">python3</span><span style="color:#9ECBFF"> examples/data_preprocess/gsm8k.py</span><span style="color:#79B8FF"> --local_save_dir</span><span style="color:#9ECBFF"> ~/data/gsm8k</span></span></code></pre>
+<p>跑完后，<code>~/data/gsm8k</code> 下会有 <code>train.parquet</code> 和 <code>test.parquet</code> 两个文件，分别是训练集和测试集。脚本还顺手做了一件重要的事：在每道题后面加上一句英文提示，要求模型“一步步思考，并把最终答案写在 <code>####</code> 之后”。后面算奖励时，就靠这个标记找答案。</p>
+<h3 id="第三步下载模型">第三步：下载模型</h3>
+<p>我们用通义千问的 5 亿参数指令模型，小到一张卡就能装下 PPO 的全部角色：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">python3</span><span style="color:#79B8FF"> -c</span><span style="color:#9ECBFF"> "import transformers; transformers.pipeline('text-generation', model='Qwen/Qwen2.5-0.5B-Instruct')"</span></span></code></pre>
+<p>这条命令的作用只是触发一次下载，把模型缓存到本地。如果从国内访问 Hugging Face 不方便，官方文档提供了一个开关：设置环境变量 <code>VERL_USE_MODELSCOPE=True</code>，训练时就会改从魔搭社区下载模型。</p>
+<h3 id="第四步启动第一次-ppo-训练">第四步：启动第一次 PPO 训练</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#E1E4E8">PYTHONUNBUFFERED</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">1</span><span style="color:#B392F0"> python3</span><span style="color:#79B8FF"> -m</span><span style="color:#9ECBFF"> verl.trainer.main_ppo</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  data.train_files=</span><span style="color:#E1E4E8">$HOME</span><span style="color:#9ECBFF">/data/gsm8k/train.parquet</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  data.val_files=</span><span style="color:#E1E4E8">$HOME</span><span style="color:#9ECBFF">/data/gsm8k/test.parquet</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  data.train_batch_size=</span><span style="color:#79B8FF">256</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  data.max_prompt_length=</span><span style="color:#79B8FF">512</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  data.max_response_length=</span><span style="color:#79B8FF">512</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.model.path=Qwen/Qwen2.5-0.5B-Instruct</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.actor.optim.lr=1e-6</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.actor.ppo_mini_batch_size=</span><span style="color:#79B8FF">64</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=</span><span style="color:#79B8FF">4</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.rollout.name=vllm</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=</span><span style="color:#79B8FF">8</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.rollout.tensor_model_parallel_size=</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.rollout.gpu_memory_utilization=</span><span style="color:#79B8FF">0.4</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=</span><span style="color:#79B8FF">4</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  critic.optim.lr=1e-5</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  critic.model.path=Qwen/Qwen2.5-0.5B-Instruct</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  critic.ppo_micro_batch_size_per_gpu=</span><span style="color:#79B8FF">4</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  algorithm.use_kl_in_reward=True</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  algorithm.kl_ctrl.kl_coef=</span><span style="color:#79B8FF">0.001</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  trainer.logger=console</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  trainer.val_before_train=False</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  trainer.n_gpus_per_node=</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  trainer.nnodes=</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  trainer.save_freq=</span><span style="color:#79B8FF">10</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  trainer.test_freq=</span><span style="color:#79B8FF">10</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  trainer.total_epochs=</span><span style="color:#79B8FF">15</span></span></code></pre>
+<p>这条命令基本照搬官方快速入门，只多加了一行 <code>algorithm.use_kl_in_reward=True</code>，原因下面会讲。如果你走的是 uv 路线，记得先激活 <code>.venv</code> 再执行。</p>
+<p>参数很多，别慌，按前缀分组来看就清楚了：</p>
+<p><strong><code>data.*</code>：喂什么数据</strong></p>
+<ul>
+<li><code>train_batch_size=256</code>：每一轮训练（日志里的一个 step）取 256 个<strong>问题</strong>。注意单位是问题，不是回答。</li>
+<li><code>max_prompt_length</code> 和 <code>max_response_length</code>：问题和回答各自最多多少个 token。回答写到 512 个 token 还没写完，就会被强行停下。</li>
+</ul>
+<p><strong><code>actor_rollout_ref.*</code>：策略模型、生成引擎、参考模型三合一</strong></p>
+<ul>
+<li><code>model.path</code>：要训练的模型。</li>
+<li><code>actor.optim.lr=1e-6</code>：学习率。强化学习的学习率要比监督微调小得多，否则模型很容易学崩。</li>
+<li><code>ppo_mini_batch_size=64</code>：每做一次参数更新用多少个问题，这是所有显卡加起来的全局值。256 个问题会被切成 4 份，所以每个 step 里 actor 实际更新 4 次参数。</li>
+<li><code>ppo_micro_batch_size_per_gpu=4</code>：每张卡一次前向、反向计算处理几条样本（一条样本就是“一个问题加一条回答”）。显卡处理不了一整份 mini batch 时，就拆成几小口分别算，再把梯度累加起来。所以它不影响训练效果，只是显存和速度的折中：显存不够就调小。</li>
+<li><code>rollout.name=vllm</code>：用 vLLM 来生成回答。</li>
+<li><code>rollout.gpu_memory_utilization=0.4</code>：vLLM 最多能占用整张卡显存的 40%，用来放模型权重和生成时的缓存。这里给得比较少，是因为一张卡上还同时驻留着 actor、critic、参考模型的参数，训练时还要放梯度和优化器状态，得给它们留出空间。</li>
+<li><code>rollout.tensor_model_parallel_size=1</code>：生成时用几张卡做张量并行。框架默认值是 2，单卡必须显式改成 1。</li>
+<li><code>rollout.log_prob_micro_batch_size_per_gpu</code> 和 <code>ref.log_prob_micro_batch_size_per_gpu</code>：重新计算“每个词的概率”时，每张卡一次处理几条样本。同样只影响显存和速度。</li>
+</ul>
+<p><strong><code>critic.*</code>：价值模型</strong></p>
+<ul>
+<li>这里用同一个模型来初始化 Critic，学习率 <code>1e-5</code> 比 actor 大一些。</li>
+</ul>
+<p><strong><code>algorithm.*</code>：KL 惩罚</strong></p>
+<ul>
+<li><code>use_kl_in_reward=True</code>：把“偏离参考模型多少”折算成扣分，从奖励里扣掉，这是经典 PPO 的做法。新版本里这个开关默认是关的，而官方快速入门命令没有写它。不打开的话，下面的 <code>kl_coef</code> 不起作用，参考模型也根本不会启动。</li>
+<li><code>kl_ctrl.kl_coef=0.001</code>：KL 惩罚系数。数值越大，模型越“保守”，越不敢偏离最初的样子。</li>
+</ul>
+<p><strong><code>trainer.*</code>：训练调度</strong></p>
+<ul>
+<li><code>n_gpus_per_node=1</code>、<code>nnodes=1</code>：一台机器一张卡。</li>
+<li><code>val_before_train=False</code>：开训前不先跑一遍验证，省点时间。</li>
+<li><code>save_freq=10</code>、<code>test_freq=10</code>：每 10 个 step 存一次检查点、跑一次验证。</li>
+<li><code>total_epochs=15</code>：把训练数据过 15 遍。GSM8K 训练集约 7473 道题，每个 step 用 256 道，一遍大约 29 个 step，15 遍一共四百多个 step。</li>
+</ul>
+<p>如果显存不到 32GB 跑不起来，官方建议先把 <code>actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu</code> 和 <code>critic.ppo_micro_batch_size_per_gpu</code> 都改成 1。</p>
+<h3 id="第五步看懂训练日志">第五步：看懂训练日志</h3>
+<p>启动后，每个 step 终端会输出一长行指标，节选出来大概是这样（数字取自官方文档的示例日志）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>step:0 - timing_s/gen:21.470 - timing_s/ref:4.360 - ... - critic/score/mean:0.004 - critic/vf_loss:14.947 - actor/pg_loss:-0.005 - response_length/mean:239.133</span></span></code></pre>
+<p>注意一个版本差异：官方快速入门文档里的示例日志还是旧名字 <code>timing/gen</code>、<code>val/test_score/openai/gsm8k</code>，新版本已经改成下面这些名字了，含义不变。如果你用的是较老的 verl 版本，看到旧名字也不用慌。</p>
+<p>初学者最需要盯住的几个指标：</p>
+<ul>
+<li><strong><code>critic/score/mean</code></strong>：这一批回答的平均得分。训练的目标就是让它一路上升。刚开始接近 0，说明小模型基本答不对。</li>
+<li><strong><code>val-core/openai/gsm8k/reward/mean@1</code></strong>：在测试集上的平均得分，每 <code>test_freq</code> 个 step 计算一次。GSM8K 答对 1 分、答错 0 分，所以它就是准确率，这是最终要看的“真实成绩”。</li>
+<li><strong><code>timing_s/gen</code></strong>：生成阶段的耗时，单位是秒。上面这行里生成花了 21 秒，而参考模型计算（<code>timing_s/ref</code>）只花了 4 秒。这印证了前面说的：生成往往是最慢的一环。</li>
+<li><strong><code>response_length/mean</code></strong>：回答的平均长度。如果它突然暴涨或骤降，通常说明模型学偏了。</li>
+<li><strong><code>critic/vf_loss</code></strong> 和 <strong><code>actor/pg_loss</code></strong>：价值模型和策略模型各自的损失，用来判断训练是否稳定，不必逐个细看。</li>
+</ul>
+<h3 id="第六步奖励是怎么来的">第六步：奖励是怎么来的</h3>
+<p>GSM8K 的奖励规则非常简单：模型的回答里，最终答案要写在 <code>####</code> 之后。程序用正则表达式把它抽出来，和标准答案比较：<strong>答对得 1 分，答错得 0 分，没给答案也是 0 分。</strong></p>
+<p>verl 是怎么知道该用这条规则的？预处理脚本给每条数据打了一个来源标签 <code>data_source</code>（这里是 <code>openai/gsm8k</code>），标准答案则存在 <code>reward_model.ground_truth</code> 字段里。verl 看到这个来源，就自动调用内置的 GSM8K 打分函数。</p>
+<p>这就是“可验证奖励”的魅力：不需要训练专门的打分模型，一段几行的规则代码就够了。想让模型学别的任务，思路是一样的：换一份数据，再写一个判断对错的函数交给 verl。比如新建一个 <code>my_reward.py</code>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> compute_score</span><span style="color:#E1E4E8">(data_source, solution_str, ground_truth, extra_info</span><span style="color:#F97583">=</span><span style="color:#79B8FF">None</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">**</span><span style="color:#E1E4E8">kwargs):</span></span>
+<span class="line"><span style="color:#6A737D">    # solution_str：模型生成的回答文本</span></span>
+<span class="line"><span style="color:#6A737D">    # ground_truth：数据里存的标准答案</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#9ECBFF"> "####"</span><span style="color:#F97583"> not</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> solution_str:</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> 0.0</span><span style="color:#6A737D">  # 没按格式给答案</span></span>
+<span class="line"><span style="color:#E1E4E8">    answer </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> solution_str.split(</span><span style="color:#9ECBFF">"####"</span><span style="color:#E1E4E8">)[</span><span style="color:#F97583">-</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">].strip()</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> 1.0</span><span style="color:#F97583"> if</span><span style="color:#E1E4E8"> answer </span><span style="color:#F97583">==</span><span style="color:#79B8FF"> str</span><span style="color:#E1E4E8">(ground_truth).strip() </span><span style="color:#F97583">else</span><span style="color:#79B8FF"> 0.0</span></span></code></pre>
+<p>函数的参数名要照这个写，返回一个分数即可。然后在训练命令里加两行，告诉 verl 去用它：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">  reward.custom_reward_function.path</span><span style="color:#9ECBFF">=</span><span style="color:#E1E4E8">$(</span><span style="color:#79B8FF">pwd</span><span style="color:#E1E4E8">)/my_reward.py </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#B392F0">  reward.custom_reward_function.name</span><span style="color:#9ECBFF">=compute_score</span><span style="color:#79B8FF"> \</span></span></code></pre>
+<p><code>name</code> 默认就是 <code>compute_score</code>，函数叫这个名字时第二行可以省略。老版本的教程里这两个配置没有 <code>reward.</code> 前缀，新版本会自动兼容，但建议按新写法来。注意：自定义函数会同时用于训练和验证两边的打分。</p>
+<h3 id="第七步换成-grpo">第七步：换成 GRPO</h3>
+<p>PPO 要额外训练一个 Critic，比较占资源。换成 GRPO，就是不再要 Critic，让每个问题答多遍。需要改的关键点只有这几个：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#E1E4E8">PYTHONUNBUFFERED</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">1</span><span style="color:#B392F0"> python3</span><span style="color:#79B8FF"> -m</span><span style="color:#9ECBFF"> verl.trainer.main_ppo</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  algorithm.adv_estimator=grpo</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  algorithm.use_kl_in_reward=False</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  data.train_files=</span><span style="color:#E1E4E8">$HOME</span><span style="color:#9ECBFF">/data/gsm8k/train.parquet</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  data.val_files=</span><span style="color:#E1E4E8">$HOME</span><span style="color:#9ECBFF">/data/gsm8k/test.parquet</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  data.train_batch_size=</span><span style="color:#79B8FF">256</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  data.max_prompt_length=</span><span style="color:#79B8FF">512</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  data.max_response_length=</span><span style="color:#79B8FF">1024</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.model.path=Qwen/Qwen2.5-0.5B-Instruct</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.actor.optim.lr=1e-6</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.actor.ppo_mini_batch_size=</span><span style="color:#79B8FF">64</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=</span><span style="color:#79B8FF">4</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.actor.use_kl_loss=True</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.actor.kl_loss_coef=</span><span style="color:#79B8FF">0.001</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.actor.kl_loss_type=low_var_kl</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.rollout.name=vllm</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.rollout.n=</span><span style="color:#79B8FF">5</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.rollout.tensor_model_parallel_size=</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.rollout.gpu_memory_utilization=</span><span style="color:#79B8FF">0.4</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=</span><span style="color:#79B8FF">8</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=</span><span style="color:#79B8FF">8</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  trainer.logger=console</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  trainer.val_before_train=False</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  trainer.n_gpus_per_node=</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  trainer.nnodes=</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  trainer.save_freq=</span><span style="color:#79B8FF">10</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  trainer.test_freq=</span><span style="color:#79B8FF">10</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  trainer.total_epochs=</span><span style="color:#79B8FF">15</span></span></code></pre>
+<p>和 PPO 版本对比，变化有四处：</p>
+<ol>
+<li><strong><code>algorithm.adv_estimator=grpo</code></strong>：把优势估计方式从默认的 GAE 换成 GRPO，同时去掉了整个 <code>critic.*</code> 配置，因为不再需要 Critic（优势估计方式不是 GAE 时，框架会自动关掉 Critic）。</li>
+<li><strong><code>rollout.n=5</code></strong>：每个问题生成 5 条回答，构成一组。这个值必须大于 1，GRPO 才有“组内比较”可做。此时每个 step 实际生成的回答总数是 <code>train_batch_size × n</code>，也就是 256 × 5 = 1280 条。同理，<code>ppo_mini_batch_size=64</code> 虽然写的是 64 个问题，框架内部会自动乘以 5，每次参数更新实际用 320 条回答。</li>
+<li><strong><code>use_kl_loss=True</code>、<code>kl_loss_coef=0.001</code>、<code>kl_loss_type=low_var_kl</code></strong>：GRPO 把 KL 惩罚直接加进损失里，而不是像 PPO 那样折算进奖励，所以要打开这个开关，同时让 <code>use_kl_in_reward</code> 保持关闭。系数 0.001 和估算方式 <code>low_var_kl</code> 都是框架默认值，写出来是为了看得明白。打开 <code>use_kl_loss</code> 后，参考模型会自动启动。</li>
+<li><strong><code>max_response_length</code> 调到 1024</strong>：给模型多一点空间写解题过程。回答变长、条数变多，生成会更慢，显存也更紧，跑不动时先调小各个 <code>micro_batch_size_per_gpu</code>。</li>
+</ol>
+<p>另外两个 GRPO 相关的设置不用改，默认值就是官方推荐的：损失聚合方式 <code>loss_agg_mode</code> 默认就是 <code>token-mean</code>，熵奖励系数 <code>entropy_coeff</code> 默认是 0。想看更完整的写法，可以参考官方仓库 <code>examples/grpo_trainer/</code> 下的脚本，比如 <code>run_qwen3_8b_fsdp.sh</code>，它面向的是 8 卡、80 亿参数的模型，额外开了动态批大小、梯度检查点、参考模型参数卸载等选项。</p>
+<h3 id="第八步扩展到多卡多机大模型">第八步：扩展到多卡、多机、大模型</h3>
+<p>小模型跑通之后，往上扩展主要动这几处：</p>
+<ul>
+<li><strong>单机多卡</strong>：最简单，把 <code>trainer.n_gpus_per_node</code> 改成这台机器的显卡数，比如 8，其余不用动。</li>
+<li><strong>多机</strong>：verl 底层用 Ray 调度，多台机器要先组成一个 Ray 集群，再把训练任务提交上去。官方文档的手动步骤是这样的：</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 1. 在主节点上启动 Ray，输出里会给出一个集群地址</span></span>
+<span class="line"><span style="color:#B392F0">ray</span><span style="color:#9ECBFF"> start</span><span style="color:#79B8FF"> --head</span><span style="color:#79B8FF"> --dashboard-host=0.0.0.0</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 2. 在每台其他机器上，用上一步拿到的地址加入集群</span></span>
+<span class="line"><span style="color:#B392F0">ray</span><span style="color:#9ECBFF"> start</span><span style="color:#79B8FF"> --address=</span><span style="color:#F97583">&lt;</span><span style="color:#79B8FF">主节点给出的地址</span><span style="color:#F97583">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 3. 任意一台机器上确认节点都到齐了</span></span>
+<span class="line"><span style="color:#B392F0">ray</span><span style="color:#9ECBFF"> status</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 4. 在主节点上，通过 Ray 控制台地址（默认 8265 端口）提交训练任务</span></span>
+<span class="line"><span style="color:#B392F0">ray</span><span style="color:#9ECBFF"> job</span><span style="color:#9ECBFF"> submit</span><span style="color:#79B8FF"> --address=</span><span style="color:#9ECBFF">"http://127.0.0.1:8265"</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --runtime-env=verl/trainer/runtime_env.yaml</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --no-wait</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  python3</span><span style="color:#79B8FF"> -m</span><span style="color:#9ECBFF"> verl.trainer.main_ppo</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  trainer.n_gpus_per_node=</span><span style="color:#79B8FF">8</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  trainer.nnodes=</span><span style="color:#79B8FF">2</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  ...</span></span></code></pre>
+<p>第 4 步的 <code>...</code> 就是前面那一串训练参数，<code>nnodes</code> 填机器台数。提交后用 <code>ray job logs &lt;任务 ID&gt; --follow</code> 看实时日志，用 <code>ray job stop &lt;任务 ID&gt;</code> 停止任务。每台机器的环境、代码和数据路径要保持一致。如果控制台端口访问不通，多半是防火墙的问题。</p>
+<ul>
+<li><strong>生成并行度</strong>：模型变大后，把 <code>rollout.tensor_model_parallel_size</code> 调大，让一个模型副本跨多张卡做生成。</li>
+<li><strong>换训练后端</strong>：模型大到 FSDP 吃力时，换成 Megatron-LM。官方示例脚本的做法是在训练命令里加一行 <code>model_engine=megatron</code>；uv 环境要同时把 <code>--extra fsdp</code> 换成 <code>--extra megatron</code>。可以参考 <code>examples/grpo_trainer/run_qwen3_8b_megatron.sh</code>。</li>
+<li><strong>参考模型卸载</strong>：官方建议超过 70 亿参数的模型，开启参考模型的参数卸载（把暂时不用的参数挪到内存里），配置是 <code>actor_rollout_ref.ref.fsdp_config.param_offload=True</code>。</li>
+<li><strong>监控</strong>：把 <code>trainer.logger</code> 改成列表形式，比如 <code>trainer.logger='["console","wandb"]'</code>（也支持 tensorboard 等），并设好 <code>trainer.project_name</code> 和 <code>trainer.experiment_name</code>，方便对比多次实验。</li>
+</ul>
+<h2 id="常见问题排查">常见问题排查</h2>
+<ul>
+<li><strong>显存不足</strong>：优先调小各类 <code>micro_batch_size_per_gpu</code>，其次降低 <code>rollout.gpu_memory_utilization</code>，再考虑缩短 <code>max_response_length</code> 或开启梯度检查点（<code>actor_rollout_ref.model.enable_gradient_checkpointing=True</code>）。</li>
+<li><strong>训练很慢</strong>：先看日志里 <code>timing_s/gen</code> 在 <code>timing_s/step</code>（整个 step 的总耗时）里是不是占大头。如果是，说明瓶颈在生成，可以增大生成并行度，或者换用吞吐更高的生成引擎。</li>
+<li><strong>奖励迟迟不涨</strong>：检查奖励函数是否真的能给出区分度。如果一组回答全对或全错，GRPO 就学不到东西。可以适当增大 <code>rollout.n</code>，或者换一份难度更合适的数据。</li>
+<li><strong>模型输出变得奇怪</strong>：可能是学偏了，适当调大 KL 系数（PPO 是 <code>kl_ctrl.kl_coef</code>，GRPO 是 <code>kl_loss_coef</code>），或调小学习率。</li>
+<li><strong>改了 KL 系数却没反应</strong>：检查 KL 开关是否真的打开了。PPO 要 <code>algorithm.use_kl_in_reward=True</code>，GRPO 要 <code>actor.use_kl_loss=True</code>，两个都关着时参考模型根本不会参与计算。</li>
+<li><strong>版本报错</strong>：强化学习框架依赖的组件多、更新快，遇到不兼容，第一反应是回到官方文档核对该版本要求的 vLLM、PyTorch 版本。</li>
+</ul>
+<h2 id="我的看法">我的看法</h2>
+<p>强化学习后训练，过去是少数大厂才玩得起的事，原因不是算法多神秘，而是工程太重：多个模型、两种工作模式、复杂的并行。verl 的价值，就是把这层工程复杂度替你扛下来，让你能把精力放在数据和奖励设计上。</p>
+<p>对新手来说，最务实的路线是：先用小模型加 GSM8K 把 PPO 跑通、看懂日志；再换成 GRPO，体会没有 Critic 的省心；然后换成你自己的任务，认真设计奖励函数。这一步往往比调参更决定成败。等到模型变大，再考虑多机、Megatron-LM 这些扩展手段，一步一步来，出问题也好定位。</p>
+<h2 id="项目地址">项目地址</h2>
+<p>github.com/verl-project/verl</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>verl</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>RLHF</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>GRPO</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/understand-deepspeed-zero3-and-moe-training" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 understand-deepspeed-zero3-and-moe-training</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
