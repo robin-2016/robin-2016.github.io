@@ -1,0 +1,137 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/strata-run-125b-parameter-model-on-gaming-pc/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/strata-run-125b-parameter-model-on-gaming-pc/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/strata-run-125b-parameter-model-on-gaming-pc/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/strata-run-125b-parameter-model-on-gaming-pc/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/strata-run-125b-parameter-model-on-gaming-pc/"><meta property="og:title" content="strata-run-125b-parameter-model-on-gaming-pc — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="strata-run-125b-parameter-model-on-gaming-pc — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>strata-run-125b-parameter-model-on-gaming-pc — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/strata-run-125b-parameter-model-on-gaming-pc/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 10 / 01</span><span class="text-meta" data-astro-cid-tldeq5d5>约 12 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>strata-run-125b-parameter-model-on-gaming-pc</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>Strata</span><span class="tag-outline" data-astro-cid-tldeq5d5>本地大模型</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="strata-让普通游戏电脑跑-1250-亿参数大模型">Strata 让普通游戏电脑跑 1250 亿参数大模型</h1>
+<p><img src="/assets/images/strata-run-125b-parameter-model-on-gaming-pc-summary.png" alt="知识点总结"></p>
+<h2 id="摘要">摘要</h2>
+<p>Strata 是一个开源推理引擎，能让一台带 NVIDIA 显卡的普通游戏电脑，跑起 1250 亿参数的 Qwen3.8-Flash-Next。Windows 和 Linux 都支持一键安装，装完在本机 8080 端口提供 OpenAI 和 Anthropic 两种兼容接口，还能直接喂图片。官方在 RTX 5070（12GB）上实测，生成速度 53 到 93 tokens/s，比人读字还快。</p>
+<h2 id="背景大模型为什么总在服务器上">背景：大模型为什么总在服务器上</h2>
+<p>这类模型动辄需要几百 GB 显存，而一张游戏卡只有 12 到 24GB。差距太大，所以大家习惯了调云端接口。</p>
+<p>Strata 的思路是别让显卡单打独斗，把整台电脑的资源都用起来，就像厨房里常用的调料放手边，其余的收进储物间。</p>
+<h2 id="核心优势">核心优势</h2>
+<ul>
+<li><strong>专家分层存放。</strong> 模型由 24576 个小专家组成，每生成一个词只调用其中 10 个。显卡只放每个词都要用的部分，以及被调用最频繁的几千个专家，并且会在使用中持续学习哪些最常用。全部专家放在内存里，显卡没有的由 CPU 同步计算，两边互不等待。硬盘上还有一张约 29GB 的查找表，每个词只读其中几小行。</li>
+<li><strong>先猜后验，提速 1.6 到 1.8 倍。</strong> 模型内置一个小助手，先猜接下来几个词，大模型一次性检查这些猜测，认可的就保留。每个词最终仍由大模型把关，所以回答质量不变，只是出字更快。</li>
+<li><strong>长文读得快。</strong> 长文按最多 8192 个 token 一块来读，长文档和代码库的读取速度能超过每秒 1000 token。</li>
+<li><strong>接口全兼容。</strong> 本机直接给出 OpenAI 风格接口和 Anthropic 风格接口，现有的聊天应用、编程助手改个地址就能接上。</li>
+<li><strong>支持图片输入，</strong> 网页里点「Picture」，终端里输入 <code>/image</code> 加路径，应用里直接附图即可。</li>
+<li><strong>完全开源，</strong> 引擎采用 MIT 协议，模型文件各自遵循自己的许可。</li>
+</ul>
+<h2 id="速度到底怎么样">速度到底怎么样</h2>
+<p>官方在 RTX 5070（12GB）、锐龙 5 7600、64GB 内存上的实测：</p>
+<table>
+<thead>
+<tr>
+<th>量化版本</th>
+<th style="text-align: right">短对话生成</th>
+<th style="text-align: right">128K 上下文生成</th>
+<th style="text-align: right">读取提示词</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q2_0</td>
+<td style="text-align: right">93 tokens/s</td>
+<td style="text-align: right">74 tokens/s</td>
+<td style="text-align: right">2170 tokens/s</td>
+</tr>
+<tr>
+<td>IQ2_XS</td>
+<td style="text-align: right">79 tokens/s</td>
+<td style="text-align: right">63 tokens/s</td>
+<td style="text-align: right">2090 tokens/s</td>
+</tr>
+<tr>
+<td>IQ3_XXS</td>
+<td style="text-align: right">62 tokens/s</td>
+<td style="text-align: right">49 tokens/s</td>
+<td style="text-align: right">1750 tokens/s</td>
+</tr>
+<tr>
+<td>IQ3_S</td>
+<td style="text-align: right">53 tokens/s</td>
+<td style="text-align: right">46 tokens/s</td>
+<td style="text-align: right">1620 tokens/s</td>
+</tr>
+</tbody>
+</table>
+<p>显存更大的卡会更快，官方估计 RTX 3090（24GB）大约在 100 到 140 tokens/s。读 3.2 万 token 的提示词，用 Q2_0 大约 15 秒。</p>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li>想在本机跑大模型、不愿把代码和文档交给云端的开发者</li>
+<li>手里有 12GB 以上显存的 RTX 20、30、40、50 系显卡，内存在 32GB 以上（64GB 最从容）的玩家</li>
+<li>想给编程助手接一个本地后端，省掉接口费用的人</li>
+<li>对「消费级硬件如何跑超大模型」的工程思路感兴趣的人</li>
+</ul>
+<h2 id="硬件要求重点看这里">硬件要求（重点看这里）</h2>
+<p>先把门槛说清楚，避免踩坑：</p>
+<ul>
+<li>显卡：NVIDIA RTX 20、30、40、50 系列，<strong>显存 12GB 及以上</strong>。双卡或三卡可以共同分担，此时每张卡需要 8GB 以上</li>
+<li>内存：取决于选哪个版本。内存至少要比模型第一分片大 10GB 左右，留给系统和其他程序</li>
+<li>硬盘：约 80GB 空闲空间，用固态硬盘首次启动会快很多</li>
+<li>系统：Windows 10/11 或 Linux</li>
+<li>驱动：需要自己装好较新的 NVIDIA 驱动，其余的 Python、引擎、模型都由安装脚本搞定</li>
+</ul>
+<p>四个体积版本的取舍：</p>
+<table>
+<thead>
+<tr>
+<th>版本</th>
+<th style="text-align: right">内存加显存需求</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q2_0</td>
+<td style="text-align: right">37.6 GB</td>
+<td>最快，质量不错</td>
+</tr>
+<tr>
+<td>IQ2_XS</td>
+<td style="text-align: right">39.2 GB</td>
+<td>较快，质量更好，官方推荐</td>
+</tr>
+<tr>
+<td>IQ3_XXS</td>
+<td style="text-align: right">47.0 GB</td>
+<td>稍慢，质量很好</td>
+</tr>
+<tr>
+<td>IQ3_S</td>
+<td style="text-align: right">54.8 GB</td>
+<td>最慢，质量最好，在公开测试上与完整模型持平</td>
+</tr>
+</tbody>
+</table>
+<p>不确定就选 IQ2_XS。如果主要写代码，或者内存只有 32 到 48GB，可以选 Coder 版：它砍掉一半专家，只保留代码、工具调用和图片需要的部分，第一分片只有 29.6GB，32GB 内存就能跑。</p>
+<h2 id="快速上手">快速上手</h2>
+<p><strong>Windows：</strong> 下载项目压缩包并解压，双击 <code>START-HERE.bat</code>。它会问几个问题，包括选哪个模型和体积、上下文多长、要不要读图，一路回车就是推荐配置。随后自动下载约 70GB 的模型并启动，浏览器会打开本机 8080 端口的 Strata 页面。</p>
+<p><strong>Linux：</strong> 执行 <code>./setup.sh</code>，问题和结果都一样。</p>
+<p><strong>Docker（Linux）：</strong> 需要 NVIDIA Container Toolkit 和 580 以上的驱动。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> build</span><span style="color:#79B8FF"> -t</span><span style="color:#9ECBFF"> strata</span><span style="color:#9ECBFF"> .</span></span>
+<span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> run</span><span style="color:#79B8FF"> --rm</span><span style="color:#79B8FF"> --gpus</span><span style="color:#9ECBFF"> all</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> 8080:8080</span><span style="color:#79B8FF"> --ulimit</span><span style="color:#9ECBFF"> memlock=</span><span style="color:#79B8FF">-1</span><span style="color:#79B8FF"> -v</span><span style="color:#9ECBFF"> strata-data:/data</span><span style="color:#9ECBFF"> strata</span></span></code></pre>
+<p>有两点要提前知道：</p>
+<ol>
+<li>首次启动时，电脑可能卡顿 1 到 3 分钟，因为它要往内存里装 35 到 55GB 数据。这是正常现象，别关窗口。</li>
+<li>下载中断了，重新运行脚本就会接着下，不会重复下载。</li>
+</ol>
+<h2 id="进阶用法">进阶用法</h2>
+<p><strong>接入自己的应用。</strong> 在应用里添加一个「OpenAI 兼容」提供方，地址填下面这个，密钥和模型名随便填：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>http://127.0.0.1:8080/v1</span></span></code></pre>
+<p>使用 Anthropic 接口的应用，地址则是：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>http://127.0.0.1:8080/v1/messages</span></span></code></pre>
+<p><strong>调节思考深度。</strong> 模型回答前会先思考，可以选关闭、低、中、高。关闭最快，高适合难题。网页里在菜单切换，终端里用 <code>/think low</code>，应用里用推理强度设置。</p>
+<p><strong>多卡共用。</strong> 直接运行 <code>START-HERE.bat</code>，它会列出可用的显卡并询问是否分摊。官方在 RTX 5080 加 RTX 3090 上测得，读提示词比单张 5080 快 18% 到 20%，生成速度持平。</p>
+<p><strong>测出你机器的最快设置。</strong> 运行 <code>START-HERE.bat --calibrate</code>，花 5 到 10 分钟测几项引擎参数并保留最快的一组，官方机器上让 Coder 版提速了 7%。</p>
+<h2 id="使用中要注意">使用中要注意</h2>
+<ul>
+<li>它一次只处理一个请求，不适合多人并发</li>
+<li>一段对话的第一条消息会被完整读取，大约每 3 万 token 需要 1 分钟，之后只读新增部分，追问几秒就开始回答</li>
+<li>聊天记录只存在浏览器本地，换浏览器或开无痕窗口就是空的</li>
+<li>如果要从手机或另一台电脑访问，务必设置密钥，不要把端口裸露在网络里</li>
+</ul>
+<h2 id="我的看法">我的看法</h2>
+<p>Strata 最有价值的地方，是把「内存大、显卡小」这个普通人的现实条件，变成了可用的方案。它不追求单项极限，而是让显卡、CPU、内存、硬盘各干各的活。</p>
+<p>当然也别神化它：12GB 显存加 48 到 64GB 内存（Coder 版也要 32GB）的门槛，依然不是人人都有，而且量化版本相比完整模型有精度损失，IQ3_S 才是官方称与完整模型持平的那一档。但对已经有这套硬件的玩家来说，本地跑一个 1250 亿参数的模型，已经从想象变成了双击就能完成的事。</p>
+<p>项目地址：github.com/Niko1221/Strata</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>Strata</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>本地大模型</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/why-aseprite-is-a-staple-for-pixel-games" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 why-aseprite-is-a-staple-for-pixel-games</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
