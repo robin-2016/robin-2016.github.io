@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/how-to-configure-3d-parallel-llm-training-without-wasting-compute/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/how-to-configure-3d-parallel-llm-training-without-wasting-compute/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/how-to-configure-3d-parallel-llm-training-without-wasting-compute/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/how-to-configure-3d-parallel-llm-training-without-wasting-compute/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/how-to-configure-3d-parallel-llm-training-without-wasting-compute/"><meta property="og:title" content="how-to-configure-3d-parallel-llm-training-without-wasting-compute — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="how-to-configure-3d-parallel-llm-training-without-wasting-compute — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>how-to-configure-3d-parallel-llm-training-without-wasting-compute — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/how-to-configure-3d-parallel-llm-training-without-wasting-compute/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 10 / 03</span><span class="text-meta" data-astro-cid-tldeq5d5>约 11 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>how-to-configure-3d-parallel-llm-training-without-wasting-compute</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>分布式训练</span><span class="tag-outline" data-astro-cid-tldeq5d5>Megatron</span><span class="tag-outline" data-astro-cid-tldeq5d5>并行策略</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="大模型3d并行训练怎么配才不浪费算力">大模型3D并行训练怎么配才不浪费算力</h1>
+<p><img src="/assets/images/how-to-configure-3d-parallel-llm-training-without-wasting-compute-summary.png" alt="知识点总结"></p>
+<h2 id="摘要">摘要</h2>
+<p>模型大到单卡放不下，就必须把张量并行（TP）、流水线并行（PP）和数据并行（DP）组合起来用。难点不在概念，而在怎么配：TP 开多大，PP 切几段，剩下的卡给 DP，三个数一乘必须等于总卡数。这篇文章按“先放得下，再跑得快”的顺序，讲清每一维并行的代价和一套可以照着走的调优流程。</p>
+<h2 id="背景与问题">背景与问题</h2>
+<p>前面几篇讲过 DDP、FSDP、DeepSpeed ZeRO 和 Megatron 的基本用法。它们各管一段：数据并行解决“吞吐”，ZeRO 和 FSDP 解决“状态冗余”，而当单层权重或整个模型的激活都放不下时，就得切计算本身。</p>
+<p>实际项目里没有谁单独够用。官方指南给出的关系式是：</p>
+<p>总 GPU 数 = TP x PP x CP x EP x DP</p>
+<p>不用长上下文和 MoE 时，CP 和 EP 都是 1，公式退化成 DP = 总卡数 / (TP x PP)。所以所谓“调优”，本质是在满足显存约束的前提下，选一组 TP 和 PP，让通信开销最小、DP 尽量大。</p>
+<h2 id="核心思路与优势">核心思路与优势</h2>
+<h3 id="三个维度各自的代价">三个维度各自的代价</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>切什么</th>
+<th>通信方式</th>
+<th>主要代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TP</td>
+<td>单层内部的矩阵</td>
+<td>每层前后向都有 all-reduce，频率最高</td>
+<td>对带宽极敏感</td>
+</tr>
+<tr>
+<td>PP</td>
+<td>按层分段</td>
+<td>只在相邻段之间传激活，量小</td>
+<td>流水线气泡，空转的卡</td>
+</tr>
+<tr>
+<td>DP</td>
+<td>数据批次</td>
+<td>每步一次梯度同步，可与计算重叠</td>
+<td>每份副本都要装下模型分片</td>
+</tr>
+</tbody>
+</table>
+<p>由此得到第一条铁律：<strong>TP 放在节点内，PP 和 DP 跨节点。</strong> TP 的通信太密，必须走 NVLink；跨节点的 InfiniBand 或 RoCE 带宽低得多，只适合 PP 的点对点传输和 DP 的梯度同步。常见的 8 卡节点上，TP 一般不超过 8。</p>
+<h3 id="流水线气泡与交错调度">流水线气泡与交错调度</h3>
+<p>PP 切成 p 段、一个批次拆成 m 个微批次时，非交错的 1F1B 调度中气泡占比约为 (p-1)/m。要压低气泡，有两个办法：</p>
+<ul>
+<li>增大微批次数 m，也就是增大全局批大小或减小微批大小</li>
+<li>开启交错调度（虚拟流水线），每张卡负责多段不连续的层，气泡约降到原来的 1/v，代价是通信量相应增加</li>
+</ul>
+<p>Megatron 的论文报告，交错调度在显存占用相当的情况下能把吞吐提升 10% 以上。对应的参数是 <code>--num-layers-per-virtual-pipeline-stage</code>。</p>
+<h3 id="配套的三个开关">配套的三个开关</h3>
+<ul>
+<li><strong>序列并行</strong>：<code>--sequence-parallel</code>，把 LayerNorm 和 Dropout 的激活沿序列维度切开。用了 TP 就应该打开，TP 与专家并行同时使用时则是必选项</li>
+<li><strong>分布式优化器</strong>：<code>--use-distributed-optimizer</code>，把优化器状态在 DP 组内切分，相当于 ZeRO-1，省下的显存可以换更小的 TP 或 PP</li>
+<li><strong>通信重叠</strong>：<code>--overlap-grad-reduce</code>、<code>--overlap-param-gather</code>、<code>--tp-comm-overlap</code>，让通信藏在计算后面</li>
+</ul>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li>已经会用 DDP 或 FSDP，开始碰到单卡放不下的模型的工程师</li>
+<li>在 K8s 或 Slurm 集群上负责训练平台，需要给不同模型定并行配置的人</li>
+<li>想读懂 Megatron 论文和官方文档里那些并行参数的人</li>
+</ul>
+<h2 id="实践步骤">实践步骤</h2>
+<h3 id="第一步先算清楚放不放得下">第一步：先算清楚放不放得下</h3>
+<p>用 bf16 加 Adam 估算，每个参数约需要 16 字节（权重、梯度、优化器状态合计，混合精度下常见的估法；若梯度按 fp32 累加，则约 18 字节）。70B 模型光是这些状态就超过 1TB，远超单卡 80GB。所以必须靠 TP x PP 把模型切成能装进单卡的分片，分布式优化器再把优化器状态在 DP 组内摊薄。</p>
+<h3 id="第二步确定-tp">第二步：确定 TP</h3>
+<p>从节点内卡数出发：8 卡节点先试 TP=4 或 TP=8，官方指南把 TP 的适用场景定为 hidden size 4096 以上。hidden 很小的模型开大 TP，通信占比会盖过计算收益，反而变慢。</p>
+<h3 id="第三步确定-pp">第三步：确定 PP</h3>
+<p>TP 切完仍放不下，再加 PP。PP 只在模型层数足够多（官方建议 50 层以上）时才划算，并且要保证每段层数大致均衡。PP 能不加就不加，每多一段，气泡就多一份。</p>
+<h3 id="第四步剩下的给-dp再调批大小">第四步：剩下的给 DP，再调批大小</h3>
+<p>DP = 总卡数 / (TP x PP)。然后检查全局批大小能否被 DP x 微批大小整除，并保证微批次数 m 远大于 PP 段数 p，否则气泡会很大。</p>
+<h3 id="第五步一个官方示例">第五步：一个官方示例</h3>
+<p>官方指南里的 LLaMA-3 70B、64 卡示例（这里额外加上了指南推荐的 <code>--sequence-parallel</code>；这只是并行相关参数的节选，真正跑起来还要补上数据、分词器等参数，并在 8 个节点上分别用 torchrun 配好 <code>--nnodes</code> 与 rendezvous 参数启动）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">torchrun</span><span style="color:#79B8FF"> --nproc_per_node=8</span><span style="color:#9ECBFF"> pretrain_gpt.py</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --tensor-model-parallel-size</span><span style="color:#79B8FF"> 4</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --pipeline-model-parallel-size</span><span style="color:#79B8FF"> 4</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --context-parallel-size</span><span style="color:#79B8FF"> 2</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --num-layers</span><span style="color:#79B8FF"> 80</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --hidden-size</span><span style="color:#79B8FF"> 8192</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --num-attention-heads</span><span style="color:#79B8FF"> 64</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --seq-length</span><span style="color:#79B8FF"> 8192</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --sequence-parallel</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --micro-batch-size</span><span style="color:#79B8FF"> 1</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --global-batch-size</span><span style="color:#79B8FF"> 512</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --bf16</span></span></code></pre>
+<p>这里 TP=4、PP=4、CP=2，DP 就是 64 / (4 x 4 x 2) = 2。CP 是上下文并行，只在序列很长（官方说明针对 8K 以上，这个示例的序列长度正好是 8192）时才需要，序列不长就设为 1，把卡留给 DP。</p>
+<h3 id="第六步看指标再迭代">第六步：看指标再迭代</h3>
+<p>先别猜，看三个数：单卡 MFU、显存峰值、各 rank 的通信耗时。显存有富余就把 TP 或 PP 降一档，把卡让给 DP；MFU 低且 PP 气泡明显，就开交错调度或增大微批次数；通信耗时集中在 TP all-reduce，就确认 TP 组没有跨出节点。</p>
+<p>官方给的总原则很朴素：先只用 DP，放不下再加 TP，模型更大再加 PP，序列很长再加 CP，能不加的维度就不加。论文中的万亿参数模型在 3072 张 GPU 上跑出 502 petaFLOP/s，单卡吞吐达到理论峰值的 52%，说明这套组合在超大规模下也能把算力吃满，前提是每一维都配得克制。</p>
+<h2 id="我的看法">我的看法</h2>
+<p>3D 并行的调优没有万能配方，但有稳定的顺序：先让模型放得下，再让通信不跨越慢链路，最后用 DP 吃掉剩余的卡。多数人踩坑，是一上来就把 TP 开得很大，或者为了省显存无脑加 PP。反过来想，每一维并行都是一笔通信账，能少付就少付。</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>分布式训练</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>Megatron</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>并行策略</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/strata-run-125b-parameter-model-on-gaming-pc" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 strata-run-125b-parameter-model-on-gaming-pc</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
