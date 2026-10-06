@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/paged-attention-principle-kv-cache-can-be-paged-too/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/paged-attention-principle-kv-cache-can-be-paged-too/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/paged-attention-principle-kv-cache-can-be-paged-too/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/paged-attention-principle-kv-cache-can-be-paged-too/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/paged-attention-principle-kv-cache-can-be-paged-too/"><meta property="og:title" content="paged-attention-principle-kv-cache-can-be-paged-too — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="paged-attention-principle-kv-cache-can-be-paged-too — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>paged-attention-principle-kv-cache-can-be-paged-too — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/paged-attention-principle-kv-cache-can-be-paged-too/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 10 / 05</span><span class="text-meta" data-astro-cid-tldeq5d5>约 19 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>paged-attention-principle-kv-cache-can-be-paged-too</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>vLLM</span><span class="tag-outline" data-astro-cid-tldeq5d5>PagedAttention</span><span class="tag-outline" data-astro-cid-tldeq5d5>KV缓存</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="pagedattention原理kv缓存也能分页">PagedAttention原理，KV缓存也能分页</h1>
+<p><img src="/assets/images/paged-attention-principle-kv-cache-can-be-paged-too-summary.png" alt="知识点总结"></p>
+<h2 id="摘要">摘要</h2>
+<p>大模型推理的瓶颈常常不是算力，而是装不下更多请求的 KV 缓存。vLLM 的 PagedAttention 借用操作系统的虚拟内存思路，把 KV 缓存切成固定大小的块，按需分配、用块表映射，几乎消除了显存碎片，还能在多个请求之间共享块。原论文（SOSP 2023）的实验里，相同延迟下吞吐比 FasterTransformer 和 Orca 高 2 到 4 倍。我还写了一个小模拟器，把这套机制跑了一遍。</p>
+<h2 id="背景与问题">背景与问题</h2>
+<p>自回归生成时，每个已经处理过的 token 都要保存它在每一层的 Key 和 Value，这就是 KV 缓存。它很大：论文里 13B 的 OPT 模型，单个 token 就要 800KB（2 个向量 × 5120 隐层维度 × 40 层 × 2 字节），一个 2048 token 的请求最多占 1.6GB。在 40GB 的 A100 上，约 65% 的显存给了权重，接近 30% 用来存 KV 缓存（其余是激活等），能同时服务多少请求，几乎由这 30% 决定。</p>
+<p>早期系统把一个请求的 KV 缓存放在一段连续显存里，并且按最大长度（比如 2048）提前预留。论文把浪费分成三类：</p>
+<ul>
+<li><strong>预留浪费</strong>：为将来要生成的 token 先占着位置，但这些位置在整个请求期间别人用不了</li>
+<li><strong>内部碎片</strong>：预留的最大长度远大于实际长度，用不上的部分白白浪费</li>
+<li><strong>外部碎片</strong>：不同请求预留的大小不同，分配器留下一堆零散缝隙</li>
+</ul>
+<p>论文在实验里测到，现有系统里只有 20.4% 到 38.2% 的 KV 缓存显存真正存着 token 状态。另外，连续存放还让共享变得很难：同一个请求的多个采样结果、多个请求共用的系统提示词，它们的 KV 本来可以共用，却各存一份。</p>
+<h2 id="核心思路与优势">核心思路与优势</h2>
+<h3 id="像操作系统一样分页">像操作系统一样分页</h3>
+<p>PagedAttention 的类比很直接：块是页，token 是字节，请求是进程。</p>
+<ul>
+<li>把 KV 缓存切成固定大小的<strong>块</strong>，vLLM 论文默认每块 16 个 token</li>
+<li>每个请求有一张<strong>块表</strong>，把它的<strong>逻辑块</strong>（按顺序排的）映射到<strong>物理块</strong>（显存里的实际位置）</li>
+<li>物理块不必连续，用到哪里分配到哪里，新 token 写满一个块才再要一个新块</li>
+</ul>
+<p>这样三类浪费就都被压住了：不再提前预留最大长度；浪费只可能出现在每个请求最后一个没写满的块里；所有块一样大，也就没有外部碎片。论文的说法是 KV 缓存显存接近零浪费。</p>
+<p>代价是注意力内核要先查块表再取数据。论文测得注意力内核延迟比高度优化的 FasterTransformer 高 20% 到 26%，但这只影响注意力算子，不影响线性层，端到端仍然大幅领先：论文 2023 年的实验里，相同延迟下吞吐比 FasterTransformer 和 Orca 高 2 到 4 倍，原因是显存省下来之后，一次能塞进更多请求。</p>
+<h3 id="块级共享和写时复制">块级共享和写时复制</h3>
+<p>块表还带来第二个好处：共享。物理块上有引用计数，多个序列的块表可以指向同一个物理块。</p>
+<ul>
+<li><strong>并行采样</strong>：同一个提示词生成多个候选，提示词部分的块全部共用</li>
+<li><strong>束搜索</strong>：不同候选的前缀大部分相同，共享比例更高</li>
+<li>共享的块如果某个序列要往里写新内容，就用<strong>写时复制</strong>：先复制一份给它，再改，其他序列不受影响</li>
+</ul>
+<p>论文给出的显存节省：并行采样 6.1% 到 9.8%，束搜索 37.6% 到 55.2%（Alpaca 数据）；换成对话更长的 ShareGPT 数据，分别是 16.2% 到 30.5% 和 44.3% 到 66.3%。</p>
+<h3 id="显存不够时的调度">显存不够时的调度</h3>
+<p>块是按需增长的，所以显存可能中途耗尽。vLLM 的做法是：先来先服务，显存不够就<strong>抢占</strong>，而且整个序列的块要么全部驱逐，要么都不驱逐，同一个请求里的多个序列（比如束搜索的候选）一起抢占、一起恢复。被驱逐的块有两种恢复方式：</p>
+<ul>
+<li><strong>交换</strong>：搬到 CPU 内存，需要时再搬回来</li>
+<li><strong>重算</strong>：丢掉，之后重新计算这些 token 的 KV</li>
+</ul>
+<p>论文发现：块太小时交换要做大量零碎的 CPU-GPU 小传输，开销很大；重算不读 KV 块，开销与块大小无关。所以小块时重算更划算，大块时交换更划算，但即便在交换占优的情况下，重算也最多比交换慢 20% 左右；块大小在 16 到 64 之间时，两者的端到端性能相当。</p>
+<h3 id="块大小怎么选">块大小怎么选</h3>
+<p>块太小，GPU 读 KV 缓存的效率下降；块太大，内部碎片变多，共享的机会也变少。论文在 ShareGPT 数据上测到 16 到 128 都不错，在较短序列的 Alpaca 数据上 16 和 32 好、更大的块性能明显变差，最终默认 16。</p>
+<h3 id="后来的演进自动前缀缓存">后来的演进：自动前缀缓存</h3>
+<p>分块之后，还能做一件事：把已经算好的块缓存下来，新请求只要前缀相同就直接复用。vLLM 当前的实现是<strong>基于哈希</strong>的自动前缀缓存：每个块的哈希由前一个块的哈希、本块的 token，以及 LoRA 编号、多模态输入哈希、缓存盐值等附加信息共同决定，所以哈希能唯一标识“这个块 + 它前面的全部内容”。几个要点：</p>
+<ul>
+<li>只缓存写满的块</li>
+<li>从 v0.11 起默认哈希算法是 sha256，降低碰撞风险；也可以通过 <code>--prefix-caching-hash-algo</code> 换成可跨环境复现的 sha256_cbor，或更快但非加密、碰撞风险理论上更高的 xxhash / xxhash_cbor</li>
+<li>多租户场景可以给请求加 <code>cache_salt</code>，只有盐值相同的请求才能复用缓存，避免通过延迟差异推测别人缓存了什么内容</li>
+</ul>
+<p>另外要注意：vLLM 官方仓库里 <code>paged_attention.md</code> 那篇讲内核实现的设计文档，开头就标明是基于原论文的历史文档，已不再描述今天 vLLM 的代码。想读当前实现，看注意力后端和 KV 缓存管理器的文档更靠谱。</p>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li>想弄清 vLLM 为什么比朴素推理吞吐高的工程师</li>
+<li>需要给线上服务估算显存、调 <code>max-model-len</code> 之类参数的人</li>
+<li>学过操作系统，想看虚拟内存思想怎么用到大模型上的人</li>
+<li>面试或做技术分享，需要讲清 PagedAttention 的人</li>
+</ul>
+<h2 id="实践步骤">实践步骤</h2>
+<h3 id="第一步先算清楚-kv-缓存多大">第一步：先算清楚 KV 缓存多大</h3>
+<p>每个 token 的 KV 大小 = 2（K 和 V）× 层数 × KV 头数 × 头维度 × 每个数的字节数。</p>
+<p>论文里 OPT-13B 用的是传统多头注意力，KV 头数等于注意力头数，所以大。现在的新模型多用分组查询注意力（GQA），KV 头数少得多。我用本机的 Qwen2.5-1.5B-Instruct 配置算了一下：28 层、2 个 KV 头、头维度 128（1536 隐层 ÷ 12 个注意力头）、BF16 每个数 2 字节，每个 token 只要 28KiB，2048 个 token 才 56MiB，比 OPT-13B 单个 token 800KB 小了约 28 倍。所以你的模型到底有多吃 KV 缓存，要看它的配置，不能套用论文里的数字。</p>
+<h3 id="第二步用一个小模拟器看清分页的效果">第二步：用一个小模拟器看清分页的效果</h3>
+<p>下面的数字是我写的一个玩具模拟器算出来的，<strong>不是 vLLM 的实测</strong>，目的是把机制跑一遍。设定：沿用论文的 OPT-13B 数字（每 token 800KB），给 KV 缓存 12GB（约 15000 个 token 位置），最大长度 2048，块大小 16，5000 个合成请求（提示词和输出长度服从对数正态分布，平均总长约 480 个 token），每个请求取生命周期中随机一刻的快照。</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>真正存着 token 的显存占比</th>
+<th>同时能容纳的请求数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>连续预留 2048 个位置</td>
+<td>17.1%</td>
+<td>7</td>
+</tr>
+<tr>
+<td>分页（块大小 16）</td>
+<td>97.9%</td>
+<td>40</td>
+</tr>
+</tbody>
+</table>
+<p>分页方案里平均每个请求浪费 7.4 个位置，就是最后一块没写满的部分。要说明的是，这里“能容纳 40 个”是按当前长度算的快照，没有模拟后续增长、抢占和调度，真实系统不可能一直满载。但量级的差异能说明问题：连续预留把绝大部分显存都耗在了用不上的位置上。</p>
+<p>核心的块管理只需要引用计数和写时复制：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#79B8FF">BLOCK</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 16</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> BlockManager</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#79B8FF"> __init__</span><span style="color:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.ref </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {}        </span><span style="color:#6A737D"># 物理块编号 -&gt; 引用计数</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.next_id </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> new_block</span><span style="color:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#E1E4E8">        b </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.next_id</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.next_id </span><span style="color:#F97583">+=</span><span style="color:#79B8FF"> 1</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.ref[b] </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 1</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> b</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> fork</span><span style="color:#E1E4E8">(self, table):                       </span><span style="color:#6A737D"># 复制块表，只增加引用计数</span></span>
+<span class="line"><span style="color:#F97583">        for</span><span style="color:#E1E4E8"> b </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> table:</span></span>
+<span class="line"><span style="color:#79B8FF">            self</span><span style="color:#E1E4E8">.ref[b] </span><span style="color:#F97583">+=</span><span style="color:#79B8FF"> 1</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> list</span><span style="color:#E1E4E8">(table)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> append_token</span><span style="color:#E1E4E8">(self, table, n_tokens):     </span><span style="color:#6A737D"># 给序列再放一个 token</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> n_tokens </span><span style="color:#F97583">%</span><span style="color:#79B8FF"> BLOCK</span><span style="color:#F97583"> ==</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">:                </span><span style="color:#6A737D"># 最后一块写满了 -&gt; 新开一块</span></span>
+<span class="line"><span style="color:#E1E4E8">            table.append(</span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.new_block())</span></span>
+<span class="line"><span style="color:#F97583">        elif</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.ref[table[</span><span style="color:#F97583">-</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">]] </span><span style="color:#F97583">&gt;</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">:            </span><span style="color:#6A737D"># 要写的块被共享 -&gt; 写时复制</span></span>
+<span class="line"><span style="color:#79B8FF">            self</span><span style="color:#E1E4E8">.ref[table[</span><span style="color:#F97583">-</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">]] </span><span style="color:#F97583">-=</span><span style="color:#79B8FF"> 1</span></span>
+<span class="line"><span style="color:#E1E4E8">            table[</span><span style="color:#F97583">-</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.new_block()</span></span></code></pre>
+<p>用它模拟“提示词 300 个 token，每个采样再生成 100 个 token”的并行采样：</p>
+<table>
+<thead>
+<tr>
+<th>采样数</th>
+<th>不共享（块）</th>
+<th>共享（块）</th>
+<th>节省</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>50</td>
+<td>32</td>
+<td>36.0%</td>
+</tr>
+<tr>
+<td>4</td>
+<td>100</td>
+<td>46</td>
+<td>54.0%</td>
+</tr>
+<tr>
+<td>6</td>
+<td>150</td>
+<td>60</td>
+<td>60.0%</td>
+</tr>
+</tbody>
+</table>
+<p>采样数越多省得越多（提示词在总长里占比越高，同理也越省），趋势和论文一致；具体数字和论文不同，因为这只是固定长度的玩具设定，工作负载完全不同。</p>
+<h3 id="第三步在-vllm-里和分页相关的参数">第三步：在 vLLM 里和分页相关的参数</h3>
+<p>下面的参数和默认值取自 2026 年 10 月初 vLLM 主分支的缓存配置，你装的版本可能不同，以 <code>vllm serve --help</code> 为准：</p>
+<ul>
+<li><code>--gpu-memory-utilization</code>：这个 vLLM 实例能用的显存比例，默认 0.92。启动时在这个额度内扣掉权重、剖析得到的峰值激活等开销，剩下的大体划给 KV 缓存的块池。和别的进程共卡时要调低</li>
+<li><code>--max-model-len</code>：单个请求（提示词加输出）的最大长度，不指定就取模型配置里的上下文长度。块是按需分配的，它并不改变块池大小；它限制的是单个请求最多占多少块，启动时 vLLM 还会检查块池至少装得下一个满长度的请求，装不下就报错并给出估算的可用长度（设成 -1 或 auto 会自动选一个装得下的长度）</li>
+<li><code>--block-size</code>：块大小，不指定时默认 16，个别平台或注意力后端会自行调整，一般不需要改</li>
+<li>自动前缀缓存：当前版本默认开启，系统提示词很长、多轮对话多的场景收益最大</li>
+<li><code>--prefix-caching-hash-algo</code>：前缀缓存的哈希算法，默认 sha256</li>
+</ul>
+<p>启动时 vLLM 会先剖析模型的显存占用，再算出能分出多少个 KV 块，日志里会打印类似 <code>GPU KV cache size: N tokens, Maximum concurrency for L tokens per request: X x</code> 的一行。后半句是按每个请求都用满最大长度算的，比较保守；用 N 除以你的平均请求长度，可以得到一个粗略的并发上限。</p>
+<h2 id="我的看法">我的看法</h2>
+<p>PagedAttention 的价值不在于某个精巧的算法，而在于换了一个视角：KV 缓存的问题本质上是内存管理问题，而内存管理问题操作系统几十年前就解决过。把页、页表、引用计数、写时复制、换入换出这一整套搬过来，论文在 2023 年的实验里就换到了 2 到 4 倍的吞吐。</p>
+<p>几点提醒：论文的 2 到 4 倍是在 2023 年的模型、基线和负载上测的，今天的推理引擎也在吸收分页的思想，别把它当成对任何场景都成立的加速比；我的模拟器是玩具，只证明机制，不证明 vLLM 的实际收益；新的混合注意力模型（滑动窗口、Mamba 等）对 KV 缓存管理提出了新要求，vLLM 官方已有专门的混合 KV 缓存管理器，但文档标注这个功能还处于早期阶段。</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>vLLM</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>PagedAttention</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>KV缓存</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/twenty-58k-star-open-source-crm-built-for-ai-agents" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 twenty-58k-star-open-source-crm-built-for-ai-agents</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
