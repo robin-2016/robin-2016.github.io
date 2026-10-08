@@ -1,0 +1,393 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/hands-on-llm-quantization-mac-benchmarks-and-nvidia-guide/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/hands-on-llm-quantization-mac-benchmarks-and-nvidia-guide/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/hands-on-llm-quantization-mac-benchmarks-and-nvidia-guide/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/hands-on-llm-quantization-mac-benchmarks-and-nvidia-guide/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/hands-on-llm-quantization-mac-benchmarks-and-nvidia-guide/"><meta property="og:title" content="hands-on-llm-quantization-mac-benchmarks-and-nvidia-guide — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="hands-on-llm-quantization-mac-benchmarks-and-nvidia-guide — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>hands-on-llm-quantization-mac-benchmarks-and-nvidia-guide — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/hands-on-llm-quantization-mac-benchmarks-and-nvidia-guide/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 10 / 07</span><span class="text-meta" data-astro-cid-tldeq5d5>约 44 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>hands-on-llm-quantization-mac-benchmarks-and-nvidia-guide</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>模型量化</span><span class="tag-outline" data-astro-cid-tldeq5d5>vLLM</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="亲手量化大模型mac实测和nvidia指南">亲手量化大模型，Mac实测和NVIDIA指南</h1>
+<p><img src="/assets/images/hands-on-llm-quantization-mac-benchmarks-and-nvidia-guide-summary.png" alt="知识点总结"></p>
+<blockquote>
+<p><strong>先说明可信度：</strong> 第一部分 Mac（Apple 芯片）是我亲手实践的，数据都是在 M3 Max 上实测的，脚本和日志都留着，可以复现。第二部分 NVIDIA 显卡我没有实践过（手头没有 NVIDIA 显卡），内容是 2026 年 10 月初联网查询并通读官方文档整理的，命令和代码都没有运行过，也没有速度和精度数据，请当作操作指引。「较新的方法」一节同样来自官方说明，效果数字是官方自己的说法，我没有复现。</p>
+</blockquote>
+<h2 id="摘要">摘要</h2>
+<p>大模型量化就是把 16 位权重压到 4 位，换更小的体积和更快的解码。这篇文章分 Mac 和 NVIDIA 两种硬件讲怎么做：Mac 上我用 RTN、GPTQ、AWQ 把 Qwen2.5-1.5B-Instruct 量化成 INT4，体积从 3087MB 降到 869 到 1143MB，解码速度从 82 提到 205 到 213 token/s，困惑度上升 0.7 到 2 左右；NVIDIA 上按显卡架构选格式（INT4、FP8、NVFP4），用 llm-compressor、GPTQModel、NVIDIA Model Optimizer 量化，再交给 vLLM 部署。</p>
+<h2 id="背景与问题">背景与问题</h2>
+<p>1.5B 模型的 bf16 权重就要 3GB，7B 要 14GB，70B 要 140GB。显存和带宽是部署的硬门槛，量化让同一块卡装得下更大的模型，每个 token 读的数据也更少。</p>
+<p>网上的量化文章大多只讲原理，或贴别人的数字，还默认你有 NVIDIA 显卡。真正动手会遇到的问题：</p>
+<ol>
+<li>RTN、GPTQ、AWQ 到底差多少，值不值得多花时间</li>
+<li>校准数据怎么选，踩坑怎么办</li>
+<li>只有 Mac 能不能做真实的量化，速度是不是真的变快</li>
+<li>手里是 NVIDIA 显卡，该选什么格式、什么工具、怎么部署</li>
+<li>新出的方法（FP8、NVFP4、蒸馏式量化等）该不该用</li>
+</ol>
+<h2 id="核心思路与优势">核心思路与优势</h2>
+<h3 id="格式和算法">格式和算法</h3>
+<p><strong>格式</strong>决定权重最后存成什么精度，<strong>算法</strong>决定怎么压进去而少损失精度。</p>
+<ul>
+<li><strong>INT4 权重量化（W4A16）</strong>：权重 4 位整数，激活保持 16 位，按组（如 128 个一组）存缩放系数，Mac 和 NVIDIA 都能用</li>
+<li><strong>FP8（W8A8）</strong>：权重和激活都用 8 位浮点，较新的 NVIDIA 显卡才有硬件加速</li>
+<li><strong>FP4 微缩放（NVFP4、MXFP4）</strong>：4 位浮点，按小块共享缩放系数，可做到权重和激活都 4 位（W4A4），Blackwell 显卡有原生 FP4 计算</li>
+</ul>
+<p>三个经典算法：</p>
+<ul>
+<li><strong>RTN（四舍五入）</strong>：把每组权重线性映射到 16 个整数档位，不用数据，几秒完成，最粗糙</li>
+<li><strong>GPTQ</strong>：逐层用校准数据估计二阶信息（Hessian），量化一个权重后把误差补偿到还没量化的权重上，用计算换精度</li>
+<li><strong>AWQ</strong>：论文观察到约 1% 的权重通道特别重要，重要与否看对应激活的大小。它不做误差补偿，而是按激活幅度搜索逐通道缩放系数来保护这些通道，再统一量化</li>
+</ul>
+<h3 id="较新的方法截至-2026-年-10-月初">较新的方法（截至 2026 年 10 月初）</h3>
+<ul>
+<li><strong>AutoRound</strong>（llm-compressor 支持）：引入三个可训练参数，逐解码层用块输出的重建误差优化取整方式和裁剪范围，目标是低比特下保住精度</li>
+<li><strong>变换类方法</strong>（llm-compressor）：量化前做旋转类变换（如 Hadamard），压低异常值的影响，官方示例支持 SpinQuant／QuaRot 和 QuIP 两种风格</li>
+<li><strong>MSE、iMatrix 观察器</strong>（llm-compressor）：MSE 用网格搜索找误差最小的缩放系数，iMatrix 再按各输入通道的激活重要性加权。官方 README 称它们在 NVFP4 上平均优于 GPTQ，依据是官方内部的困惑度基准</li>
+<li><strong>GPTQ 的 Triton 内核</strong>（llm-compressor）：README 称 0.13.0 之后 GPTQ 加入了 Triton 量化内核，比之前快约 15 倍。我翻了 0.14.0 的源码，它只在 CUDA 或 Intel XPU 设备上启用，和我在 Mac 上纯 CPU 跑一小时没有关系</li>
+<li><strong>量化感知蒸馏 QAD、局部 Hessian 缩放</strong>（NVIDIA Model Optimizer）：针对激进的 NVFP4，用蒸馏补回精度；官方 9 月 16 日的教程称 Qwen3.6-35B-A3B 做 NVFP4 W4A4 加 QAD 后，在 vLLM 上吞吐最高为 bf16 的 1.30 倍，检查点小 3.1 倍</li>
+<li><strong>mlx-lm 的 DWQ 和动态量化</strong>（Mac）：<code>dwq</code> 拿原模型当老师，蒸馏改进已量化的学生模型；<code>dynamic_quant</code> 先估计各层敏感度，再按目标平均位数让敏感层用高位宽、其余用低位宽</li>
+<li><strong>GPTQModel</strong>：除 GPTQ、AWQ，README 的支持列表里还有 ParoQuant、EXL3、GPTAQ 等</li>
+</ul>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li>想把模型压小、跑快的工程师</li>
+<li>只有 Mac，想真实做一次量化的人</li>
+<li>需要在 RTN、GPTQ、AWQ 之间做选择，想看对比数据的人</li>
+<li>有 NVIDIA 显卡（T4、RTX 30/40 到 A100、H100、Blackwell），想知道选什么格式和工具、怎么用 vLLM 部署的人</li>
+</ul>
+<h2 id="实践步骤">实践步骤</h2>
+<h3 id="第一部分macapple-芯片">第一部分：Mac（Apple 芯片）</h3>
+<h4 id="实验环境">实验环境</h4>
+<ul>
+<li>机器：Apple M3 Max，36GB 统一内存</li>
+<li>模型：Qwen2.5-1.5B-Instruct，bf16 权重 3087MB</li>
+<li>工具：llm-compressor 0.14.0 和 mlx-lm 0.32.0（Apple 芯片原生）</li>
+<li>评测：WikiText-2 测试集，按 1024 个 token 切成 292 个不重叠窗口算困惑度，越低越好</li>
+</ul>
+<p>在国内建议先用魔搭社区下载模型，找不到再走 Hugging Face，这个模型在两边名字一致：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">modelscope</span><span style="color:#9ECBFF"> download</span><span style="color:#79B8FF"> --model</span><span style="color:#9ECBFF"> Qwen/Qwen2.5-1.5B-Instruct</span><span style="color:#79B8FF"> --local_dir</span><span style="color:#9ECBFF"> ./Qwen2.5-1.5B-Instruct</span></span></code></pre>
+<p>我这次是直接走 Hugging Face 下的，通过代理下这 3GB 花了十几分钟。</p>
+<h4 id="路线一llm-compressor">路线一：llm-compressor</h4>
+<p>一个脚本跑三种方法，区别只在 recipe：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> torch</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> llmcompressor </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> oneshot</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> llmcompressor.modifiers.quantization </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> GPTQModifier, QuantizationModifier</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 让 llm-compressor 看不到 Apple GPU，校准全程在 CPU 上跑</span></span>
+<span class="line"><span style="color:#E1E4E8">torch.accelerator.is_available </span><span style="color:#F97583">=</span><span style="color:#F97583"> lambda</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">False</span></span>
+<span class="line"><span style="color:#E1E4E8">torch.mps.is_available </span><span style="color:#F97583">=</span><span style="color:#F97583"> lambda</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">False</span></span>
+<span class="line"><span style="color:#E1E4E8">torch.backends.mps.is_available </span><span style="color:#F97583">=</span><span style="color:#F97583"> lambda</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">False</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">recipe </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> GPTQModifier(</span><span style="color:#FFAB70">targets</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"Linear"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">scheme</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"W4A16"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">ignore</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">"lm_head"</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#6A737D"># RTN 换成：QuantizationModifier(targets="Linear", scheme="W4A16", ignore=["lm_head"])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">oneshot(</span></span>
+<span class="line"><span style="color:#FFAB70">    model</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"Qwen/Qwen2.5-1.5B-Instruct"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    dataset</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"wikitext"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    dataset_config_name</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"wikitext-2-raw-v1"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    splits</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span><span style="color:#9ECBFF">"calibration"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"train"</span><span style="color:#E1E4E8">},</span></span>
+<span class="line"><span style="color:#FFAB70">    recipe</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">recipe,</span></span>
+<span class="line"><span style="color:#FFAB70">    max_seq_length</span><span style="color:#F97583">=</span><span style="color:#79B8FF">512</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    num_calibration_samples</span><span style="color:#F97583">=</span><span style="color:#79B8FF">128</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    concatenate_data</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    shuffle_calibration_samples</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    output_dir</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"out/qwen15-gptq-w4a16"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span></code></pre>
+<p><code>W4A16</code> 是权重 4 位整数、激活 16 位，128 个一组、对称量化，<code>lm_head</code> 不量化。</p>
+<p><strong>踩的坑</strong>：没加 <code>concatenate_data=True</code> 时，GPTQ 在第一层就报 <code>Expected tensor for argument #1 'indices' to have one of the following scalar types: Long, Int</code>。我先怀疑是 MPS 后端的问题，切到 CPU 后还是同一个错，只是类型名变成了 FloatTensor。看源码后更可能的原因是：WikiText 有大量空行，库不会过滤空样本，空字符串分词得到空列表，<code>torch.tensor([[]])</code> 默认是浮点型，于是 input_ids 变成了浮点。开启 <code>concatenate_data=True</code> 后文本先拼接再切块，问题消失。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>困惑度</th>
+<th>权重体积</th>
+<th>量化耗时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bf16 原模型</td>
+<td>10.805</td>
+<td>3087MB</td>
+<td>-</td>
+</tr>
+<tr>
+<td>RTN</td>
+<td>12.771</td>
+<td>1143MB</td>
+<td>几秒</td>
+</tr>
+<tr>
+<td>GPTQ</td>
+<td>11.539</td>
+<td>1143MB</td>
+<td>约 59 分钟（纯 CPU）</td>
+</tr>
+</tbody>
+</table>
+<p>GPTQ 把困惑度上升从 RTN 的 1.97（+18%）压到 0.73（+6.8%），消掉了 RTN 约 63% 的精度损失。这一组校准用 WikiText 训练集、评测用 WikiText 测试集，同一领域，对 GPTQ 有利。评测时 INT4 权重被 transformers 解压回 bf16 再算，所以这张表只说明精度，不说明速度。</p>
+<p>体积没降到理论上的四分之一，是因为词嵌入层没量化（输入输出共用一张表，<code>lm_head</code> 又被排除），它单独占约 467MB。</p>
+<p>llm-compressor 的 AWQ 我没跑完：它对每层 4 组平滑映射各做 20 个点的网格搜索，CPU 上每个点约 22 秒，28 层估算超过 10 小时，中止了。下面 AWQ 的数字只来自 mlx-lm。</p>
+<h4 id="路线二mlx-lm">路线二：mlx-lm</h4>
+<p>mlx-lm 自带三种量化命令，Apple 芯片上直接能跑，不依赖 CUDA：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#E1E4E8">M</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">Qwen/Qwen2.5-1.5B-Instruct</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># RTN</span></span>
+<span class="line"><span style="color:#B392F0">python</span><span style="color:#79B8FF"> -m</span><span style="color:#9ECBFF"> mlx_lm</span><span style="color:#9ECBFF"> convert</span><span style="color:#79B8FF"> --hf-path</span><span style="color:#E1E4E8"> $M </span><span style="color:#79B8FF">--mlx-path</span><span style="color:#9ECBFF"> mlx/rtn4</span><span style="color:#79B8FF"> -q</span><span style="color:#79B8FF"> --q-bits</span><span style="color:#79B8FF"> 4</span><span style="color:#79B8FF"> --q-group-size</span><span style="color:#79B8FF"> 64</span></span>
+<span class="line"><span style="color:#6A737D"># AWQ</span></span>
+<span class="line"><span style="color:#B392F0">python</span><span style="color:#79B8FF"> -m</span><span style="color:#9ECBFF"> mlx_lm</span><span style="color:#9ECBFF"> awq</span><span style="color:#79B8FF"> --model</span><span style="color:#E1E4E8"> $M </span><span style="color:#79B8FF">--mlx-path</span><span style="color:#9ECBFF"> mlx/awq4</span><span style="color:#79B8FF"> --bits</span><span style="color:#79B8FF"> 4</span><span style="color:#79B8FF"> --group-size</span><span style="color:#79B8FF"> 64</span></span>
+<span class="line"><span style="color:#6A737D"># GPTQ</span></span>
+<span class="line"><span style="color:#B392F0">python</span><span style="color:#79B8FF"> -m</span><span style="color:#9ECBFF"> mlx_lm</span><span style="color:#9ECBFF"> gptq</span><span style="color:#79B8FF"> --model</span><span style="color:#E1E4E8"> $M </span><span style="color:#79B8FF">--mlx-path</span><span style="color:#9ECBFF"> mlx/gptq4</span><span style="color:#79B8FF"> --bits</span><span style="color:#79B8FF"> 4</span><span style="color:#79B8FF"> --group-size</span><span style="color:#79B8FF"> 64</span></span></code></pre>
+<p>分组 64，同一套评测窗口：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>困惑度</th>
+<th>权重体积</th>
+<th>量化耗时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bf16 原模型</td>
+<td>10.804</td>
+<td>3087MB</td>
+<td>-</td>
+</tr>
+<tr>
+<td>RTN</td>
+<td>12.404</td>
+<td>869MB</td>
+<td>7 秒</td>
+</tr>
+<tr>
+<td>AWQ</td>
+<td>12.157</td>
+<td>883MB</td>
+<td>约 14 分钟</td>
+</tr>
+<tr>
+<td>GPTQ</td>
+<td>12.816</td>
+<td>927MB</td>
+<td>约 10 分钟</td>
+</tr>
+</tbody>
+</table>
+<p>这一组和上一组结论相反：<strong>GPTQ（12.816）反而比 RTN（12.404）差，AWQ（12.157）最好。</strong> 两组不能直接比，原因有：</p>
+<ul>
+<li>mlx-lm 的 GPTQ 和 AWQ 默认校准文本不是 WikiText，而是 llama.cpp 社区常用的通用文本</li>
+<li>格式不同：llm-compressor 是对称、分组 128，mlx-lm 是带零点的仿射量化、分组 64；mlx-lm 的 GPTQ 还把没被处理的层（含词嵌入）回退成 6 位，所以体积更大，AWQ 的词嵌入默认 4 位、分组 32</li>
+<li>模型只有 1.5B，量化噪声本来就明显</li>
+</ul>
+<p>所以我只能说：在这个模型上，换了校准数据和实现，GPTQ 与 RTN 的胜负翻转了，两组同时变了好几个因素，没法把原因单独归到校准数据上。“GPTQ 一定比 RTN 好”这个说法并不严谨。</p>
+<h4 id="速度">速度</h4>
+<p><code>mlx_lm benchmark</code>，输入 512 个 token，生成 256 个，3 次取平均：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>预填充 token/s</th>
+<th>解码 token/s</th>
+<th>峰值内存</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bf16</td>
+<td>2450</td>
+<td>82.1</td>
+<td>3.46GB</td>
+</tr>
+<tr>
+<td>RTN 4 位</td>
+<td>2524</td>
+<td>213.2</td>
+<td>1.62GB</td>
+</tr>
+<tr>
+<td>AWQ 4 位</td>
+<td>2472</td>
+<td>209.5</td>
+<td>1.62GB</td>
+</tr>
+<tr>
+<td>GPTQ 4 位</td>
+<td>2478</td>
+<td>205.4</td>
+<td>1.67GB</td>
+</tr>
+</tbody>
+</table>
+<p>解码快约 2.5 倍，峰值内存降约 53%，三种方法速度差在 4% 以内（GPTQ 稍慢，对应它回退成 6 位的层更大）。预填充几乎没变：预填充受算力限制，解码受带宽限制，权重变小只帮得上后者。</p>
+<p>同一个提示词“用三句话解释什么是模型量化，并说明 INT4 为什么能省显存”，贪心解码，bf16 和 AWQ 4 位的回答都通顺没有胡话，只有一个样本，只能说明没有明显崩坏。</p>
+<h3 id="第二部分nvidia-显卡">第二部分：NVIDIA 显卡</h3>
+<h4 id="按显卡架构选格式">按显卡架构选格式</h4>
+<table>
+<thead>
+<tr>
+<th>显卡架构</th>
+<th>典型型号</th>
+<th>推荐格式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ampere</td>
+<td>A100、RTX 30 系</td>
+<td>INT4（W4A16，GPTQ 或 AWQ）</td>
+<td>vLLM 用 Marlin 内核加速，省显存、降解码延迟</td>
+</tr>
+<tr>
+<td>Ada、Hopper</td>
+<td>RTX 40 系、L40S、H100</td>
+<td>FP8（W8A8），或 INT4</td>
+<td>FP8 需要算力 8.9 以上，免校准数据</td>
+</tr>
+<tr>
+<td>Blackwell</td>
+<td>B200 等</td>
+<td>NVFP4</td>
+<td>原生 FP4 计算，需要算力 10.0</td>
+</tr>
+</tbody>
+</table>
+<p>官方文档里的几个细节：</p>
+<ul>
+<li>INT4 的最低要求，vLLM 的 INT4 文档写算力大于 8.0（Ampere 起），llm-compressor 的方案选择文档写 W4A16 从 Turing（7.5）起可用。两处不一致，保险起见按 Ampere 起步，T4 这类 Turing 显卡先小规模验证</li>
+<li>算力低于 8.9 的显卡可以加载 FP8 模型，但只按 W8A16 权重量化运行，用 FP8 Marlin 内核</li>
+<li>NVFP4 在没有原生 FP4 内核的显卡上，vLLM 会退回 W4A16 路径并打印警告，吞吐可能不及预期</li>
+</ul>
+<h4 id="工具现状">工具现状</h4>
+<p>别再装 AutoAWQ 和 AutoGPTQ：两个仓库都已归档，AutoAWQ 的 README 写明正式弃用，替代品是 llm-compressor；AutoGPTQ 的 README 建议改用 GPTQModel。仍在维护的主要有三套：</p>
+<ul>
+<li><strong>llm-compressor</strong>：vLLM 项目的官方量化库，GPTQ、AWQ、SmoothQuant、FP8、NVFP4 都有，产物是 compressed-tensors 格式</li>
+<li><strong>GPTQModel</strong>：GPTQ、AWQ、FP8 等多种格式，覆盖 NVIDIA CUDA、AMD ROCm、Intel、CPU，也能在 Apple 芯片上用</li>
+<li><strong>NVIDIA Model Optimizer</strong>：主打 FP8、INT4 AWQ、NVFP4，检查点可给 TensorRT-LLM、vLLM、SGLang 用</li>
+</ul>
+<h4 id="方案一llm-compressor">方案一：llm-compressor</h4>
+<p>Mac 那份脚本去掉强制 CPU 的三行就能搬过来，校准会自动用 GPU。官方示例对校准数据的建议：从 512 条样本、2048 序列长度起步，精度掉得多再加样本，并使用模型训练时的对话模板。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> datasets </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> load_dataset</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> transformers </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> AutoModelForCausalLM, AutoTokenizer</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> llmcompressor </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> oneshot</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> llmcompressor.modifiers.gptq </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> GPTQModifier</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">MODEL_ID</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "./Qwen2.5-1.5B-Instruct"</span><span style="color:#6A737D">   # 换成你自己的模型</span></span>
+<span class="line"><span style="color:#79B8FF">NUM_SAMPLES</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">MAX_LEN</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 512</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">2048</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">model </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> AutoModelForCausalLM.from_pretrained(</span><span style="color:#79B8FF">MODEL_ID</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">tokenizer </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> AutoTokenizer.from_pretrained(</span><span style="color:#79B8FF">MODEL_ID</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 校准数据：用对话模板格式化，再分词（模板已带 bos，所以 add_special_tokens=False）</span></span>
+<span class="line"><span style="color:#E1E4E8">ds </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> load_dataset(</span><span style="color:#9ECBFF">"HuggingFaceH4/ultrachat_200k"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">split</span><span style="color:#F97583">=</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"train_sft[:</span><span style="color:#79B8FF">{NUM_SAMPLES}</span><span style="color:#9ECBFF">]"</span><span style="color:#E1E4E8">).shuffle(</span><span style="color:#FFAB70">seed</span><span style="color:#F97583">=</span><span style="color:#79B8FF">42</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">ds </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ds.map(</span><span style="color:#F97583">lambda</span><span style="color:#E1E4E8"> ex: {</span><span style="color:#9ECBFF">"text"</span><span style="color:#E1E4E8">: tokenizer.apply_chat_template(ex[</span><span style="color:#9ECBFF">"messages"</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">tokenize</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">)})</span></span>
+<span class="line"><span style="color:#E1E4E8">ds </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ds.map(</span></span>
+<span class="line"><span style="color:#F97583">    lambda</span><span style="color:#E1E4E8"> s: tokenizer(s[</span><span style="color:#9ECBFF">"text"</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">padding</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">max_length</span><span style="color:#F97583">=</span><span style="color:#79B8FF">MAX_LEN</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">                        truncation</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">add_special_tokens</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#FFAB70">    remove_columns</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">ds.column_names,</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">recipe </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> GPTQModifier(</span><span style="color:#FFAB70">targets</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"Linear"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">scheme</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"W4A16"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">ignore</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">"lm_head"</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#E1E4E8">oneshot(</span><span style="color:#FFAB70">model</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">model, </span><span style="color:#FFAB70">dataset</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">ds, </span><span style="color:#FFAB70">recipe</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">recipe,</span></span>
+<span class="line"><span style="color:#FFAB70">        max_seq_length</span><span style="color:#F97583">=</span><span style="color:#79B8FF">MAX_LEN</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">num_calibration_samples</span><span style="color:#F97583">=</span><span style="color:#79B8FF">NUM_SAMPLES</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">SAVE_DIR</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "Qwen2.5-1.5B-Instruct-W4A16-G128"</span></span>
+<span class="line"><span style="color:#E1E4E8">model.save_pretrained(</span><span style="color:#79B8FF">SAVE_DIR</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">save_compressed</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">tokenizer.save_pretrained(</span><span style="color:#79B8FF">SAVE_DIR</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>换成 AWQ，官方配方是两个修饰器串起来：<code>AWQModifier</code> 先算缩放，<code>QuantizationModifier</code> 再做量化，官方示例用带零点的 <code>W4A16_ASYM</code>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> llmcompressor.modifiers.quantization </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> QuantizationModifier</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> llmcompressor.modifiers.transform.awq </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> AWQModifier</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">recipe </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#E1E4E8">    AWQModifier(),</span></span>
+<span class="line"><span style="color:#E1E4E8">    QuantizationModifier(</span><span style="color:#FFAB70">ignore</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">"lm_head"</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">scheme</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"W4A16_ASYM"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">targets</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">"Linear"</span><span style="color:#E1E4E8">]),</span></span>
+<span class="line"><span style="color:#E1E4E8">]</span></span></code></pre>
+<p>注意导入路径：我查了 0.14.0，<code>AWQModifier</code> 已搬到 <code>llmcompressor.modifiers.transform.awq</code>，旧路径 <code>llmcompressor.modifiers.awq</code> 只是会报弃用警告的兼容层，沿用的是把量化参数直接传给 <code>AWQModifier</code> 的旧写法，两种写法不要混用。</p>
+<p>量化出来的目录可以直接交给 vLLM：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">vllm</span><span style="color:#9ECBFF"> serve</span><span style="color:#9ECBFF"> ./Qwen2.5-1.5B-Instruct-W4A16-G128</span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> vllm </span><span style="color:#F97583">import</span><span style="color:#79B8FF"> LLM</span></span>
+<span class="line"><span style="color:#E1E4E8">llm </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> LLM(</span><span style="color:#9ECBFF">"./Qwen2.5-1.5B-Instruct-W4A16-G128"</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>vLLM 官方文档提醒，vLLM 和 llm-compressor 最好装在两个独立的虚拟环境里，依赖可能冲突。</p>
+<h4 id="方案二gptqmodel">方案二：GPTQModel</h4>
+<p>接口是“加载、量化、保存”三步，适合只想要 GPTQ 或 AWQ 产物的人：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">pip</span><span style="color:#9ECBFF"> install</span><span style="color:#79B8FF"> -v</span><span style="color:#9ECBFF"> gptqmodel</span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> datasets </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> load_dataset</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> gptqmodel </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> GPTQConfig, GPTQModel</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">model_id </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "./Qwen2.5-1.5B-Instruct"</span></span>
+<span class="line"><span style="color:#E1E4E8">quant_path </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "Qwen2.5-1.5B-Instruct-gptqmodel-4bit"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">calibration_dataset </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> load_dataset(</span></span>
+<span class="line"><span style="color:#9ECBFF">    "allenai/c4"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    data_files</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"en/c4-train.00001-of-01024.json.gz"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    split</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"train"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">).select(</span><span style="color:#79B8FF">range</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">1024</span><span style="color:#E1E4E8">))[</span><span style="color:#9ECBFF">"text"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">quant_config </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> GPTQConfig(</span><span style="color:#FFAB70">bits</span><span style="color:#F97583">=</span><span style="color:#79B8FF">4</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">group_size</span><span style="color:#F97583">=</span><span style="color:#79B8FF">128</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">model </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> GPTQModel.load(model_id, quant_config)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 按显存大小调大 batch_size 可以加快量化</span></span>
+<span class="line"><span style="color:#E1E4E8">model.quantize(calibration_dataset, </span><span style="color:#FFAB70">batch_size</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">model.save(quant_path)</span></span></code></pre>
+<p>README 的示例用英文 C4 数据，模型主要处理中文的话，校准数据最好换成中文语料。vLLM 文档里同一个示例用的类名是 <code>QuantizeConfig</code>，README 里是 <code>GPTQConfig</code>，前者仍是通用入口，后者是 GPTQ 专用配置类，以你装的版本为准。GPTQModel 的 GPTQ 检查点，vLLM 可用 Marlin 或 Machete 内核加载，适用 Ampere（A100 起）和 Hopper（H100 起）。</p>
+<h4 id="方案三fp8">方案三：FP8</h4>
+<p>RTX 40 系、L40S、H100 上，FP8 往往比 INT4 更省心：权重逐通道 FP8，激活推理时按 token 动态量化，<strong>权重量化阶段不需要校准数据</strong>，最简单的 RTN 就能保住精度：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> llmcompressor </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> oneshot</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> llmcompressor.modifiers.quantization </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> QuantizationModifier</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># model、tokenizer 的加载方式同上，不需要准备校准数据</span></span>
+<span class="line"><span style="color:#E1E4E8">recipe </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> QuantizationModifier(</span><span style="color:#FFAB70">targets</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"Linear"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">scheme</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"FP8_DYNAMIC"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">ignore</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">"lm_head"</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#E1E4E8">oneshot(</span><span style="color:#FFAB70">model</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">model, </span><span style="color:#FFAB70">recipe</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">recipe)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">model.save_pretrained(</span><span style="color:#9ECBFF">"Qwen2.5-1.5B-Instruct-FP8-Dynamic"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">tokenizer.save_pretrained(</span><span style="color:#9ECBFF">"Qwen2.5-1.5B-Instruct-FP8-Dynamic"</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>FP8 权重体积约为 bf16 的一半（vLLM 文档说显存需求降低 2 倍），INT4 约四分之一。vLLM 文档称 FP8 对精度影响很小，具体差多少要在自己的模型上测。</p>
+<h4 id="方案四nvidia-model-optimizer">方案四：NVIDIA Model Optimizer</h4>
+<p>Blackwell 显卡或部署目标是 TensorRT-LLM 时，官方推荐用它：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">pip</span><span style="color:#9ECBFF"> install</span><span style="color:#79B8FF"> -U</span><span style="color:#9ECBFF"> "nvidia-modelopt[hf]"</span></span></code></pre>
+<p>“量化，再导出”两步，校准数据官方说一般 128 到 512 条：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> torch</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> modelopt.torch.quantization </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> mtq</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> modelopt.torch.export </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> export_hf_checkpoint</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> forward_loop</span><span style="color:#E1E4E8">(model):</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> batch </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> calib_set:       </span><span style="color:#6A737D"># 你准备好的校准数据加载器</span></span>
+<span class="line"><span style="color:#E1E4E8">        model(batch)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 就地替换成量化模块；NVFP4 换成 FP8 或 INT4 AWQ 对应的配置即可</span></span>
+<span class="line"><span style="color:#E1E4E8">model </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> mtq.quantize(model, mtq.</span><span style="color:#79B8FF">NVFP4_DEFAULT_CFG</span><span style="color:#E1E4E8">, forward_loop)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">with</span><span style="color:#E1E4E8"> torch.inference_mode():</span></span>
+<span class="line"><span style="color:#E1E4E8">    export_hf_checkpoint(model, export_dir)</span></span></code></pre>
+<p>也可以用官方现成脚本，<code>--quant</code> 可选 <code>fp8</code>、<code>int4_awq</code>、<code>nvfp4</code> 等，<code>--tp</code> 指定张量并行数；README 建议在 TensorRT-LLM 的 Docker 镜像里跑：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">scripts/huggingface_example.sh</span><span style="color:#79B8FF"> --model</span><span style="color:#E1E4E8"> $HF_PATH </span><span style="color:#79B8FF">--quant</span><span style="color:#9ECBFF"> nvfp4</span><span style="color:#79B8FF"> --tp</span><span style="color:#79B8FF"> 1</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> pull</span><span style="color:#9ECBFF"> nvcr.io/nvidia/tensorrt-llm/release:1.2.0</span></span></code></pre>
+<p>导出的检查点可部署到 TensorRT-LLM、vLLM、SGLang。vLLM 通过 <code>hf_quant_config.json</code> 识别 ModelOpt 产物，官方示例加载时还加了 <code>--quantization modelopt</code>。README 说明 NVFP4 推理需要 Blackwell 显卡和 TensorRT-LLM 1.2 或更新版本；用 vLLM 部署时，非 Blackwell 显卡会退回 W4A16，能跑但没有 FP4 计算的速度。想要更高的 NVFP4 精度，README 建议改用只量化 MLP 层、保留注意力层的 <code>mtq.NVFP4_MLP_ONLY_CFG</code>。</p>
+<h4 id="零校准试水bitsandbytes">零校准试水：bitsandbytes</h4>
+<p>不想准备校准数据、也不在乎吞吐的话，transformers 自带的 bitsandbytes 在加载时现场量化，最快。新版也支持 <code>save_pretrained</code> 存下 4 位模型，只是这种格式为省显存设计，不是为高吞吐部署优化的：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> torch</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> transformers </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> AutoModelForCausalLM, BitsAndBytesConfig</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">bnb </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> BitsAndBytesConfig(</span></span>
+<span class="line"><span style="color:#FFAB70">    load_in_4bit</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    bnb_4bit_quant_type</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"nf4"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    bnb_4bit_compute_dtype</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">torch.bfloat16,</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">model </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> AutoModelForCausalLM.from_pretrained(</span><span style="color:#9ECBFF">"./Qwen2.5-1.5B-Instruct"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">quantization_config</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">bnb, </span><span style="color:#FFAB70">device_map</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"auto"</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<h4 id="量化完怎么验证">量化完怎么验证</h4>
+<p>llm-compressor 官方示例用 <code>lm_eval</code> 加 vLLM 在 GSM8K 上做精度回归。README 提醒量化模型对 bos 开头符号敏感，而 <code>lm_eval</code> 默认不加 bos，所以要写 <code>add_bos_token=true</code>，否则分数可能偏低。这条来自 Llama 3 的示例，Qwen2.5 的分词器没有定义 bos，对它基本不起作用，写上无妨：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">lm_eval</span><span style="color:#79B8FF"> --model</span><span style="color:#9ECBFF"> vllm</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --model_args</span><span style="color:#9ECBFF"> pretrained="./Qwen2.5-1.5B-Instruct-W4A16-G128",add_bos_token=</span><span style="color:#79B8FF">true</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --tasks</span><span style="color:#9ECBFF"> gsm8k</span><span style="color:#79B8FF"> --num_fewshot</span><span style="color:#79B8FF"> 5</span><span style="color:#79B8FF"> --limit</span><span style="color:#79B8FF"> 250</span><span style="color:#79B8FF"> --batch_size</span><span style="color:#9ECBFF"> 'auto'</span></span></code></pre>
+<p>别只看这一个任务，拿自己业务的评测集对比量化前后，再决定能不能上线。</p>
+<h2 id="我的看法">我的看法</h2>
+<p><strong>Mac 实测得出的：</strong></p>
+<ol>
+<li><strong>先用 RTN 当基线。</strong> 几秒就好，这个模型上困惑度涨幅 15% 到 18%，能接受就不必多花时间。</li>
+<li><strong>GPTQ 和 AWQ 值得跑，但校准数据要接近真实任务。</strong> 一份无关的校准集可能让 GPTQ 的优势消失。</li>
+<li><strong>别只看困惑度，也别指望速度差异来自方法。</strong> 困惑度只能排除明显坏掉的量化；速度收益主要来自权重变小，三种方法差在 4% 以内，选方法看精度和量化成本。</li>
+<li><strong>量化成本差异巨大。</strong> CPU 上 GPTQ 约一小时、AWQ 估算超过 10 小时，mlx-lm 用 Apple GPU 只要 10 到 14 分钟。只有 Mac 的话优先用 mlx-lm 自带命令。</li>
+</ol>
+<p><strong>NVIDIA 上的建议（基于官方资料）：</strong></p>
+<ol start="5">
+<li><strong>先选格式，再选工具。</strong> Ampere 起用 INT4，Ada 和 Hopper 优先试 FP8，Blackwell 看 NVFP4；工具用 llm-compressor、GPTQModel 或 Model Optimizer。</li>
+<li><strong>较新的方法值得关注，但别盲信官方数字。</strong> 那些数字来自论文、官方内部基准或针对某个模型的教程，换成你的模型和任务要自己验证。</li>
+</ol>
+<p>结论只来自一个 1.5B 模型、一个评测集、一台机器，不要外推成方法的通用排名，也不要直接套到 70B 这类大模型上，那里的量化噪声通常更小，方法之间的差距也可能不同。</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>模型量化</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>vLLM</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/paged-attention-principle-kv-cache-can-be-paged-too" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 paged-attention-principle-kv-cache-can-be-paged-too</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
