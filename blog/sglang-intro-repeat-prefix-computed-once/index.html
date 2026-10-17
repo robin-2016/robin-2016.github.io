@@ -1,0 +1,199 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/sglang-intro-repeat-prefix-computed-once/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/sglang-intro-repeat-prefix-computed-once/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/sglang-intro-repeat-prefix-computed-once/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/sglang-intro-repeat-prefix-computed-once/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/sglang-intro-repeat-prefix-computed-once/"><meta property="og:title" content="sglang-intro-repeat-prefix-computed-once — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="sglang-intro-repeat-prefix-computed-once — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>sglang-intro-repeat-prefix-computed-once — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/sglang-intro-repeat-prefix-computed-once/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 10 / 16</span><span class="text-meta" data-astro-cid-tldeq5d5>约 21 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>sglang-intro-repeat-prefix-computed-once</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>SGLang</span><span class="tag-outline" data-astro-cid-tldeq5d5>推理引擎</span><span class="tag-outline" data-astro-cid-tldeq5d5>vLLM</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="sglang-上手重复的前缀只算一次">SGLang 上手：重复的前缀只算一次</h1>
+<p><img src="/assets/images/sglang-intro-repeat-prefix-computed-once-summary.png" alt="知识点总结"></p>
+<p>每个请求都带同一段系统提示词，GPU 就把它重算一遍。</p>
+<h2 id="摘要">摘要</h2>
+<p>SGLang 用基数树缓存 KV，让相同前缀只算一次，天然适合 Agent、多轮对话和结构化输出。本文讲清它是什么、现状如何、和 vLLM 怎么选，并给出从单机启动到前端语言的上手路径。</p>
+<h2 id="sglang-是什么">SGLang 是什么</h2>
+<p>SGLang 是一个开源的大模型推理框架，Apache-2.0 协议，由 LMSYS 社区发起（论文作者包括 Ion Stoica、Joseph Gonzalez 等）。官方 README 现在的定位是：面向 Agent 工作负载、大规模服务和强化学习 rollout 的推理框架。</p>
+<p>它由两部分组成：</p>
+<ul>
+<li><strong>前端语言</strong>：用 Python 写“LLM 程序”，里面可以有多轮调用、分支、并行和结构化输出。</li>
+<li><strong>后端运行时</strong>：真正跑模型的推理引擎，对外提供 OpenAI 兼容接口。</li>
+</ul>
+<p>绝大多数人只会用到后端：启动一个服务，用 OpenAI 的客户端去调。前端语言是进阶选项，后面再讲。</p>
+<h3 id="核心radixattention">核心：RadixAttention</h3>
+<p>做过多轮对话或 Agent 的人都知道，请求之间有大量重复内容：同一段系统提示词、同一份文档、同一段对话历史。每次都重新计算这些 token 的 KV，是纯粹的浪费。</p>
+<p>RadixAttention 的做法是把已经算过的 KV 缓存放进一棵<strong>基数树</strong>里，新请求进来，先沿着树找最长的公共前缀，命中的部分直接复用，只计算后面新增的 token。缓存满了，按 LRU 淘汰叶子节点。</p>
+<p>另一个特色是<strong>压缩有限状态机</strong>：约束输出格式（比如必须是合法 JSON）时，它能一次跳过确定的多个 token，而不是逐个解码。</p>
+<p>论文摘要里给出的数字是：在 Agent 控制、推理、多轮对话等任务上，吞吐最高可达当时先进推理系统的 6.4 倍。注意是“最高”，而且对比的是 2023 年底的系统，别把它当成今天的日常加速比。</p>
+<h2 id="现在发展到哪了">现在发展到哪了</h2>
+<p>截至 2026 年 10 月中旬，我查到的公开信息：</p>
+<ul>
+<li>GitHub 约 3.7 万 star、9.6 千 fork。</li>
+<li>版本在 0.5.x 系列上快速迭代，官方安装文档的源码示例已经用到 v0.5.21。</li>
+<li>新版要求 <strong>CUDA 13</strong>，CUDA 12 的镜像和 wheel 不再发布，最后一个 CUDA 12 标签是 v0.5.19-cu129。老机器要留意。</li>
+<li>硬件覆盖很广：NVIDIA 从 A100 到 B200/GB300，AMD Instinct MI300 系列到 MI355X，Google TPU，Intel GPU 和 CPU，Apple Silicon，还有华为昇腾和摩尔线程。</li>
+<li>模型方面，项目标签里列出的有 DeepSeek、GLM、GPT-OSS、Llama、MiniMax、Qwen 等，完整兼容列表见官方 Cookbook。</li>
+<li>除了语言模型，还内置了图像/视频生成引擎 SGLang Diffusion。</li>
+</ul>
+<p>可以看出，它已经不只是“前缀缓存”那个点子，而是一个覆盖多硬件、多模型的完整推理栈。</p>
+<h2 id="和-vllmtensorrt-llm-怎么选">和 vLLM、TensorRT-LLM 怎么选</h2>
+<p>先说明：下面的对比来自公开的第三方文章，不是我自己的实测，具体数字强烈建议在你自己的负载上复测。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>SGLang</th>
+<th>vLLM</th>
+<th>TensorRT-LLM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>前缀缓存</td>
+<td>基数树，token 级</td>
+<td>块级哈希</td>
+<td>本文未对比</td>
+</tr>
+<tr>
+<td>擅长</td>
+<td>Agent、结构化输出、重度提示词复用</td>
+<td>高并发通用服务、混合硬件</td>
+<td>固定 NVIDIA 集群、延迟优先</td>
+</tr>
+<tr>
+<td>代价</td>
+<td>迭代快，新版要求 CUDA 13</td>
+<td>前缀重复多时缓存粒度不如基数树细</td>
+<td>硬件绑定，灵活性差</td>
+</tr>
+<tr>
+<td>上手难度</td>
+<td>低</td>
+<td>低</td>
+<td>中（仅限 NVIDIA，调优项多）</td>
+</tr>
+</tbody>
+</table>
+<p>几点判断：</p>
+<ul>
+<li><strong>前缀重复多</strong>（长系统提示词、RAG 固定文档、多轮对话、Agent 反复调用）：优先试 SGLang。</li>
+<li><strong>纯通用高并发、前缀几乎不重复</strong>：两者差距不大，选团队更熟的。有第三方测试显示，Llama 3.3 70B 的 FP8 场景下两者只差几个百分点；而在 8B 小模型上，SGLang 的吞吐领先约三成。这些数字的版本和负载都没写清楚，只能当参考。</li>
+<li><strong>NVIDIA 卡固定、追求极致延迟、愿意花时间调优</strong>：TensorRT-LLM。</li>
+</ul>
+<p>vLLM 的原理可以看前面写过的 PagedAttention 那篇，它们解决的是不同层面的问题：PagedAttention 管显存怎么分页，RadixAttention 管算过的结果怎么复用。</p>
+<h2 id="由浅入深的使用教程">由浅入深的使用教程</h2>
+<h3 id="第一步安装">第一步：安装</h3>
+<p>推荐用 uv，要求 Python 3.11+ 和 CUDA 13 环境：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">pip</span><span style="color:#9ECBFF"> install</span><span style="color:#79B8FF"> --upgrade</span><span style="color:#9ECBFF"> pip</span></span>
+<span class="line"><span style="color:#B392F0">pip</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> uv</span></span>
+<span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> venv</span><span style="color:#79B8FF"> --python</span><span style="color:#79B8FF"> 3.12</span></span>
+<span class="line"><span style="color:#79B8FF">source</span><span style="color:#9ECBFF"> .venv/bin/activate</span></span>
+<span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> pip</span><span style="color:#9ECBFF"> install</span><span style="color:#79B8FF"> --prerelease=allow</span><span style="color:#9ECBFF"> sglang</span></span></code></pre>
+<p><code>--prerelease=allow</code> 建议保留。官方文档提醒：uv 版本低于 0.12.0 时不加它，可能静默装到旧版本；0.12.0 及以上加了也无副作用。</p>
+<p>不想折腾环境，直接用 Docker：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> pull</span><span style="color:#9ECBFF"> lmsysorg/sglang:latest</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">docker</span><span style="color:#9ECBFF"> run</span><span style="color:#79B8FF"> -it</span><span style="color:#79B8FF"> --gpus</span><span style="color:#9ECBFF"> all</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --shm-size</span><span style="color:#9ECBFF"> 32g</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -p</span><span style="color:#9ECBFF"> 30000:30000</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -v</span><span style="color:#9ECBFF"> "</span><span style="color:#E1E4E8">$HOME</span><span style="color:#9ECBFF">/.cache/huggingface:/root/.cache/huggingface"</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --ipc=host</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  lmsysorg/sglang:latest</span><span style="color:#9ECBFF"> bash</span></span></code></pre>
+<h3 id="第二步启动服务">第二步：启动服务</h3>
+<p>在环境里执行：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sglang</span><span style="color:#9ECBFF"> serve</span><span style="color:#9ECBFF"> Qwen/Qwen2.5-0.5B-Instruct</span><span style="color:#79B8FF"> --host</span><span style="color:#79B8FF"> 0.0.0.0</span><span style="color:#79B8FF"> --port</span><span style="color:#79B8FF"> 30000</span></span></code></pre>
+<p>不指定 <code>--port</code> 时默认也是 30000。官方快速上手文档里仍然能看到旧写法 <code>python3 -m sglang.launch_server --model-path ...</code>，旧写法仍可用，安装文档现在用的是 <code>sglang serve</code>。先用小模型跑通，再换大的。</p>
+<h3 id="第三步像调用-openai-一样调用">第三步：像调用 OpenAI 一样调用</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -s</span><span style="color:#9ECBFF"> http://localhost:30000/v1/chat/completions</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -H</span><span style="color:#9ECBFF"> "Content-Type: application/json"</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -d</span><span style="color:#9ECBFF"> '{"model": "Qwen/Qwen2.5-0.5B-Instruct",</span></span>
+<span class="line"><span style="color:#9ECBFF">       "messages": [{"role": "user", "content": "法国的首都是哪里？"}]}'</span></span></code></pre>
+<p>用 Python 客户端也一样，只要改 <code>base_url</code>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> openai</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">client </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> openai.Client(</span><span style="color:#FFAB70">base_url</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"http://127.0.0.1:30000/v1"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">api_key</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"None"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">response </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> client.chat.completions.create(</span></span>
+<span class="line"><span style="color:#FFAB70">    model</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"Qwen/Qwen2.5-0.5B-Instruct"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    messages</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[{</span><span style="color:#9ECBFF">"role"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"user"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"content"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"列出三个国家和它们的首都"</span><span style="color:#E1E4E8">}],</span></span>
+<span class="line"><span style="color:#FFAB70">    temperature</span><span style="color:#F97583">=</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    max_tokens</span><span style="color:#F97583">=</span><span style="color:#79B8FF">64</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(response.choices[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">].message.content)</span></span></code></pre>
+<p>到这里，你已经可以把原来调用 OpenAI 的代码无缝切到自己的服务上。</p>
+<h3 id="第四步让前缀缓存真正起作用">第四步：让前缀缓存真正起作用</h3>
+<p>RadixAttention 默认就是开着的，但它只复用<strong>逐 token 完全一致的前缀</strong>，从第一个不同的 token 开始，后面都要重算。写提示词时记住一条：<strong>固定的内容放前面，变化的内容放后面</strong>。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#79B8FF">SYSTEM</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "你是一名严谨的代码审查员……（一大段固定规则）"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">for</span><span style="color:#E1E4E8"> diff </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> diffs:</span></span>
+<span class="line"><span style="color:#E1E4E8">    client.chat.completions.create(</span></span>
+<span class="line"><span style="color:#FFAB70">        model</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"Qwen/Qwen2.5-0.5B-Instruct"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">        messages</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span></span>
+<span class="line"><span style="color:#E1E4E8">            {</span><span style="color:#9ECBFF">"role"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"system"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"content"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">SYSTEM</span><span style="color:#E1E4E8">},   </span><span style="color:#6A737D"># 固定前缀，只算一次</span></span>
+<span class="line"><span style="color:#E1E4E8">            {</span><span style="color:#9ECBFF">"role"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"user"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"content"</span><span style="color:#E1E4E8">: diff},        </span><span style="color:#6A737D"># 每次不同</span></span>
+<span class="line"><span style="color:#E1E4E8">        ],</span></span>
+<span class="line"><span style="color:#E1E4E8">    )</span></span></code></pre>
+<p>反过来，把当前时间或请求编号放在系统提示词开头，会让每个请求的前缀都不同，缓存全部失效。这是最常见的踩坑。</p>
+<h3 id="第五步结构化输出">第五步：结构化输出</h3>
+<p>要让模型稳定输出 JSON，可以用 OpenAI 风格的 <code>response_format</code> 传入 JSON Schema：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">schema </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#9ECBFF">    "type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"object"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">    "properties"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">        "city"</span><span style="color:#E1E4E8">: {</span><span style="color:#9ECBFF">"type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"string"</span><span style="color:#E1E4E8">},</span></span>
+<span class="line"><span style="color:#9ECBFF">        "population"</span><span style="color:#E1E4E8">: {</span><span style="color:#9ECBFF">"type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"integer"</span><span style="color:#E1E4E8">},</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#9ECBFF">    "required"</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">"city"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"population"</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">resp </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> client.chat.completions.create(</span></span>
+<span class="line"><span style="color:#FFAB70">    model</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"Qwen/Qwen2.5-0.5B-Instruct"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    messages</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[{</span><span style="color:#9ECBFF">"role"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"user"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"content"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"给出巴黎的名称和大致人口"</span><span style="color:#E1E4E8">}],</span></span>
+<span class="line"><span style="color:#FFAB70">    response_format</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#9ECBFF">        "type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"json_schema"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "json_schema"</span><span style="color:#E1E4E8">: {</span><span style="color:#9ECBFF">"name"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"city_info"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"schema"</span><span style="color:#E1E4E8">: schema},</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(resp.choices[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">].message.content)</span></span></code></pre>
+<p>解码过程会被约束在这个 Schema 内（默认用 XGrammar 后端），格式错误基本消失；但如果 <code>max_tokens</code> 太小导致输出被截断，JSON 仍可能不完整，兜底校验别全删。</p>
+<h3 id="第六步多卡与显存调优">第六步：多卡与显存调优</h3>
+<p>模型一张卡放不下时，用张量并行：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sglang</span><span style="color:#9ECBFF"> serve</span><span style="color:#F97583"> &lt;</span><span style="color:#9ECBFF">模</span><span style="color:#E1E4E8">型</span><span style="color:#F97583">&gt;</span><span style="color:#79B8FF"> --tp</span><span style="color:#79B8FF"> 2</span><span style="color:#79B8FF"> --port</span><span style="color:#79B8FF"> 30000</span></span></code></pre>
+<p>如果启动时报显存不足，可以调低静态显存占比：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sglang</span><span style="color:#9ECBFF"> serve</span><span style="color:#F97583"> &lt;</span><span style="color:#9ECBFF">模</span><span style="color:#E1E4E8">型</span><span style="color:#F97583">&gt;</span><span style="color:#79B8FF"> --mem-fraction-static</span><span style="color:#79B8FF"> 0.8</span></span></code></pre>
+<p>这两个参数的具体含义和默认值，随版本会有变化，以 <code>sglang serve --help</code> 的输出为准。</p>
+<h3 id="第七步前端语言进阶">第七步：前端语言（进阶）</h3>
+<p>当你的逻辑不是“一问一答”，而是多步骤、带分支和并行时，前端语言会比手写循环更清晰：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> sglang </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> sgl</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">sgl.set_default_backend(sgl.RuntimeEndpoint(</span><span style="color:#9ECBFF">"http://localhost:30000"</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">@sgl.function</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> tip_suggestion</span><span style="color:#E1E4E8">(s, topic):</span></span>
+<span class="line"><span style="color:#E1E4E8">    s </span><span style="color:#F97583">+=</span><span style="color:#E1E4E8"> sgl.user(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"给我三条关于</span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">topic</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">的建议"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    s </span><span style="color:#F97583">+=</span><span style="color:#E1E4E8"> sgl.assistant(sgl.gen(</span><span style="color:#9ECBFF">"tips"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">max_tokens</span><span style="color:#F97583">=</span><span style="color:#79B8FF">128</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#E1E4E8">    forks </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> s.fork(</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> i, f </span><span style="color:#F97583">in</span><span style="color:#79B8FF"> enumerate</span><span style="color:#E1E4E8">(forks):</span></span>
+<span class="line"><span style="color:#E1E4E8">        f </span><span style="color:#F97583">+=</span><span style="color:#E1E4E8"> sgl.user(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"把第 </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">i </span><span style="color:#F97583">+</span><span style="color:#79B8FF"> 1}</span><span style="color:#9ECBFF"> 条建议展开成一段话"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        f </span><span style="color:#F97583">+=</span><span style="color:#E1E4E8"> sgl.assistant(sgl.gen(</span><span style="color:#9ECBFF">"detail"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">max_tokens</span><span style="color:#F97583">=</span><span style="color:#79B8FF">128</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#6A737D">    # 分支结果不会自动合并，要按下标取回，拼进主线</span></span>
+<span class="line"><span style="color:#E1E4E8">    s </span><span style="color:#F97583">+=</span><span style="color:#E1E4E8"> sgl.user(</span></span>
+<span class="line"><span style="color:#9ECBFF">        "第 1 条展开："</span><span style="color:#F97583"> +</span><span style="color:#E1E4E8"> forks[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">][</span><span style="color:#9ECBFF">"detail"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">+</span><span style="color:#9ECBFF"> "</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span></span>
+<span class="line"><span style="color:#F97583">        +</span><span style="color:#9ECBFF"> "第 2 条展开："</span><span style="color:#F97583"> +</span><span style="color:#E1E4E8"> forks[</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">][</span><span style="color:#9ECBFF">"detail"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">+</span><span style="color:#9ECBFF"> "</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span></span>
+<span class="line"><span style="color:#F97583">        +</span><span style="color:#9ECBFF"> "总结以上内容"</span></span>
+<span class="line"><span style="color:#E1E4E8">    )</span></span>
+<span class="line"><span style="color:#E1E4E8">    s </span><span style="color:#F97583">+=</span><span style="color:#E1E4E8"> sgl.assistant(sgl.gen(</span><span style="color:#9ECBFF">"summary"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">max_tokens</span><span style="color:#F97583">=</span><span style="color:#79B8FF">64</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">state </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> tip_suggestion.run(</span><span style="color:#FFAB70">topic</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"学习 Python"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(state[</span><span style="color:#9ECBFF">"summary"</span><span style="color:#E1E4E8">])</span></span></code></pre>
+<p><code>fork</code> 出来的分支共享同一个前缀，RadixAttention 会让这部分只算一次；分支各自生成的结果要像上面这样用 <code>forks[i]["detail"]</code> 取回，主线才能看到。这就是前端语言和后端运行时联合设计的价值。</p>
+<h2 id="适合谁">适合谁</h2>
+<ul>
+<li>在做 Agent、RAG、多轮对话，提示词里有大段固定内容的开发者。</li>
+<li>需要稳定结构化输出的业务（抽取、分类、工具调用）。</li>
+<li>要在非 NVIDIA 硬件（AMD、昇腾等）上做推理的团队。</li>
+</ul>
+<p>不太适合：只想要最省事的单模型 demo，Ollama 之类的本地工具更轻；也不适合 CUDA 12 环境又不想升级的机器。</p>
+<h2 id="速查清单">速查清单</h2>
+<ol>
+<li>环境：Python 3.11+、CUDA 13，<code>uv pip install --prerelease=allow sglang</code>。</li>
+<li>启动：<code>sglang serve &lt;模型&gt; --port 30000</code>，接口是 OpenAI 兼容的 <code>/v1</code>。</li>
+<li>提速：固定内容放前面，变化内容放后面，别在开头塞时间戳。</li>
+<li>结构化：用 <code>response_format</code> 传 JSON Schema。</li>
+<li>多卡：<code>--tp N</code>；显存紧张调 <code>--mem-fraction-static</code>。</li>
+<li>选型：前缀重复多选 SGLang，其余在自己的负载上跑一遍再定。</li>
+</ol>
+<p>你现在的服务里，每个请求开头有多少 token 是完全一样的？</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>SGLang</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>推理引擎</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>vLLM</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/one-codebase-to-a-dozen-platforms-cocos-quick-start" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 one-codebase-to-a-dozen-platforms-cocos-quick-start</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
