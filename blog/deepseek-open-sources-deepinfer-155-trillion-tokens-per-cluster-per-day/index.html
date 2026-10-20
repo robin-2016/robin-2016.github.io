@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/deepseek-open-sources-deepinfer-155-trillion-tokens-per-cluster-per-day/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/deepseek-open-sources-deepinfer-155-trillion-tokens-per-cluster-per-day/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/deepseek-open-sources-deepinfer-155-trillion-tokens-per-cluster-per-day/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/deepseek-open-sources-deepinfer-155-trillion-tokens-per-cluster-per-day/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/deepseek-open-sources-deepinfer-155-trillion-tokens-per-cluster-per-day/"><meta property="og:title" content="deepseek-open-sources-deepinfer-155-trillion-tokens-per-cluster-per-day — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="deepseek-open-sources-deepinfer-155-trillion-tokens-per-cluster-per-day — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>deepseek-open-sources-deepinfer-155-trillion-tokens-per-cluster-per-day — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/deepseek-open-sources-deepinfer-155-trillion-tokens-per-cluster-per-day/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 10 / 20</span><span class="text-meta" data-astro-cid-tldeq5d5>约 18 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>deepseek-open-sources-deepinfer-155-trillion-tokens-per-cluster-per-day</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>推理框架</span><span class="tag-outline" data-astro-cid-tldeq5d5>DeepSeek</span><span class="tag-outline" data-astro-cid-tldeq5d5>大模型推理</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="deepseek-开源-deepinfer单集群日跑-155-万亿-token">DeepSeek 开源 DeepInfer，单集群日跑 155 万亿 token</h1>
+<p><img src="/assets/images/deepseek-open-sources-deepinfer-155-trillion-tokens-per-cluster-per-day-summary.png" alt="知识点总结"></p>
+<h2 id="摘要">摘要</h2>
+<p>DeepSeek 把支撑自家线上服务的推理框架 DeepInfer 开源了，同时放出一份部署问答，讲清了 V4.1 Flash 的线上服务是怎么搭起来的。这次开源只包含离线推理，但其中的工程思路，做推理的人都值得看一遍。</p>
+<h2 id="是什么">是什么</h2>
+<p>大模型能做什么，由模型本身决定；能用多低的成本把它卖给海量用户，则取决于夹在中间的推理框架。DeepInfer 就是 DeepSeek 线上服务背后的那一层。</p>
+<p>根据官方部署问答披露的数据：</p>
+<ul>
+<li>单个集群每天服务 <strong>155 万亿 token</strong>；</li>
+<li>按谷时价格计算，整体收入约 <strong>每 GPU 小时 38 美元</strong>。</li>
+</ul>
+<p>这次开源的是两个仓库：</p>
+<ul>
+<li><strong>DeepInfer</strong>：推理引擎本体，集成了高性能算子（FlashMLA、DeepGEMM、DeepEP、TileLang 算子等），支持分布式推理、推测解码、SWA Bounded Replay、结构化输出等能力，可运行在英伟达和华为昇腾两个平台上。</li>
+<li><strong>deepseek-recipe</strong>：生产级的 Token 编解码组件，用 Rust 实现并提供 Python 绑定，把 Chat Completions、Responses、Messages 三种 API 协议统一转换为模型的 token 序列，处理逻辑与 DeepSeek 官方 API 完全对齐。</li>
+</ul>
+<p>DeepInfer 最初主要基于 vLLM 构建，也借鉴了 SGLang 和 TensorRT-LLM。官方表示，DeepSeek 后续新模型的推理代码也会继续在这个仓库里更新。</p>
+<p>先把边界说清楚，这次开源的是<strong>离线推理</strong>部分，一套完整的在线服务还缺三块：</p>
+<ol>
+<li>KV 缓存系统；</li>
+<li>视觉编码 / Prefill / Decode 分离部署（引擎侧大部分功能已实现）；</li>
+<li>跨数据并行副本的负载均衡。</li>
+</ol>
+<p>KV 缓存管理和负载均衡跟 DeepSeek 内部基础设施耦合较深，所以代码暂未开源，只在技术报告和部署问答里讲了设计。</p>
+<h2 id="核心优势">核心优势</h2>
+<h3 id="1-wide-epdecode-阶段用-64128-卡做专家并行">1. Wide-EP：Decode 阶段用 64～128 卡做专家并行</h3>
+<p>V4.1 Flash 是 MoE 模型。DeepInfer 的做法是：Prefill 用尽量小的并行规模（EP2～8），Decode 则在显存允许的范围内用尽量大的 EP（EP64～128，即 Wide-EP）。专家分得越散，每一步 MoE 部分的显存读取量越低，吞吐就越高。</p>
+<p>官方基准（64 卡 Decode、128K 上下文、按 75% 草稿接受率折算）：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center">每个 DP rank 的并发</th>
+<th style="text-align: center">单卡输出吞吐</th>
+<th style="text-align: center">单用户速度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center">8</td>
+<td style="text-align: center">约 2,600 token/s</td>
+<td style="text-align: center">约 325 token/s</td>
+</tr>
+<tr>
+<td style="text-align: center">64</td>
+<td style="text-align: center">约 15,700 token/s</td>
+<td style="text-align: center">约 246 token/s</td>
+</tr>
+<tr>
+<td style="text-align: center">256</td>
+<td style="text-align: center">约 26,300 token/s</td>
+<td style="text-align: center">约 103 token/s</td>
+</tr>
+</tbody>
+</table>
+<p>Prefill 侧在 4 卡、32K 批大小下，单卡未命中缓存的输入吞吐约 87,000 token/s。</p>
+<h3 id="2-dspark推测解码不再一刀切">2. DSpark：推测解码不再“一刀切”</h3>
+<p>普通推测解码每步固定验证 N 个草稿 token，可不同请求、不同位置的草稿被接受的概率差别很大，固定长度就会把算力浪费在低概率 token 上。</p>
+<p>DSpark 用一个置信度头预测每个草稿 token 的接受率，再把验证算力优先分给收益最高的那些。线上草稿模型一次生成 5 个 token，动态验证后每步实际验证的数量降到 3.2～4.4 个（减少约 30%），平均接受长度基本不变。在生产工作点（每个 rank 约 60 条并发）上，吞吐提升 4%～7%。</p>
+<h3 id="3-swa-bounded-replay把重算成本压成常数">3. SWA Bounded Replay：把重算成本压成常数</h3>
+<p>V4.1 用了滑动窗口注意力（SWA）。缓存命中但 SWA 缓存缺失时，常规做法是把窗口内的历史全部重算一遍。DeepInfer 只重放最近 128 个 token，并把注意力窗口截断在重放段内，用近似的 SWA 缓存代替精确重建，重算成本因此与上下文长度、层数都无关。</p>
+<p>把它用在解码器层后（精确重建本需把最后 2,560 个 token 过一遍 20 层解码器），每次 Prefill 的总计算量<strong>几乎减半</strong>。</p>
+<h3 id="4-零开销异步调度">4. 零开销异步调度</h3>
+<p>传统流程里，GPU 算完一步要等 CPU 做完后处理和下一步调度，中间存在空转。DeepInfer 借鉴 SGLang 和 NanoFlow 的思路，让 CPU 在 GPU 执行第 N 步时就并行完成第 N+1 步的调度，GPU 全程不空闲。这个功能默认开启。</p>
+<h3 id="5-结果可复现batch-不变性与确定性采样">5. 结果可复现：Batch 不变性与确定性采样</h3>
+<p>同一个请求，无论和哪些请求拼在一个 batch 里，模型结果都保持一致；输入和采样参数相同，就能得到完全相同的输出。做评测、回归测试和线上排障时，这一点非常实用（目前仅支持英伟达平台）。</p>
+<h3 id="6-kv-缓存保留超过-72-小时">6. KV 缓存保留超过 72 小时</h3>
+<p>这部分没开源，但设计值得一看：主体的块 KV 缓存不放在本机内存，而是存进专用的 3FS 存储集群，约 100 PiB SSD，Agent 流量保留 3 天，对话流量保留 7 天。任何一台 Prefill 机器都能命中任意前缀，路由时就不必再去照顾前缀亲和性。</p>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li><strong>大模型推理 / 基础设施工程师</strong>：这是少有的、来自一线大规模服务的完整工程实践，部署问答里的参数（EP 规模、冗余专家数、负载均衡策略）可以直接拿来对照。</li>
+<li><strong>计划私有化部署 DeepSeek 的企业</strong>：官方建议的最小高效部署单元是 64 卡 Prefill 加 64 卡 Decode，评估资源前值得先读一遍部署问答。</li>
+<li><strong>用昇腾做推理的团队</strong>：DeepInfer 原生支持昇腾 950，国产算力也有了一份官方参考实现。</li>
+</ul>
+<p>普通开发者手里的消费级显卡跑不起来，硬件门槛是英伟达 SM100 架构（B200、GB200 这类 Blackwell 数据中心卡）或昇腾 950。不过，结构化输出、确定性采样、异步调度这些思路，在其他推理框架里同样适用。</p>
+<h2 id="如何使用">如何使用</h2>
+<h3 id="环境要求">环境要求</h3>
+<ul>
+<li>Linux，GCC 13 及以上，Python 3.12</li>
+<li>英伟达平台需要 CUDA 13，昇腾平台需要 CANN 9.2</li>
+<li>目前只支持 DeepSeek-V4.1-Flash 一个模型</li>
+</ul>
+<h3 id="编译安装">编译安装</h3>
+<p>先创建一个干净的 Python 3.12 环境，然后：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> clone</span><span style="color:#9ECBFF"> https://github.com/deepseek-ai/DeepInfer.git</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> DeepInfer</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 昇腾平台改成 ascend；运行时也要保持这个环境变量</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> DEEPINFER_ACCELERATOR</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">nvidia</span></span>
+<span class="line"><span style="color:#B392F0">./build.sh</span></span></code></pre>
+<h3 id="离线推理">离线推理</h3>
+<p>首次运行会自动把 DeepSeek-V4.1-Flash-1017 权重下载到 Hugging Face 缓存目录。已有本地权重的话，用环境变量指定路径：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> DEEPINFER_HF_MODEL_DIR</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">/path/to/DeepSeek-V4.1-Flash-1017</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 默认 8 卡专家并行</span></span>
+<span class="line"><span style="color:#B392F0">python</span><span style="color:#9ECBFF"> examples/offline_inference.py</span><span style="color:#79B8FF"> --ep</span><span style="color:#79B8FF"> 8</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 2 路专家并行 + 8 路数据并行</span></span>
+<span class="line"><span style="color:#B392F0">python</span><span style="color:#9ECBFF"> examples/offline_inference.py</span><span style="color:#79B8FF"> --ep</span><span style="color:#79B8FF"> 2</span><span style="color:#79B8FF"> --dp</span><span style="color:#79B8FF"> 8</span></span></code></pre>
+<h3 id="常用开关">常用开关</h3>
+<p>几个特性都通过环境变量控制：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 推测解码 + 置信度调度验证；NEXTN 控制最大草稿长度，默认 5</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> DEEPINFER_ENABLE_MTP_VARLEN</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> DEEPINFER_USE_NEXTN_DECODE</span><span style="color:#F97583">=</span><span style="color:#79B8FF">5</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 解码器 SWA Bounded Replay（V4.1 默认配置）</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> DEEPINFER_YOCO_PREFILL_TRUNCATION_MODE</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">compact</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> DEEPINFER_YOCO_PREFILL_KEEP_TOKENS</span><span style="color:#F97583">=</span><span style="color:#79B8FF">140</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Batch 不变性（仅英伟达）</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> DEEPINFER_BATCH_INVARIANT</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span></span></code></pre>
+<p>如果要确定性采样，需要同时设置 <code>DEEPINFER_BATCH_INVARIANT=1</code> 和 <code>DEEPINFER_ENABLE_MTP_VARLEN=0</code>，并给 <code>SamplingParams</code> 传入固定的 <code>seq_seed</code>。</p>
+<h3 id="结构化输出">结构化输出</h3>
+<p>通过 <code>SamplingParams</code> 的 <code>so_args</code> 参数，可以把输出约束到正则、JSON Schema 或 EBNF 语法。下面的写法取自仓库 examples 目录，<code>llm</code> 是用 examples 里的辅助函数创建的引擎实例：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> json</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> deepinfer.sampling_params </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> SamplingParams</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">schema </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#9ECBFF">    "type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"object"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">    "properties"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">        "color"</span><span style="color:#E1E4E8">: {</span><span style="color:#9ECBFF">"type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"string"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"enum"</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">"red"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"green"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"blue"</span><span style="color:#E1E4E8">]},</span></span>
+<span class="line"><span style="color:#9ECBFF">        "count"</span><span style="color:#E1E4E8">: {</span><span style="color:#9ECBFF">"type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"integer"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"enum"</span><span style="color:#E1E4E8">: [</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">]},</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#9ECBFF">    "required"</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">"color"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"count"</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#9ECBFF">    "additionalProperties"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">params </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> SamplingParams(</span></span>
+<span class="line"><span style="color:#FFAB70">    temperature</span><span style="color:#F97583">=</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    max_tokens</span><span style="color:#F97583">=</span><span style="color:#79B8FF">128</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    so_args</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span><span style="color:#9ECBFF">"schema_type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"json"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"schema"</span><span style="color:#E1E4E8">: json.dumps(schema)},</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">outputs </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> llm.generate(</span><span style="color:#FFAB70">prompts</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">"随便描述一个物体"</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">sampling_params</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[params])</span></span></code></pre>
+<p><code>schema_type</code> 还可以取 <code>regex</code> 或 <code>ebnf</code>。</p>
+<h3 id="验证部署是否正确">验证部署是否正确</h3>
+<p>仓库的 eval 目录提供了 AIME 2026、GPQA Diamond、HLE 三套评测脚本，官方参考 Pass@1 分别为 99.9%、93.4%、42.6%（HLE 为全量集）。部署完跑一遍，分数接近就说明配置没问题。注意脚本不会自动下载数据集，需要先按 eval 文档准备好 JSONL；评分默认调用一个 LLM 裁判服务：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># LLM 裁判服务（OpenAI 兼容接口）</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> EVAL_JUDGE_BASE_URL</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">https://api.deepseek.com</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> EVAL_JUDGE_API_KEY</span><span style="color:#F97583">=&lt;</span><span style="color:#E1E4E8">key</span><span style="color:#F97583">&gt;</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> EVAL_JUDGE_MODEL</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">deepseek-v4-flash</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">EP</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">8</span><span style="color:#E1E4E8"> N_SAMPLE</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">4</span><span style="color:#E1E4E8"> TAG</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">smoke</span><span style="color:#B392F0"> bash</span><span style="color:#9ECBFF"> eval/aime/run.sh</span><span style="color:#6A737D">   # 冒烟测试</span></span></code></pre>
+<p>没有裁判服务的话，AIME 和 GPQA 可以改用规则判分：<code>python eval/score.py --out-dir eval/outputs/aime/&lt;TAG&gt; --judge rule</code>（HLE 只支持 LLM 裁判）。</p>
+<h3 id="对接-apideepseek-recipe">对接 API：deepseek-recipe</h3>
+<p>想在自己的推理后端前面接一层和官方行为一致的 API，可以用 deepseek-recipe：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">python3</span><span style="color:#79B8FF"> -m</span><span style="color:#9ECBFF"> pip</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> deepseek-recipe</span></span></code></pre>
+<p>它负责请求转换、提示词编码和输出解析（思考内容、工具调用、结构化输出），模型推理和 HTTP 服务由调用方自己提供。</p>
+<p>项目地址：github.com/deepseek-ai/DeepInfer</p>
+<h2 id="写在最后三行速记">写在最后：三行速记</h2>
+<ul>
+<li><strong>能跑什么</strong>：DeepSeek-V4.1-Flash 离线推理，硬件为英伟达 SM100 或昇腾 950，在线服务所需的 KV 缓存与负载均衡需自建。</li>
+<li><strong>最值得学</strong>：Wide-EP 大规模专家并行、DSpark 动态验证、SWA Bounded Replay、零开销异步调度。</li>
+<li><strong>最先读的</strong>：仓库里的部署问答文档，并行规模、冗余专家数、存储配比这些参数都写在里面。</li>
+</ul>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>推理框架</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>DeepSeek</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>大模型推理</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/sglang-intro-repeat-prefix-computed-once" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 sglang-intro-repeat-prefix-computed-once</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
