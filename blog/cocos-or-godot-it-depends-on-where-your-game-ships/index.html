@@ -1,0 +1,169 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/cocos-or-godot-it-depends-on-where-your-game-ships/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/cocos-or-godot-it-depends-on-where-your-game-ships/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/cocos-or-godot-it-depends-on-where-your-game-ships/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/cocos-or-godot-it-depends-on-where-your-game-ships/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/cocos-or-godot-it-depends-on-where-your-game-ships/"><meta property="og:title" content="cocos-or-godot-it-depends-on-where-your-game-ships — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="cocos-or-godot-it-depends-on-where-your-game-ships — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>cocos-or-godot-it-depends-on-where-your-game-ships — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/cocos-or-godot-it-depends-on-where-your-game-ships/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>游戏开发</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>游戏开发</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 10 / 20</span><span class="text-meta" data-astro-cid-tldeq5d5>约 14 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>cocos-or-godot-it-depends-on-where-your-game-ships</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>Cocos</span><span class="tag-outline" data-astro-cid-tldeq5d5>Godot</span><span class="tag-outline" data-astro-cid-tldeq5d5>游戏引擎</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="cocos-还是-godot先看你的游戏发在哪">Cocos 还是 Godot？先看你的游戏发在哪</h1>
+<p><img src="/assets/images/cocos-or-godot-it-depends-on-where-your-game-ships-summary.png" alt="知识点总结"></p>
+<p>同样免费，只有一个官方支持导出绿泡泡小游戏。</p>
+<h2 id="摘要">摘要</h2>
+<p>Cocos Creator 擅长小游戏和移动端，Godot 擅长独立游戏和跨平台。两者没有绝对的强弱，选哪个取决于游戏最终发在哪里。本文基于 2026 年 10 月的最新版本，逐项对比优势、缺点和适用场景。</p>
+<h2 id="先说结论">先说结论</h2>
+<ul>
+<li>目标平台是<strong>绿泡泡小游戏、抖某音小游戏</strong>等国内小游戏平台，选 Cocos Creator。</li>
+<li>目标平台是 <strong>Steam、PC 等桌面端的独立游戏</strong>，选 Godot。</li>
+<li>想<strong>写 C#</strong>，倾向 Godot；想做<strong>网页和小游戏</strong>，倾向 Cocos。</li>
+<li>如果你的游戏要<strong>同时上小游戏和 Steam</strong>，两边都有取舍，后面有专门一节。</li>
+</ul>
+<h2 id="先看版本和现状">先看版本和现状</h2>
+<p>资料检索于 2026 年 10 月 20 日，数据来自 GitHub 和官方文档。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left">项目</th>
+<th style="text-align: left">Cocos</th>
+<th style="text-align: left">Godot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left">当前稳定版</td>
+<td style="text-align: left">Cocos Creator 3.8.8（2025 年 12 月 16 日）</td>
+<td style="text-align: left">Godot 4.7.2（2026 年 8 月 18 日）</td>
+</tr>
+<tr>
+<td style="text-align: left">协议</td>
+<td style="text-align: left">引擎代码 MIT；3.x 编辑器免费但闭源，另有官方使用条款</td>
+<td style="text-align: left">MIT，无分成、无席位费</td>
+</tr>
+<tr>
+<td style="text-align: left">GitHub 星数</td>
+<td style="text-align: left">约 9,900（cocos-engine）</td>
+<td style="text-align: left">约 11.9 万</td>
+</tr>
+<tr>
+<td style="text-align: left">主要语言</td>
+<td style="text-align: left">TypeScript / JavaScript</td>
+<td style="text-align: left">GDScript，另支持 C# 和 C++</td>
+</tr>
+<tr>
+<td style="text-align: left">在做的新东西</td>
+<td style="text-align: left">COCOS 4，目前仍是 alpha（最新 4.0.0-alpha.35，2026 年 10 月 13 日）</td>
+<td style="text-align: left">4.8 开发中</td>
+</tr>
+</tbody>
+</table>
+<p>有一个容易被忽略的变化：Cocos 官方在 2026 年 1 月宣布了 COCOS 4，把引擎和编辑器拆开，编辑器部分的方向叫 PinK，并改用标准 MIT 协议。但它到现在还是 alpha，官方公告也说小游戏平台支持会逐步到来。所以今天要做正式项目，用的仍然是 Cocos Creator 3.8.x。</p>
+<h2 id="cocos-creator优势">Cocos Creator：优势</h2>
+<p><strong>1. 小游戏是主场。</strong> 官方支持的发布目标包括 Web、iOS、Android、Windows、Mac、鸿蒙，以及绿泡泡、抖某音、OPPO、华为快游戏、vivo、荣耀等小游戏平台。Web 和小游戏上运行的是纯 JS 运行时，原生平台底层则是 C++。</p>
+<p><strong>2. 前端开发者几乎零门槛。</strong> 脚本用 TypeScript 或 JavaScript，两者可以混用。组件写法大致是这样：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { _decorator, Component } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> 'cc'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#E1E4E8"> { </span><span style="color:#79B8FF">ccclass</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">property</span><span style="color:#E1E4E8"> } </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> _decorator;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">@</span><span style="color:#B392F0">ccclass</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'Player'</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> Player</span><span style="color:#F97583"> extends</span><span style="color:#B392F0"> Component</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    @property</span></span>
+<span class="line"><span style="color:#FFAB70">    speed</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 200</span><span style="color:#E1E4E8">;          </span><span style="color:#6A737D">// 会显示在属性检查器里</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    update</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">dt</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#6A737D">        // 每帧调用</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p><strong>3. 2D 工具链完整。</strong> 内置 UI 系统、带曲线编辑的动画系统，并支持 Spine、DragonBones、TiledMap 和 Box2D。手机扫码就能预览。</p>
+<p><strong>4. 在包体上下了功夫。</strong> 3.8.5 起 WASM 模块延迟加载，Spine 模块体积比 3.8.4 缩小约 40%。小游戏有包体上限，这类优化会直接影响能否过审。</p>
+<h2 id="cocos-creator缺点">Cocos Creator：缺点</h2>
+<p><strong>1. 编辑器平台少。</strong> 官方手册只写了编辑器支持 Windows 和 Mac，没有提 Linux。</p>
+<p><strong>2. 小游戏也有硬限制。</strong> 绿泡泡小游戏手册写明主包不能超过 4MB（含全部代码和资源），超出的资源要走网络下载，而且<strong>脚本文件不能远程下载</strong>。VideoPlayer 和 WebView 不支持。使用绿泡泡引擎插件的“分离引擎”模式时，目前只支持 JS 模式，不能用 Wasm 物理。</p>
+<p><strong>3. 版本处于过渡期。</strong> 3.8.8 发布于 2025 年 12 月，此后 GitHub 上没有新的 3.8.x 正式版，而新版 COCOS 4 还是 alpha。选 3.8.x 是稳定但迭代放缓，选 COCOS 4 则要接受 alpha 阶段的不确定。</p>
+<p><strong>4. 社区体量差距明显。</strong> 引擎仓库星数约 9,900，Godot 约 11.9 万，找国际社区的现成方案会更吃力。</p>
+<h2 id="godot优势">Godot：优势</h2>
+<p><strong>1. 完全开源，没有任何附加条款。</strong> MIT 协议，没有分成，没有席位费，由 Godot Foundation 和赞助商维护。</p>
+<p><strong>2. 节点和场景架构，上手快。</strong> GDScript 语法接近 Python，也能用 C# 和 C++（GDExtension）。一个最小的移动脚本：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="gdscript"><code><span class="line"><span style="color:#F97583">extends</span><span style="color:#B392F0"> CharacterBody2D</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">@export</span><span style="color:#F97583"> var</span><span style="color:#E1E4E8"> speed </span><span style="color:#F97583">:=</span><span style="color:#79B8FF"> 200.0</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">func</span><span style="color:#B392F0"> _physics_process</span><span style="color:#E1E4E8">(_delta):</span></span>
+<span class="line"><span style="color:#E1E4E8">    velocity </span><span style="color:#F97583">=</span><span style="color:#B392F0"> Input</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">get_vector</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"ui_left"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"ui_right"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"ui_up"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"ui_down"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> speed</span></span>
+<span class="line"><span style="color:#B392F0">    move_and_slide</span><span style="color:#E1E4E8">()</span></span></code></pre>
+<p><strong>3. 2D 和 3D 都在持续进步。</strong> 4.6 起 Jolt 成为新项目的 3D 默认物理引擎。4.7（2026 年 6 月发布）新增矩形面光 AreaLight3D、HDR 输出、2D 编辑器的 Scene Paint 模式，Android 上的编辑器环境 GABE 也已稳定，可以直接在安卓设备上导出游戏。</p>
+<p><strong>4. 独立游戏的实战案例多。</strong> Brotato、Buckshot Roulette、Dome Keeper、Cassette Beasts 都是 Godot 做的。</p>
+<h2 id="godot缺点">Godot：缺点</h2>
+<p><strong>1. 没有官方的国内小游戏导出。</strong> 想上小游戏只能从 Web（HTML5）导出入手。社区里有人手工移植到绿泡泡小游戏，但要改引擎的 JS 层、音频、文件系统和 PCK 分包，而且我找到的案例用的是 Godot 3.6，没有找到 2026 年的现成方案。</p>
+<p><strong>2. Web 导出限制不少。</strong> 按官方文档：</p>
+<ul>
+<li>Godot 4 的 C# 项目目前<strong>无法导出到 Web</strong>；</li>
+<li>Web 只能用 Compatibility 渲染器（WebGL 2.0），WebGPU 暂不支持；</li>
+<li>4.3 起默认单线程导出，要开多线程得配置跨域隔离头；</li>
+<li>默认的音频采样播放模式没有混响等音效；</li>
+<li>Safari 的 WebGL 2.0 有已知问题。</li>
+</ul>
+<p>官方文档没有给出体积数字，只说 .wasm 用 gzip 能压到约四分之一，建议用 Brotli 并精简导出模板。</p>
+<p><strong>3. 主机平台靠第三方。</strong> 官方直接支持的只有 Steam Deck（走 Linux 模板），Switch、PS5、Xbox 要找 W4 Games 这样的第三方移植商。</p>
+<p><strong>4. 国内平台的官方适配少。</strong> 国内小游戏之外，鸿蒙也没有 Godot 官方支持，目前只看到社区分支在做鸿蒙导出，而 Cocos 官方在直接适配。</p>
+<h2 id="把两者摆在一起">把两者摆在一起</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left">维度</th>
+<th style="text-align: left">Cocos Creator 3.8</th>
+<th style="text-align: left">Godot 4.7</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left">国内小游戏</td>
+<td style="text-align: left">官方支持，主包 4MB 上限</td>
+<td style="text-align: left">无官方支持，需手工移植</td>
+</tr>
+<tr>
+<td style="text-align: left">Web / H5</td>
+<td style="text-align: left">纯 JS 运行时</td>
+<td style="text-align: left">WebAssembly，限制较多</td>
+</tr>
+<tr>
+<td style="text-align: left">脚本语言</td>
+<td style="text-align: left">TypeScript / JavaScript</td>
+<td style="text-align: left">GDScript，另有 C# 和 C++</td>
+</tr>
+<tr>
+<td style="text-align: left">桌面 / Steam</td>
+<td style="text-align: left">官方支持 Windows 和 Mac</td>
+<td style="text-align: left">成熟，案例多</td>
+</tr>
+<tr>
+<td style="text-align: left">主机</td>
+<td style="text-align: left">官方资料未覆盖</td>
+<td style="text-align: left">官方只有 Steam Deck，其余靠第三方</td>
+</tr>
+<tr>
+<td style="text-align: left">鸿蒙</td>
+<td style="text-align: left">官方适配</td>
+<td style="text-align: left">无官方支持，只有社区分支</td>
+</tr>
+<tr>
+<td style="text-align: left">3D</td>
+<td style="text-align: left">有 PBR 和延迟管线</td>
+<td style="text-align: left">持续迭代，Jolt、面光源、HDR</td>
+</tr>
+<tr>
+<td style="text-align: left">协议</td>
+<td style="text-align: left">引擎 MIT，3.x 编辑器另有条款</td>
+<td style="text-align: left">MIT</td>
+</tr>
+</tbody>
+</table>
+<p>3D 这一栏我没有写“谁更强”：检索中没有找到 Cocos 3.8 和 Godot 4 的权威对比，只有一些二手轶事，不足以下结论。</p>
+<h2 id="如果游戏要同时上小游戏和-steam">如果游戏要同时上小游戏和 Steam</h2>
+<p>这是最纠结的情况，两条路各有成本：</p>
+<ul>
+<li><strong>选 Cocos</strong>：小游戏最顺，桌面版也能出，但 Steam 方向我没有查到足够的资料，建议先做个小原型验证。</li>
+<li><strong>选 Godot</strong>：Steam 和 PC 顺，小游戏版要自己啃 Web 导出和 4MB 包体，一旦用了 C# 就完全走不了 Web。</li>
+</ul>
+<p>比较务实的做法是：<strong>先确定最重要的那一个平台，用它决定引擎</strong>，另一个平台作为“能做到更好”的补充。</p>
+<h2 id="三行速记">三行速记</h2>
+<ul>
+<li>发<strong>国内小游戏</strong>：Cocos Creator 3.8.8，注意 4MB 主包和脚本不能远程加载。</li>
+<li>做<strong>独立游戏上 Steam</strong>：Godot 4.7.2，想上 Web 就别用 C#。</li>
+<li><strong>COCOS 4 还是 alpha</strong>，正式项目先用 3.8.x。</li>
+</ul>
+<h2 id="你会怎么选">你会怎么选？</h2>
+<p>如果让你现在启动一个新项目，你更想让它先上小游戏，还是先上 Steam？你的理由是什么？欢迎在评论区说说你的选择。</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>Cocos</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>Godot</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>游戏引擎</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/deepseek-open-sources-deepinfer-155-trillion-tokens-per-cluster-per-day" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 deepseek-open-sources-deepinfer-155-trillion-tokens-per-cluster-per-day</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
