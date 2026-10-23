@@ -1,0 +1,116 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/redis-author-built-ds4-run-deepseek-flash-on-mac/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/redis-author-built-ds4-run-deepseek-flash-on-mac/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/redis-author-built-ds4-run-deepseek-flash-on-mac/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/redis-author-built-ds4-run-deepseek-flash-on-mac/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/redis-author-built-ds4-run-deepseek-flash-on-mac/"><meta property="og:title" content="redis-author-built-ds4-run-deepseek-flash-on-mac — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="redis-author-built-ds4-run-deepseek-flash-on-mac — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>redis-author-built-ds4-run-deepseek-flash-on-mac — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/redis-author-built-ds4-run-deepseek-flash-on-mac/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 10 / 22</span><span class="text-meta" data-astro-cid-tldeq5d5>约 16 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>redis-author-built-ds4-run-deepseek-flash-on-mac</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>ds4</span><span class="tag-outline" data-astro-cid-tldeq5d5>本地推理</span><span class="tag-outline" data-astro-cid-tldeq5d5>DeepSeek</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="redis-作者做了-ds4mac-本地跑-deepseek-flash">Redis 作者做了 ds4，Mac 本地跑 DeepSeek Flash</h1>
+<p><img src="/assets/images/redis-author-built-ds4-run-deepseek-flash-on-mac-summary.png" alt="知识点总结"></p>
+<p>128GB 的 M5 Max 跑 2 比特 DeepSeek Flash，最高每秒 39 个 token。</p>
+<h2 id="摘要">摘要</h2>
+<p>ds4（项目自称 DwarfStar）是 Redis 作者 antirez 写的本地推理引擎，只专门优化 DeepSeek、GLM、Qwen 的少数几个模型，支持 Mac、DGX Spark 和 AMD Strix Halo。128GB 的 M5 Max 上跑 DeepSeek V4 Flash 的 2 比特量化版，2K 上下文时生成约 39 token/s。</p>
+<h2 id="是什么">是什么</h2>
+<p>大模型推理引擎大多追求“什么模型都能跑”。ds4 反过来：<strong>只做少数几个模型，把它们压到消费级硬件上跑得好</strong>。</p>
+<ul>
+<li><strong>作者</strong>：Salvatore Sanfilippo，网名 antirez，Redis 的原作者。</li>
+<li><strong>项目</strong>：GitHub 约 2.4 万 star，MIT 协议，C 语言写成，2026 年 5 月创建，最近一次提交在 10 月 19 日。</li>
+<li><strong>支持的模型</strong>：DeepSeek V4 Flash（含实验性视觉版）、DeepSeek V4.1 Flash、DeepSeek V4 PRO、GLM 5.2 / 5.3 / 5.3 Flash、Qwen3.8 Flash Next。</li>
+<li><strong>不是通用 GGUF 运行器</strong>：必须用项目自己提供的 GGUF 文件，别的 GGUF 可能张量布局、元数据或量化组合不兼容。</li>
+<li><strong>平台</strong>：Metal（Apple Silicon，首要目标）、NVIDIA CUDA（主要目标是 DGX Spark，也支持多卡）、ROCm（Strix Halo）。</li>
+</ul>
+<p>和 DeepSeek 官方刚开源的 DeepInfer 对照着看很有意思：DeepInfer 面向数据中心，官方部署问答里说最小的高效部署单元是 64 卡 Prefill 加 64 卡 Decode；ds4 则走到另一个极端，目标是“一台你买得起的机器”。</p>
+<p>项目有两点作者自己写得很坦白：代码是在 AI 编程助手的大量协助下写成的，人负责想法、测试和调试；状态是“变化很快，按 beta 质量对待”。它也明确感谢 llama.cpp 和 GGML，部分量化格式和内核沿用了那边的 MIT 代码。</p>
+<h2 id="核心优势">核心优势</h2>
+<h3 id="1-一台-128gb-的-mac-就能跑起来">1. 一台 128GB 的 Mac 就能跑起来</h3>
+<p>官方记录的 DeepSeek V4 Flash 2 比特量化（约 81 GiB）在 M5 Max 128GB 上的成绩，每个测试点用 128 个生成 token：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right">上下文长度</th>
+<th style="text-align: right">Prefill</th>
+<th style="text-align: right">生成</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right">2,048</td>
+<td style="text-align: right">790.18 token/s</td>
+<td style="text-align: right">39.35 token/s</td>
+</tr>
+<tr>
+<td style="text-align: right">16,384</td>
+<td style="text-align: right">572.53 token/s</td>
+<td style="text-align: right">36.14 token/s</td>
+</tr>
+<tr>
+<td style="text-align: right">32,768</td>
+<td style="text-align: right">557.04 token/s</td>
+<td style="text-align: right">34.36 token/s</td>
+</tr>
+<tr>
+<td style="text-align: right">65,536</td>
+<td style="text-align: right">398.50 token/s</td>
+<td style="text-align: right">27.64 token/s</td>
+</tr>
+</tbody>
+</table>
+<p>同一份基准里，128GB 的 DGX Spark 在 2K 到 64K 上下文下 Prefill 在 823 到 872 token/s 之间，生成从 18.05 降到 13.84 token/s。官方强调这些是“记录下来的基线”，不是对每次提交的新测试。</p>
+<h3 id="2-内存不够用-ssd-凑">2. 内存不够，用 SSD 凑</h3>
+<p><code>--ssd-streaming</code> 只在内存里留一个专家缓存，缺的专家从 GGUF 文件里按需读。代价是速度。官方在 128GB 的 M5 Max 上量过两个比内存还大的模型（自动缓存大小，生成 128 个 token）：</p>
+<ul>
+<li>GLM 5.3 Flash Q4_K（177.77 GiB）：初次 Prefill 121 token/s，两轮生成分别为 11.9 和 14.9 token/s；</li>
+<li>DeepSeek Flash 实验视觉版 MXFP4（145.26 GiB）：初次 Prefill 300 token/s，两轮生成分别为 11.9 和 19.3 token/s。</li>
+</ul>
+<p>官方的提醒值得抄下来：能启动，不代表能用。生成对缓存未命中更敏感，大模型要先用一小段生成试一下，再决定要不要交给长任务。</p>
+<h3 id="3-多台机器多张卡也能拼">3. 多台机器、多张卡也能拼</h3>
+<ul>
+<li>两台 128GB 的 Mac 用 Thunderbolt RDMA 做张量并行，能放下更大的量化版本；</li>
+<li>两台 DGX Spark 上，DeepSeek V4.1 Flash 的 Q2 版单会话约 21.8 token/s；</li>
+<li>8 张 L40S 跑 Flash，16 个会话的合计生成速度约 126 token/s。多卡方案还支持 Ada Lovelace 这类其他实现要求更新显卡才能跑新模型的卡。</li>
+</ul>
+<h3 id="4-推测解码dspark">4. 推测解码：DSpark</h3>
+<p>DSpark 是一个额外的支持文件（约 5.6 GiB），一次提出最多 5 个候选 token，再由主模型批量验证。官方在两台 Spark 上测了 V4 Flash（0731）的 Q2 版：英文散文 44.0 token/s，C 语言哈希表代码 83.3 token/s。官方同时提醒，这是针对具体提示词的数据，不是承诺的加速倍数，不好预测的提示词上反而可能更慢。</p>
+<h3 id="5-自带服务端和编码-agent">5. 自带服务端和编码 Agent</h3>
+<p><code>ds4-server</code> 提供 OpenAI 和 Anthropic 兼容接口，官方文档给了 Pi、OpenCode、Codex CLI 和 Claude Code 的配置方法；<code>ds4-agent</code> 则是不经过 HTTP、直接在引擎里跑的原生编码 Agent，会话和 KV 缓存存在 <code>~/.ds4/kvcache</code>。</p>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li><strong>手里有 96GB 或 128GB Mac 的开发者</strong>：想在本机跑一个够强的模型，又不想把代码发给云端。</li>
+<li><strong>有 DGX Spark 或 Strix Halo 的人</strong>：官方给了对应的构建目标和起步配置。</li>
+<li><strong>做推理引擎的人</strong>：一个“只服务少数模型”的专用实现，值得读，思路和通用引擎很不一样。</li>
+</ul>
+<p>内存更小的机器要慎重：官方 Metal 指南里 DeepSeek Flash 的起步配置是 64GB 配 SSD 流式、96GB 起常驻（64GB 也可以直接跑 Qwen3.8 Flash Next 的 Q2 版）；再小的机器官方只说可以试 SSD 流式，没给具体配置。</p>
+<p>另外要看清一点：2 比特量化主要压的是路由专家（门控和上投影用 IQ2_XXS，下投影用 Q2_K），其余部分用更高精度，但这仍然是很激进的量化。项目自带的 <code>ds4-eval</code> 只是内部集成检查，官方明确说不是榜单成绩，想知道质量损失要自己跑你的任务。</p>
+<h2 id="如何使用">如何使用</h2>
+<h3 id="快速上手mac96128gb">快速上手（Mac，96/128GB）</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> clone</span><span style="color:#9ECBFF"> https://github.com/antirez/ds4.git</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> ds4</span></span>
+<span class="line"><span style="color:#B392F0">make</span></span>
+<span class="line"><span style="color:#B392F0">./download_model.sh</span><span style="color:#9ECBFF"> ds4f-q2</span><span style="color:#6A737D">   # DeepSeek V4 Flash Q2，约 81 GiB</span></span>
+<span class="line"><span style="color:#B392F0">./ds4</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> "用一段话解释 Redis streams。"</span></span></code></pre>
+<p>下载会放进 <code>gguf/</code>，中断后重复执行同一条命令可以续传。<code>./ds4</code> 不带参数就是多轮对话，里面可以用 <code>/help</code>、<code>/read FILE</code>、<code>/ctx N</code> 和 <code>/quit</code>。其他平台换对应的构建命令：DGX Spark 用 <code>make cuda-spark</code>，Strix Halo 用 <code>make strix-halo</code>，一块或多块 CUDA 卡用 <code>make cuda-generic</code>。</p>
+<h3 id="内存不够ssd-流式">内存不够：SSD 流式</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#B392F0">./ds4</span><span style="color:#79B8FF"> --ssd-streaming</span><span style="color:#79B8FF"> --ctx</span><span style="color:#79B8FF"> 32768</span><span style="color:#79B8FF"> --nothink</span></span></code></pre>
+<p>先用自动缓存预算，别急着调。需要给上下文或其他会话留内存时，再用 <code>--ssd-streaming-cache-experts 32GB</code> 这类参数。</p>
+<h3 id="接-claude-code-等客户端">接 Claude Code 等客户端</h3>
+<p>先启动服务端，客户端的上下文上限不要超过服务端的：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#B392F0">./ds4-server</span><span style="color:#79B8FF"> --ctx</span><span style="color:#79B8FF"> 100000</span><span style="color:#79B8FF"> --kv-disk-dir</span><span style="color:#9ECBFF"> /tmp/ds4-kv</span><span style="color:#79B8FF"> --kv-disk-space-mb</span><span style="color:#79B8FF"> 8192</span></span></code></pre>
+<p>Claude Code 走兼容 Anthropic 的接口，官方建议写一个名字不叫 <code>claude</code> 的包装脚本：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#6A737D">#!/bin/sh</span></span>
+<span class="line"><span style="color:#79B8FF">unset</span><span style="color:#9ECBFF"> ANTHROPIC_API_KEY</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> ANTHROPIC_BASE_URL</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"http://127.0.0.1:8000"</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> ANTHROPIC_AUTH_TOKEN</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"dsv4-local"</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> ANTHROPIC_MODEL</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"deepseek-v4-flash"</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> ANTHROPIC_DEFAULT_SONNET_MODEL</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"deepseek-v4-flash"</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> ANTHROPIC_DEFAULT_HAIKU_MODEL</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"deepseek-v4-flash"</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> ANTHROPIC_DEFAULT_OPUS_MODEL</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"deepseek-v4-flash"</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> CLAUDE_CODE_SUBAGENT_MODEL</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"deepseek-v4-flash"</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> CLAUDE_STREAM_IDLE_TIMEOUT_MS</span><span style="color:#F97583">=</span><span style="color:#79B8FF">600000</span></span>
+<span class="line"><span style="color:#79B8FF">exec</span><span style="color:#9ECBFF"> claude</span><span style="color:#9ECBFF"> "</span><span style="color:#79B8FF">$@</span><span style="color:#9ECBFF">"</span></span></code></pre>
+<p>这里把 sonnet、haiku、opus 和子 Agent 的模型名都指向同一个本地模型，并调大了流式空闲超时。编码 Agent 的第一次请求提示词很大，首次 Prefill 会慢一点，磁盘 KV 缓存能在之后复用相同前缀。</p>
+<h3 id="作者的使用建议">作者的使用建议</h3>
+<p>作者在 README 里的观点很有意思：既然有 AI 编程助手，用户应该直接让它来改这个项目，比如针对自己的硬件把速度调到最高，同时要求它做完整的正确性检查。项目因此刻意只做“几种主流场景的参考实现”，不追求覆盖所有配置。</p>
+<p>项目地址：github.com/antirez/ds4</p>
+<h2 id="三行速记">三行速记</h2>
+<ul>
+<li><strong>能跑什么</strong>：DeepSeek / GLM / Qwen 的指定 GGUF，DeepSeek Flash 在 Mac 上建议 96GB 起，64GB 配 SSD 流式。</li>
+<li><strong>先跑哪个</strong>：<code>make</code>、<code>./download_model.sh ds4f-q2</code>、<code>./ds4</code>；不够内存就加 <code>--ssd-streaming</code>。</li>
+<li><strong>要留心</strong>：激进的 2 比特量化和 beta 状态，生成速度随上下文变长会掉（128GB M5 Max：2K 约 39，64K 约 28 token/s）。</li>
+</ul>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>ds4</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>本地推理</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>DeepSeek</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/cocos-or-godot-it-depends-on-where-your-game-ships" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 cocos-or-godot-it-depends-on-where-your-game-ships</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
