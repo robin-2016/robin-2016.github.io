@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/dagster-data-asset-orchestration-with-built-in-lineage-and-quality-checks/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/dagster-data-asset-orchestration-with-built-in-lineage-and-quality-checks/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/dagster-data-asset-orchestration-with-built-in-lineage-and-quality-checks/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/dagster-data-asset-orchestration-with-built-in-lineage-and-quality-checks/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/dagster-data-asset-orchestration-with-built-in-lineage-and-quality-checks/"><meta property="og:title" content="dagster-data-asset-orchestration-with-built-in-lineage-and-quality-checks — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="dagster-data-asset-orchestration-with-built-in-lineage-and-quality-checks — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>dagster-data-asset-orchestration-with-built-in-lineage-and-quality-checks — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/dagster-data-asset-orchestration-with-built-in-lineage-and-quality-checks/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 10 / 24</span><span class="text-meta" data-astro-cid-tldeq5d5>约 13 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>dagster-data-asset-orchestration-with-built-in-lineage-and-quality-checks</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>Dagster</span><span class="tag-outline" data-astro-cid-tldeq5d5>数据工程</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="dagster数据资产编排平台血缘与质量检查内置">Dagster：数据资产编排平台，血缘与质量检查内置</h1>
+<p><img src="/assets/images/dagster-data-asset-orchestration-with-built-in-lineage-and-quality-checks-summary.png" alt="知识点总结"></p>
+<p>一张表过期了，你要多久才发现？</p>
+<h2 id="摘要">摘要</h2>
+<p>Dagster 是以数据资产为中心的开源编排平台，把“跑哪些任务”改成“产出哪些数据资产”，血缘、新鲜度和质量检查随之内置。GitHub 约 1.6 万 star，Apache 2.0 协议，官方另有托管的企业版 Dagster+。</p>
+<h2 id="它想解决什么">它想解决什么</h2>
+<p>按任务编排的流水线，图上的每个节点都是“一件要做的事”：A 跑完跑 B，B 跑完跑 C。可数据团队真正关心的是<strong>结果</strong>：哪张表过期了，哪份报表受影响，下游谁在用。这些信息不在任务图里，往往要靠人脑，或者另配一套血缘、质量工具去补。</p>
+<p>Dagster 的思路是从结果出发：先声明要产出哪些数据，再让编排、血缘和质量检查围绕这些数据展开。官网把自己定位成“AI 原生的 DataOps 平台”，核心是以数据资产为中心的管道。</p>
+<h2 id="核心新概念数据资产asset">核心新概念：数据资产（asset）</h2>
+<p>Dagster 把编排的单位定为“数据资产”：表、数据集、机器学习模型、报表。你用 Python 函数声明“我要产出这个数据资产”，Dagster 负责在合适的时间跑它，并让它保持最新。</p>
+<p>官方 README 里的例子只有三个函数：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> dagster </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> dg</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> pandas </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> pd</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> sklearn.linear_model </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> LinearRegression</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">@dg.asset</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> country_populations</span><span style="color:#E1E4E8">() -&gt; pd.DataFrame:</span></span>
+<span class="line"><span style="color:#E1E4E8">    df </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.read_html(</span><span style="color:#9ECBFF">"https://tinyurl.com/mry64ebh"</span><span style="color:#E1E4E8">)[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">    df.columns </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span><span style="color:#9ECBFF">"country"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"pop2022"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"pop2023"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"change"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"continent"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"region"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">    df[</span><span style="color:#9ECBFF">"change"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> df[</span><span style="color:#9ECBFF">"change"</span><span style="color:#E1E4E8">].str.rstrip(</span><span style="color:#9ECBFF">"%"</span><span style="color:#E1E4E8">).astype(</span><span style="color:#9ECBFF">"float"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> df</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">@dg.asset</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> continent_change_model</span><span style="color:#E1E4E8">(country_populations: pd.DataFrame) -&gt; LinearRegression:</span></span>
+<span class="line"><span style="color:#E1E4E8">    data </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> country_populations.dropna(</span><span style="color:#FFAB70">subset</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">"change"</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> LinearRegression().fit(pd.get_dummies(data[[</span><span style="color:#9ECBFF">"continent"</span><span style="color:#E1E4E8">]]), data[</span><span style="color:#9ECBFF">"change"</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">@dg.asset</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> continent_stats</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    country_populations: pd.DataFrame, continent_change_model: LinearRegression</span></span>
+<span class="line"><span style="color:#E1E4E8">) -&gt; pd.DataFrame:</span></span>
+<span class="line"><span style="color:#E1E4E8">    result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> country_populations.groupby(</span><span style="color:#9ECBFF">"continent"</span><span style="color:#E1E4E8">).sum()</span></span>
+<span class="line"><span style="color:#E1E4E8">    result[</span><span style="color:#9ECBFF">"pop_change_factor"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> continent_change_model.coef_</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> result</span></span></code></pre>
+<p>注意两点：</p>
+<ul>
+<li><strong>依赖写在参数里。</strong> <code>continent_stats</code> 的参数名就是它依赖的数据资产名，不需要再单独写一遍“谁先谁后”。</li>
+<li><strong>血缘是顺手得到的。</strong> 依赖关系既然写在代码里，Dagster 就能直接画出数据资产图，不用事后去解析 SQL 或日志。</li>
+</ul>
+<h2 id="官网上的几个新东西">官网上的几个“新东西”</h2>
+<p>读完官网，有这几条值得单独记：</p>
+<p><strong>1. 数据资产上挂着上下文。</strong> 每个数据资产都带着血缘、新鲜度、质量信号和依赖关系，运行与失败记录也按数据资产归档。看一张表，就能看到它从哪来、新不新、最近是否出过错。</p>
+<p><strong>2. 声明式自动化（Declarative Automation）。</strong> 不再手写“每天 3 点跑”，而是描述数据资产应有的状态，由 Dagster 去推动它达到这个状态。</p>
+<p><strong>3. 数据质量内置。</strong> 数据资产检查、新鲜度策略、dbt 测试集成，都是同一套数据资产模型里的东西，不是外挂。</p>
+<p><strong>4. 分支部署（Branch Deployments）。</strong> 改了管道，先在接近生产的环境里验证，不碰真实数据。</p>
+<p><strong>5. 混合部署。</strong> 计算跑在你自己的基础设施上，Dagster 只管控制平面。云、本地、混合都支持。</p>
+<p><strong>6. 面向 AI 的一层。</strong> 官网现在把自己定位成“AI 原生的 DataOps 平台”，Dagster+ AI 会利用数据资产、运行、血缘、新鲜度和失败历史去帮忙诊断问题。这部分更像产品方向，页面上细节不多，我只当作路线参考。</p>
+<h2 id="企业版-dagster-与价格">企业版 Dagster+ 与价格</h2>
+<p>核心框架开源；Dagster+ 是官方托管的商业版本，没有永久免费档，提供 30 天试用。定价页上的公开价格：</p>
+<table>
+<thead>
+<tr>
+<th>档位</th>
+<th>月价</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Solo</td>
+<td>10 美元</td>
+<td>1 个用户、1 个代码位置</td>
+</tr>
+<tr>
+<td>Starter</td>
+<td>100 美元</td>
+<td>最多 3 个用户、5 个代码位置</td>
+</tr>
+<tr>
+<td>Pro</td>
+<td>联系销售</td>
+<td>不限代码位置，含更完整的企业能力</td>
+</tr>
+</tbody>
+</table>
+<p>计费单位是“积分”：每次数据资产物化、每个执行的 op 算 1 个积分（Solo 每积分 0.04 美元，Starter 0.035 美元）。混合部署不收计算费，官方托管的无服务器计算另按分钟计费。数据资产级血缘、分支部署、声明式自动化各档都有；列级血缘、目录搜索、SSO 等企业功能按档位逐级开放，具体归属以官网定价页为准。</p>
+<h2 id="一个必须知道的变化">一个必须知道的变化</h2>
+<p>2026 年 7 月 13 日，Prefect 宣布收购 Dagster Labs，买下产品、代码库和客户关系，部分 Dagster 成员加入 Prefect。Dagster 官方的客户常见问题里写明：没有把 Dagster 并入 Prefect 的计划，不要求客户迁移，对开源项目的承诺不变，近期重点是让现有客户稳定。有媒体报道称 Dagster 保留名称和路线图，但官方没给出具体的产品方向，说会提前通知。</p>
+<p>这属于公司层面的变化，对已有用户影响多大，还要看后续动作。选型时值得留意。</p>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li>管着一堆定时任务，却说不清“哪张表依赖哪张”的数据工程师。</li>
+<li>已有一堆调度脚本，又另外补了血缘或数据质量工具，嫌拼起来太散的团队。</li>
+<li>想把 dbt、Snowflake 等工具串在同一张图里的数据平台团队。</li>
+</ul>
+<p>不太适合：只有三五个脚本、没有下游依赖的小项目，上这套模型是过度设计。</p>
+<h2 id="快速上手">快速上手</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> init</span><span style="color:#9ECBFF"> dagster-demo</span><span style="color:#E1E4E8"> &amp;&amp; </span><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> dagster-demo</span></span>
+<span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> dagster</span><span style="color:#9ECBFF"> dagster-webserver</span><span style="color:#9ECBFF"> dagster-dg-cli</span><span style="color:#9ECBFF"> pandas</span><span style="color:#9ECBFF"> scikit-learn</span><span style="color:#9ECBFF"> lxml</span></span>
+<span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> dagster</span><span style="color:#9ECBFF"> dev</span><span style="color:#79B8FF"> -f</span><span style="color:#9ECBFF"> assets.py</span></span></code></pre>
+<p>前两行是官方 README 的装法，后面三个包是示例代码自己要用的（<code>read_html</code> 依赖 lxml）。把上面的三个数据资产存成 <code>assets.py</code>，启动后打开终端里提示的本地地址，就能看到数据资产图，点“物化”即可运行。官方支持 Python 3.9 到 3.14。新项目官方更推荐用 <code>dg</code> 命令行搭脚手架，单文件试玩用 <code>dagster dev</code> 就够了。</p>
+<p>官网列出的客户案例有数字，但都是厂商自述，没有第三方验证：比如 Vanta 称数据新鲜度提升 14 倍，easyJet holidays 称管道效率提升 15 倍。可以当参考，别当基准。</p>
+<h2 id="结尾选型前的检查清单">结尾：选型前的检查清单</h2>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> 你的痛点是“说不清哪张表依赖哪张、坏了影响谁”，而不只是“定时跑脚本”。</li>
+<li class="task-list-item"><input type="checkbox" disabled> 能接受用 Python 函数声明数据资产，依赖写在函数参数里。</li>
+<li class="task-list-item"><input type="checkbox" disabled> 血缘、新鲜度、质量检查想放在同一套模型里，而不是再拼一个工具。</li>
+<li class="task-list-item"><input type="checkbox" disabled> 本地先跑通：<code>uv run dagster dev -f assets.py</code>，看一眼数据资产图。</li>
+<li class="task-list-item"><input type="checkbox" disabled> 开源版（Apache 2.0）够用就先自托管；要托管再看 Dagster+，Solo 每月 10 美元起，30 天试用。</li>
+<li class="task-list-item"><input type="checkbox" disabled> 留意收购进展：Prefect 已宣布收购，官方承诺不并入、不要求迁移，具体路线待公布。</li>
+</ul>
+<p>项目地址：github.com/dagster-io/dagster，官网 dagster.io。</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>Dagster</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>数据工程</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/redis-author-built-ds4-run-deepseek-flash-on-mac" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 redis-author-built-ds4-run-deepseek-flash-on-mac</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
