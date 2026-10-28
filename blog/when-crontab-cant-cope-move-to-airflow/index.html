@@ -1,0 +1,200 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/when-crontab-cant-cope-move-to-airflow/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/when-crontab-cant-cope-move-to-airflow/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/when-crontab-cant-cope-move-to-airflow/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/when-crontab-cant-cope-move-to-airflow/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/when-crontab-cant-cope-move-to-airflow/"><meta property="og:title" content="when-crontab-cant-cope-move-to-airflow — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="when-crontab-cant-cope-move-to-airflow — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>when-crontab-cant-cope-move-to-airflow — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/when-crontab-cant-cope-move-to-airflow/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 10 / 27</span><span class="text-meta" data-astro-cid-tldeq5d5>约 17 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>when-crontab-cant-cope-move-to-airflow</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>Airflow</span><span class="tag-outline" data-astro-cid-tldeq5d5>数据工程</span><span class="tag-outline" data-astro-cid-tldeq5d5>调度</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="crontab-管不住时该上-airflow-了">crontab 管不住时，该上 Airflow 了</h1>
+<p><img src="/assets/images/When-crontab-Cant-Cope-Move-to-Airflow-summary.png" alt="知识点总结"></p>
+<p>凌晨三点脚本挂了，你第二天中午才知道。</p>
+<h2 id="摘要">摘要</h2>
+<p>Airflow 把一堆定时脚本变成一张有依赖、能重试、可回看的任务图。本文用 Airflow 3 从安装到跑通两条联动的管道（上游产出数据、下游自动触发），顺带列出老教程在 3.x 里会踩的坑。</p>
+<h2 id="crontab-的问题不在定时">crontab 的问题，不在“定时”</h2>
+<p>一开始，一条 crontab 就够了：每天两点拉数据，三点算报表。</p>
+<p>脚本多到十几个以后，麻烦就来了：</p>
+<ul>
+<li><strong>依赖靠猜时间。</strong> 拉数据那天慢了半小时，三点的报表照样开跑，算的是昨天的数。</li>
+<li><strong>失败没人知道。</strong> 日志散在各台机器上，没有统一的地方看“今天哪些成功了”。</li>
+<li><strong>重跑全靠手。</strong> 补跑上周三的数据，得登机器、改参数、按顺序一条条敲。</li>
+</ul>
+<p>这些都不是“定时”的问题，是“编排”的问题。Airflow 就是为这个生的：2014 年 Airbnb 的数据工程师 Maxime Beauchemin 发起了它，2019 年成为 Apache 顶级项目，今天在 GitHub 上有 4.7 万多颗星。</p>
+<h2 id="airflow-是什么">Airflow 是什么</h2>
+<p>一句话：<strong>用 Python 代码描述任务和依赖，由调度器按时间或事件去跑。</strong></p>
+<p>几个核心概念：</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DAG</td>
+<td>有向无环图，一条完整的管道，比如“拉数据 → 清洗 → 出报表”</td>
+</tr>
+<tr>
+<td>Task</td>
+<td>DAG 里的一个节点，一件具体要做的事</td>
+</tr>
+<tr>
+<td>Scheduler</td>
+<td>调度器，决定什么时候该跑哪个任务</td>
+</tr>
+<tr>
+<td>Asset</td>
+<td>Airflow 3 的叫法（2.x 叫 Dataset），表示一份数据，可以拿来触发下游</td>
+</tr>
+</tbody>
+</table>
+<p>DAG 只是一个放在 <code>dags/</code> 目录里的 <code>.py</code> 文件，能写进 Git、能做代码评审，这是它和图形化拖拽调度工具最大的不同。</p>
+<h2 id="核心优势">核心优势</h2>
+<ul>
+<li><strong>依赖是显式的。</strong> 上游没成功，下游就不跑，不再靠“错开一小时”来赌。</li>
+<li><strong>失败自动重试，状态一目了然。</strong> 每个任务每次运行的状态和日志都在网页上，红绿一眼看清。</li>
+<li><strong>补跑和重跑是一等公民。</strong> 选中某天某个任务点“清除”，它会带着当时的日期参数重新跑。</li>
+<li><strong>生态大。</strong> 数据库、云存储、Spark、dbt、Kubernetes 都有现成的 provider 包，不用自己写连接代码。</li>
+<li><strong>可以按数据触发。</strong> 可以说“这张表更新了就触发下游”，不必再按钟点硬排（2.x 叫 Dataset，Airflow 3 改名 Asset 并继续加强）。</li>
+</ul>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li>手上有 5 个以上相互依赖的定时脚本、开始为“谁先谁后”头疼的人；</li>
+<li>做 ETL、数据仓库、报表的数据工程师和分析师；</li>
+<li>需要把模型训练、批量推理按流程串起来的算法工程师。</li>
+</ul>
+<p>不太适合：毫秒级的实时流处理（那是 Flink、Kafka 的活），或者只有一两个互不相干的定时任务——这时候 crontab 依然是最省事的选择。</p>
+<h2 id="实践从安装到两条管道联动">实践：从安装到两条管道联动</h2>
+<p>下面在本机跑通。需要 Python 3.10–3.14，Windows 请在 WSL2 里操作。</p>
+<h3 id="第-1-步安装">第 1 步：安装</h3>
+<p>Airflow 依赖很多，<strong>必须带官方的 constraint 文件</strong>安装，否则很容易装出一套互相冲突的版本：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> venv</span><span style="color:#79B8FF"> --python</span><span style="color:#79B8FF"> 3.12</span><span style="color:#E1E4E8"> &amp;&amp; </span><span style="color:#79B8FF">source</span><span style="color:#9ECBFF"> .venv/bin/activate</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">AIRFLOW_VERSION</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">3.3.2</span></span>
+<span class="line"><span style="color:#E1E4E8">PYTHON_VERSION</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"$(</span><span style="color:#B392F0">python</span><span style="color:#79B8FF"> -c</span><span style="color:#9ECBFF"> 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')"</span></span>
+<span class="line"><span style="color:#E1E4E8">CONSTRAINT_URL</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"https://raw.githubusercontent.com/apache/airflow/constraints-${</span><span style="color:#E1E4E8">AIRFLOW_VERSION</span><span style="color:#9ECBFF">}/constraints-${</span><span style="color:#E1E4E8">PYTHON_VERSION</span><span style="color:#9ECBFF">}.txt"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> pip</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> "apache-airflow==${</span><span style="color:#E1E4E8">AIRFLOW_VERSION</span><span style="color:#9ECBFF">}"</span><span style="color:#79B8FF"> --constraint</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">CONSTRAINT_URL</span><span style="color:#9ECBFF">}"</span></span></code></pre>
+<p>官方说明里写得很清楚：Poetry 和 pip-tools 不受支持，用 pip 或 uv。</p>
+<h3 id="第-2-步一条命令启动">第 2 步：一条命令启动</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">airflow</span><span style="color:#9ECBFF"> standalone</span></span></code></pre>
+<p>它会初始化数据库、创建管理员、启动全部组件。打开浏览器访问 <code>localhost:8080</code>，用户名 <code>admin</code>，自动生成的密码不一定会打在终端上，直接看这个文件：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">cat</span><span style="color:#9ECBFF"> ~/airflow/simple_auth_manager_passwords.json.generated</span></span></code></pre>
+<p><code>standalone</code> 只适合本地学习，生产环境要把各组件分开部署。</p>
+<h3 id="第-3-步写第一个-dag">第 3 步：写第一个 DAG</h3>
+<p>在 <code>~/airflow/dags/</code> 下新建 <code>daily_orders.py</code>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> datetime </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> timedelta</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> pendulum</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> airflow.sdk </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> Asset, dag, task</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">orders_report </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Asset(</span><span style="color:#9ECBFF">"file:///tmp/orders_report.json"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">@dag</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#FFAB70">    schedule</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"0 2 * * *"</span><span style="color:#E1E4E8">,  </span><span style="color:#6A737D"># 每天凌晨两点</span></span>
+<span class="line"><span style="color:#FFAB70">    start_date</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">pendulum.datetime(</span><span style="color:#79B8FF">2026</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">10</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">tz</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"Asia/Shanghai"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#FFAB70">    catchup</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    default_args</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span><span style="color:#9ECBFF">"retries"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"retry_delay"</span><span style="color:#E1E4E8">: timedelta(</span><span style="color:#FFAB70">minutes</span><span style="color:#F97583">=</span><span style="color:#79B8FF">5</span><span style="color:#E1E4E8">)},</span></span>
+<span class="line"><span style="color:#FFAB70">    tags</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">"demo"</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> daily_orders</span><span style="color:#E1E4E8">():</span></span>
+<span class="line"><span style="color:#B392F0">    @task</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> extract</span><span style="color:#E1E4E8">() -&gt; </span><span style="color:#79B8FF">dict</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#6A737D">        # 实际项目里这里是查数据库或调接口</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> {</span><span style="color:#9ECBFF">"1001"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">301.27</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"1002"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">433.21</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"1003"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">502.22</span><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    @task</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> transform</span><span style="color:#E1E4E8">(orders: </span><span style="color:#79B8FF">dict</span><span style="color:#E1E4E8">) -&gt; </span><span style="color:#79B8FF">float</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> round</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">sum</span><span style="color:#E1E4E8">(orders.values()), </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    @task</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">outlets</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[orders_report])</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> load</span><span style="color:#E1E4E8">(total: </span><span style="color:#79B8FF">float</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#F97583">        import</span><span style="color:#E1E4E8"> json</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        with</span><span style="color:#79B8FF"> open</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"/tmp/orders_report.json"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"w"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> f:</span></span>
+<span class="line"><span style="color:#E1E4E8">            json.dump({</span><span style="color:#9ECBFF">"total"</span><span style="color:#E1E4E8">: total}, f)</span></span>
+<span class="line"><span style="color:#79B8FF">        print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"今日订单总额：</span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">total</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    load(transform(extract()))</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">daily_orders()</span></span></code></pre>
+<p>几个要点：</p>
+<ul>
+<li><code>@task</code> 函数的返回值会自动传给下一个任务，<code>load(transform(extract()))</code> 这一行同时定义了数据流和依赖顺序。</li>
+<li><code>retries=2</code> 表示任务失败会自动再试两次，间隔 5 分钟。</li>
+<li><code>outlets=[orders_report]</code> 告诉 Airflow：“这个任务成功后，<code>orders_report</code> 这份数据更新了。”</li>
+</ul>
+<h3 id="第-4-步不开调度器先在命令行测一遍">第 4 步：不开调度器，先在命令行测一遍</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">airflow</span><span style="color:#9ECBFF"> dags</span><span style="color:#9ECBFF"> test</span><span style="color:#9ECBFF"> daily_orders</span></span></code></pre>
+<p>整条 DAG 会在当前进程里跑一遍，日志直接打到终端。写 DAG 时先用它调通，比在网页上反复点快得多。</p>
+<h3 id="第-5-步让数据更新来触发下游">第 5 步：让数据更新来触发下游</h3>
+<p>再建一个 <code>notify.py</code>，不写时间，而是“等报表更新”：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> pendulum</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> airflow.sdk </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> Asset, dag, task</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">orders_report </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Asset(</span><span style="color:#9ECBFF">"file:///tmp/orders_report.json"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">@dag</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">schedule</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[orders_report], </span><span style="color:#FFAB70">start_date</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">pendulum.datetime(</span><span style="color:#79B8FF">2026</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">10</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">), </span><span style="color:#FFAB70">catchup</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> notify_on_report</span><span style="color:#E1E4E8">():</span></span>
+<span class="line"><span style="color:#B392F0">    @task</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> send</span><span style="color:#E1E4E8">():</span></span>
+<span class="line"><span style="color:#79B8FF">        print</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"报表已更新，发通知"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    send()</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">notify_on_report()</span></span></code></pre>
+<p><code>daily_orders</code> 里的 <code>load</code> 一成功，<code>notify_on_report</code> 就会被触发。如果 <code>schedule</code> 里列了多个资产，Airflow 会等它们都更新过才跑。</p>
+<p>回到网页，把两个 DAG 都打开（新 DAG 默认是暂停状态），手动触发一次 <code>daily_orders</code>，就能看到下游自己跟着跑起来。</p>
+<h2 id="老教程在-airflow-3-里会踩的坑">老教程在 Airflow 3 里会踩的坑</h2>
+<p>网上大量教程还是 2.x 写法，照抄轻则弹弃用警告，重则直接报错：</p>
+<table>
+<thead>
+<tr>
+<th>2.x 写法</th>
+<th>Airflow 3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schedule_interval="@daily"</code></td>
+<td>参数已移除，统一用 <code>schedule</code></td>
+</tr>
+<tr>
+<td><code>from airflow.decorators import dag, task</code></td>
+<td>改从 <code>airflow.sdk</code> 导入，旧路径已弃用</td>
+</tr>
+<tr>
+<td>不写 <code>catchup</code> 默认补跑历史</td>
+<td>默认不补跑，需要补跑要显式写 <code>catchup=True</code></td>
+</tr>
+<tr>
+<td>任务里用 <code>execution_date</code></td>
+<td>已移除，改用 <code>logical_date</code></td>
+</tr>
+<tr>
+<td>SubDAG</td>
+<td>已移除，用 TaskGroup 或资产代替</td>
+</tr>
+<tr>
+<td>任务里直接连元数据库</td>
+<td>不再允许，走官方提供的接口</td>
+</tr>
+</tbody>
+</table>
+<p>存量代码可以先跑一遍 ruff：AIR301、AIR302 挑出 Airflow 3 里会直接报错的写法，AIR311、AIR312 挑出“还能跑但建议改”的写法（比如 <code>airflow.decorators</code> 旧导入）。</p>
+<h2 id="排错速查">排错速查</h2>
+<ul>
+<li><strong>新 DAG 在网页上看不到：</strong> 先跑 <code>airflow dags list-import-errors</code>，多半是文件里有语法错误或导入失败；没有报错就再等一会儿，目录默认每 5 分钟扫描一次。</li>
+<li><strong>DAG 出现了但不跑：</strong> 检查是不是还处于暂停状态，以及 <code>start_date</code> 是否在未来。</li>
+<li><strong>装完一启动就报依赖错误：</strong> 基本是没带 constraint 文件，删掉虚拟环境按第 1 步重装。</li>
+<li><strong>登录密码找不到：</strong> 看 <code>$AIRFLOW_HOME/simple_auth_manager_passwords.json.generated</code>。</li>
+</ul>
+<h2 id="收藏这三行">收藏这三行</h2>
+<ol>
+<li>装：带 constraint 文件装，本地用 <code>airflow standalone</code> 起。</li>
+<li>写：<code>airflow.sdk</code> 里的 <code>@dag</code> + <code>@task</code>，返回值即依赖，失败靠 <code>retries</code> 兜底。</li>
+<li>测：先 <code>airflow dags test</code> 调通，再在网页上打开 DAG 交给调度器；下游用 <code>schedule=[Asset(...)]</code> 跟着数据走。</li>
+</ol>
+<p>项目地址：github.com/apache/airflow</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>Airflow</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>数据工程</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>调度</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/airflow-3-has-assets-is-dagster-still-worth-switching-to" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 airflow-3-has-assets-is-dagster-still-worth-switching-to</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
