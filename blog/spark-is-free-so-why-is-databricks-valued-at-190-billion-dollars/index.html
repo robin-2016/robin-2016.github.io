@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/spark-is-free-so-why-is-databricks-valued-at-190-billion-dollars/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/spark-is-free-so-why-is-databricks-valued-at-190-billion-dollars/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/spark-is-free-so-why-is-databricks-valued-at-190-billion-dollars/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/spark-is-free-so-why-is-databricks-valued-at-190-billion-dollars/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/spark-is-free-so-why-is-databricks-valued-at-190-billion-dollars/"><meta property="og:title" content="spark-is-free-so-why-is-databricks-valued-at-190-billion-dollars — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="spark-is-free-so-why-is-databricks-valued-at-190-billion-dollars — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>spark-is-free-so-why-is-databricks-valued-at-190-billion-dollars — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/spark-is-free-so-why-is-databricks-valued-at-190-billion-dollars/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 10 / 29</span><span class="text-meta" data-astro-cid-tldeq5d5>约 12 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>spark-is-free-so-why-is-databricks-valued-at-190-billion-dollars</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>Databricks</span><span class="tag-outline" data-astro-cid-tldeq5d5>Spark</span><span class="tag-outline" data-astro-cid-tldeq5d5>数据工程</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="spark-免费databricks-凭什么估值-1900-亿美元">Spark 免费，Databricks 凭什么估值 1900 亿美元</h1>
+<p><img src="/assets/images/Spark-Is-Free-So-Why-Is-Databricks-Valued-at-190-Billion-Dollars-summary.png" alt="知识点总结"></p>
+<p>裸跑 Spark，集群、权限、脏数据，全得自己扛。</p>
+<h2 id="摘要">摘要</h2>
+<p>Databricks 的核心是 Spark，卖的却是 Spark 之外的五层东西：Delta Lake、Photon、Unity Catalog、Lakeflow 和全托管。本文逐层讲清多了什么、哪些已回流开源，以及国内怎么对标。</p>
+<h2 id="先分清spark-是引擎databricks-是整台车">先分清：Spark 是引擎，Databricks 是整台车</h2>
+<p>Apache Spark 是开源的分布式计算引擎，管的是“把一大批数据算出来”。Databricks 由 Spark 的原作者创办，卖的是围绕这个引擎搭起来的完整平台。</p>
+<p>这家公司 2026 年 8 月宣布完成 50 亿美元融资，估值 1900 亿美元，年化收入运行率超过 70 亿美元（均为公司公布、媒体转述的数字）。引擎本身免费，钱是从引擎之外的部分赚来的。</p>
+<p>那些部分，大致就是五层。</p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>Spark 本身</th>
+<th>Databricks 多出来的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>存储与事务</td>
+<td>读写文件，没有事务</td>
+<td>Delta Lake：ACID 事务、历史版本</td>
+</tr>
+<tr>
+<td>执行引擎</td>
+<td>JVM 执行</td>
+<td>Photon：原生 C++ 向量化引擎</td>
+</tr>
+<tr>
+<td>治理</td>
+<td>只有元数据目录，没有统一权限</td>
+<td>Unity Catalog：权限、审计、血缘</td>
+</tr>
+<tr>
+<td>管道与编排</td>
+<td>自己写、自己调度</td>
+<td>Lakeflow：接入、声明式管道、作业编排</td>
+</tr>
+<tr>
+<td>运维</td>
+<td>自己管集群</td>
+<td>全托管、Serverless、笔记本协作</td>
+</tr>
+</tbody>
+</table>
+<h2 id="第一层delta-lake让数据湖不再写坏就坏">第一层：Delta Lake，让数据湖不再“写坏就坏”</h2>
+<p>用 Spark 往对象存储里写 Parquet 文件，没有事务。写到一半任务挂了，目录里留下半截文件，下游读到的就是脏数据。两个任务同时写同一张表，更是各写各的。</p>
+<p>Delta Lake 在文件之上加了一层事务日志，提供 ACID 事务和 schema 校验。每次写入都是一个版本，因此还能回看历史：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># 写入 Delta 表</span></span>
+<span class="line"><span style="color:#E1E4E8">df.write.format(</span><span style="color:#9ECBFF">"delta"</span><span style="color:#E1E4E8">).mode(</span><span style="color:#9ECBFF">"append"</span><span style="color:#E1E4E8">).save(</span><span style="color:#9ECBFF">"/data/orders"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 读取第 3 个版本的数据</span></span>
+<span class="line"><span style="color:#E1E4E8">spark.read.format(</span><span style="color:#9ECBFF">"delta"</span><span style="color:#E1E4E8">).option(</span><span style="color:#9ECBFF">"versionAsOf"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">).load(</span><span style="color:#9ECBFF">"/data/orders"</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>它是 Databricks 从 2017 年开始做的，2019 年 4 月开源，同年 10 月捐给了 Linux Foundation。所以这一层你在开源 Spark 上也能用，只是要自己配依赖和参数。</p>
+<h2 id="第二层photon同样的代码跑得更快但有条件">第二层：Photon，同样的代码跑得更快（但有条件）</h2>
+<p>Photon 是 Databricks 自研的向量化查询引擎，用 C++ 写成，按列批量处理数据。查询计划仍由 Spark 的 Catalyst 优化器生成，Photon 只接管执行。代码不用改，不支持的算子会自动退回普通 Spark 运行时，结果不受影响。</p>
+<p>它不是万能的，官方文档写得很清楚：</p>
+<ul>
+<li>对大数据量的长查询帮助最大，本来两秒内就跑完的查询基本没提升；</li>
+<li>UDF、RDD API 和 Dataset API 不在支持范围内；</li>
+<li>流处理只支持写入 Delta 或 Parquet 的无状态流，有状态的不支持；</li>
+<li>开启 Photon 的实例按不同的 DBU 速率计费，要自己算账。</li>
+</ul>
+<p>网上流传的“快 N 倍”多是厂商或第三方在特定负载下的测试，别直接当成你的预期，用自己的查询跑一遍最准。</p>
+<p>这一层不开源，是商业版独有的。</p>
+<h2 id="第三层unity-catalog把权限和血缘收到一处">第三层：Unity Catalog，把权限和血缘收到一处</h2>
+<p>数据一多，问题就从“算不算得出来”变成“谁能看哪张表”“这张表是谁产出的”。Unity Catalog 是 Databricks 的统一治理层，管权限、审计和数据血缘。</p>
+<p>2024 年 6 月它的服务端开源（Apache 2.0），项目托管在 Linux Foundation 旗下的 LF AI &amp; Data 基金会，兼容 Hive metastore 接口和 Iceberg 的 REST catalog 接口，Spark、Trino、DuckDB 等都能接。但要注意，开源版不等于商业版：托管的血缘展示、可视化的目录浏览器等功能，仍然只在商业产品里。</p>
+<h2 id="第四层lakeflow管道和调度一起打包">第四层：Lakeflow，管道和调度一起打包</h2>
+<p>Lakeflow 是 Databricks 的数据工程套件，分三块：</p>
+<ul>
+<li><strong>Connect：</strong> 负责数据接入；</li>
+<li><strong>Spark Declarative Pipelines：</strong> 前身是 Delta Live Tables（先改名 Lakeflow Declarative Pipelines，现名 Lakeflow Spark Declarative Pipelines），用声明的方式写转换逻辑，旧代码不用迁移；</li>
+<li><strong>Jobs：</strong> 做编排，能跑笔记本、管道、SQL 和机器学习任务，支持 if/else 分支和 for each 循环。</li>
+</ul>
+<p>“声明式管道”的思路已经进了开源 Spark：Spark 4.1 带了 Spark Declarative Pipelines，你只描述数据集和查询，依赖顺序、并行、检查点和重试由 Spark 处理。</p>
+<p>Lakeflow Jobs 的定位和 Airflow 这类编排器相近，区别是它内置在平台里。好处是和其他部分打通，代价是被绑在这个平台上。</p>
+<h2 id="第五层全托管省的是人">第五层：全托管，省的是人</h2>
+<p>最后一层最不起眼，也最值钱：集群的创建、扩缩容、版本升级、监控，Serverless 之后连实例类型都不用选。对不少中小团队来说，养一个专职 Spark 运维的人力成本，可能比平台账单还高。</p>
+<p>想上手看看，Databricks 在 2025 年 6 月推出了 Free Edition，旧的 Community Edition 已于 2026 年 1 月 1 日退役：免费、不用信用卡，只提供 Serverless 计算，包含 Unity Catalog、Delta Lake 和 Lakeflow。限制也有，比如 Databricks App 有数量上限且 24 小时后自动停止，出网访问受限，长期不活跃的账号可能被删除。</p>
+<h2 id="国内怎么对标">国内怎么对标</h2>
+<p>没有一个产品能完整等价，要分层来看：</p>
+<ul>
+<li><strong>阿里云：</strong> 曾与 Databricks 合作推出托管产品“数据洞察 DDI”，据阿里云开发者社区的文章，该产品已停服，社区推荐的对标产品是 AnalyticDB MySQL 湖仓版，自带 Serverless Spark，支持 Delta、Hudi、Iceberg 三种开放表格式。MaxCompute 则更偏超大规模的离线批量数仓。以上来自社区文章而非官方公告，选型前请以阿里云官网为准。</li>
+<li><strong>其他云厂商：</strong> 华为云、腾讯云、火山引擎都有各自的大数据套件，侧重点不同。</li>
+<li><strong>自建开源栈：</strong> 不少大厂选择 Spark 或 Flink，加 Iceberg、Paimon 或 Hudi 表格式，再配 Doris 或 StarRocks 做分析，自己拼出湖仓。灵活、不被绑定，代价是治理、编排、运维都得自己补。</li>
+</ul>
+<h2 id="该不该上-databricks">该不该上 Databricks</h2>
+<ul>
+<li>数据量不大、团队没有专职数据运维：托管平台能省下的人力很可观；</li>
+<li>已经有成熟的 Spark 运维团队、对厂商绑定敏感：自建开源栈更稳；</li>
+<li>数据必须放在国内、受合规约束：先确认目标云上的可用产品，别默认能直接用海外版。</li>
+</ul>
+<h2 id="小结">小结</h2>
+<p>Spark 管“算”，Databricks 多出来的是“管”：管数据正确、管权限、管流程、管机器。其中 Delta Lake、Unity Catalog 的服务端和声明式管道的思路已经回流开源，Photon 和全托管体验仍是商业壁垒。</p>
+<p>你们团队现在是自己维护 Spark 集群，还是已经上了托管平台？欢迎说说你的取舍。</p>
+<p>项目地址：github.com/apache/spark</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>Databricks</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>Spark</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>数据工程</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/when-crontab-cant-cope-move-to-airflow" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 when-crontab-cant-cope-move-to-airflow</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
