@@ -1,0 +1,169 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/memvid-puts-agent-long-term-memory-in-one-file/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/memvid-puts-agent-long-term-memory-in-one-file/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/memvid-puts-agent-long-term-memory-in-one-file/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/memvid-puts-agent-long-term-memory-in-one-file/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/memvid-puts-agent-long-term-memory-in-one-file/"><meta property="og:title" content="memvid-puts-agent-long-term-memory-in-one-file — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="memvid-puts-agent-long-term-memory-in-one-file — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>memvid-puts-agent-long-term-memory-in-one-file — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/memvid-puts-agent-long-term-memory-in-one-file/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 11 / 01</span><span class="text-meta" data-astro-cid-tldeq5d5>约 13 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>memvid-puts-agent-long-term-memory-in-one-file</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>Memvid</span><span class="tag-outline" data-astro-cid-tldeq5d5>Agent 记忆</span><span class="tag-outline" data-astro-cid-tldeq5d5>Rust</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="memvid-把-agent-长期记忆塞进一个文件">Memvid 把 Agent 长期记忆塞进一个文件</h1>
+<p><img src="/assets/images/memvid-puts-agent-long-term-memory-in-one-file-summary.png" alt="知识点总结"></p>
+<p>给 Agent 加记忆，非得先搭一套向量库吗？</p>
+<h2 id="摘要">摘要</h2>
+<p>Memvid 是一个用 Rust 写的开源记忆层：数据、向量索引、全文索引和时间索引，全部打包进一个 <code>.mv2</code> 文件。不用起服务，不用配数据库，拷走文件就拷走了记忆。</p>
+<h2 id="它想解决什么问题">它想解决什么问题</h2>
+<p>给 AI Agent 做长期记忆，常见路线是一整套 RAG 管道：切块、嵌入、向量库、检索、重排，每一环都是一个要部署、要升级、要排障的组件。</p>
+<p>Memvid 的思路是反过来：别让记忆依赖一堆外部服务，让它就是一个可以随身携带的文件。官方的说法是 “serverless, single-file memory layer”，数据、嵌入、检索结构和元数据都在里面，检索直接对文件进行。</p>
+<p>截至写作时，它在 GitHub 上约有 1.7 万星、1400 多个 fork，采用 Apache 2.0 协议，主语言是 Rust。</p>
+<h2 id="核心设计smart-frames">核心设计：Smart Frames</h2>
+<p>Memvid 借鉴了视频编码的思路。注意，它不存视频，而是把记忆组织成一串<strong>只追加、不可变的 Smart Frame</strong>。</p>
+<p>每个 Smart Frame 存着内容本身，加上时间戳、校验和与基础元数据。这个设计带来几个直接好处：</p>
+<ul>
+<li><strong>只追加写入</strong>：新记忆不会改动、也不会损坏旧数据</li>
+<li><strong>可查询历史状态</strong>：能看到某个时间点的记忆长什么样</li>
+<li><strong>时间线视角</strong>：可以回看知识是怎么一步步演变的</li>
+<li><strong>崩溃安全</strong>：已提交的帧不可变，配合内嵌 WAL 做崩溃恢复</li>
+<li><strong>高效压缩</strong>：沿用了视频编码里的一些压缩思路</li>
+</ul>
+<p>结果就是一个“可以倒带的记忆时间线”。</p>
+<h2 id="一个文件里装了什么">一个文件里装了什么</h2>
+<p><code>.mv2</code> 文件按顺序包含：4KB 的文件头、内嵌 WAL（崩溃恢复用，按容量分档，最大 64MB）、压缩后的数据段、Tantivy 全文索引、HNSW 向量索引、时间索引，最后是记录各段偏移的目录。</p>
+<p>README 特别强调：没有 <code>.wal</code>、<code>.lock</code>、<code>.shm</code> 之类的旁路文件。要搬走记忆，复制一个文件就够了。</p>
+<h2 id="官方给出的性能数据">官方给出的性能数据</h2>
+<p>README 的 Benchmark 部分写了几组数字：</p>
+<ul>
+<li>在 LoCoMo 基准（10 段、每段约 2.6 万 token 的长对话）上，官方称准确率领先同类记忆系统 35%（“+35% SOTA”，基线口径 README 未展开）</li>
+<li>多跳推理高 76%，时间推理高 56%（对比行业平均）</li>
+<li>延迟 P50 为 0.025ms，P99 为 0.075ms</li>
+</ul>
+<p>这些都是项目方自己公布的数据，评测用 LLM 当裁判。它声称评测代码开源、可复现，但我没有独立复跑。选型前建议用自己的数据跑一遍，别直接照抄这些数字。</p>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li>想给 Agent 加长期记忆，但不想维护向量数据库的开发者</li>
+<li>需要离线、本地运行的 AI 应用，比如隐私敏感的个人知识助手</li>
+<li>希望记忆可回溯、可审计的场景，比如排查 Agent 为什么这么答</li>
+<li>用 Rust 做底层、也想接 Node.js 或 Python 的团队</li>
+</ul>
+<h2 id="快速上手">快速上手</h2>
+<p>官方提供四种入口：</p>
+<table>
+<thead>
+<tr>
+<th>形式</th>
+<th>安装命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>命令行</td>
+<td><code>npm install -g memvid-cli</code></td>
+</tr>
+<tr>
+<td>Node.js SDK</td>
+<td><code>npm install @memvid/sdk</code></td>
+</tr>
+<tr>
+<td>Python SDK</td>
+<td><code>pip install memvid-sdk</code></td>
+</tr>
+<tr>
+<td>Rust 库</td>
+<td><code>cargo add memvid-core</code></td>
+</tr>
+</tbody>
+</table>
+<p>下面用 Rust 走一遍最小流程。先在 <code>Cargo.toml</code> 里按需打开功能：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="toml"><code><span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">dependencies</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">memvid-core = { version = </span><span style="color:#9ECBFF">"2.0"</span><span style="color:#E1E4E8">, features = [</span><span style="color:#9ECBFF">"lex"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"vec"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"temporal_track"</span><span style="color:#E1E4E8">] }</span></span></code></pre>
+<p>常用的功能开关有这些：</p>
+<table>
+<thead>
+<tr>
+<th>开关</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lex</code></td>
+<td>基于 Tantivy 的 BM25 全文检索</td>
+</tr>
+<tr>
+<td><code>vec</code></td>
+<td>HNSW 向量检索，本地 ONNX 文本嵌入</td>
+</tr>
+<tr>
+<td><code>temporal_track</code></td>
+<td>解析“上周二”这类自然语言日期</td>
+</tr>
+<tr>
+<td><code>pdf_extract</code></td>
+<td>纯 Rust 的 PDF 文本提取</td>
+</tr>
+<tr>
+<td><code>clip</code></td>
+<td>CLIP 图像嵌入，用于图片检索</td>
+</tr>
+<tr>
+<td><code>whisper</code></td>
+<td>Whisper 音频转写</td>
+</tr>
+<tr>
+<td><code>encryption</code></td>
+<td>口令加密的 <code>.mv2e</code> 胶囊</td>
+</tr>
+</tbody>
+</table>
+<p>然后创建记忆、写入、提交、检索：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#F97583">use</span><span style="color:#B392F0"> memvid_core</span><span style="color:#F97583">::</span><span style="color:#E1E4E8">{</span><span style="color:#B392F0">AclEnforcementMode</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">Memvid</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">PutOptions</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">SearchRequest</span><span style="color:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">fn</span><span style="color:#B392F0"> main</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">-&gt;</span><span style="color:#B392F0"> memvid_core</span><span style="color:#F97583">::</span><span style="color:#B392F0">Result</span><span style="color:#E1E4E8">&lt;()&gt; {</span></span>
+<span class="line"><span style="color:#6A737D">    // 创建一个新的记忆文件</span></span>
+<span class="line"><span style="color:#F97583">    let</span><span style="color:#F97583"> mut</span><span style="color:#E1E4E8"> mem </span><span style="color:#F97583">=</span><span style="color:#B392F0"> Memvid</span><span style="color:#F97583">::</span><span style="color:#B392F0">create</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"knowledge.mv2"</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">?</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // 写入文档并附带元数据</span></span>
+<span class="line"><span style="color:#F97583">    let</span><span style="color:#E1E4E8"> opts </span><span style="color:#F97583">=</span><span style="color:#B392F0"> PutOptions</span><span style="color:#F97583">::</span><span style="color:#B392F0">builder</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#F97583">        .</span><span style="color:#B392F0">title</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Meeting Notes"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">        .</span><span style="color:#B392F0">uri</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"mv2://meetings/2024-01-15"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">        .</span><span style="color:#B392F0">tag</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"project"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"alpha"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">        .</span><span style="color:#B392F0">build</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    mem</span><span style="color:#F97583">.</span><span style="color:#B392F0">put_bytes_with_options</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">b"Q4 planning discussion..."</span><span style="color:#E1E4E8">, opts)</span><span style="color:#F97583">?</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    mem</span><span style="color:#F97583">.</span><span style="color:#B392F0">commit</span><span style="color:#E1E4E8">()</span><span style="color:#F97583">?</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // 检索</span></span>
+<span class="line"><span style="color:#F97583">    let</span><span style="color:#E1E4E8"> response </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> mem</span><span style="color:#F97583">.</span><span style="color:#B392F0">search</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">SearchRequest</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">        query</span><span style="color:#F97583">:</span><span style="color:#9ECBFF"> "planning"</span><span style="color:#F97583">.</span><span style="color:#B392F0">into</span><span style="color:#E1E4E8">(),</span></span>
+<span class="line"><span style="color:#E1E4E8">        top_k</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> 10</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        snippet_chars</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> 200</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        uri</span><span style="color:#F97583">:</span><span style="color:#B392F0"> None</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        scope</span><span style="color:#F97583">:</span><span style="color:#B392F0"> None</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        cursor</span><span style="color:#F97583">:</span><span style="color:#B392F0"> None</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        temporal</span><span style="color:#F97583">:</span><span style="color:#B392F0"> None</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">// 开了 temporal_track 才有这个字段</span></span>
+<span class="line"><span style="color:#E1E4E8">        as_of_frame</span><span style="color:#F97583">:</span><span style="color:#B392F0"> None</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        as_of_ts</span><span style="color:#F97583">:</span><span style="color:#B392F0"> None</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        no_sketch</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> false</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        acl_context</span><span style="color:#F97583">:</span><span style="color:#B392F0"> None</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        acl_enforcement_mode</span><span style="color:#F97583">:</span><span style="color:#B392F0"> AclEnforcementMode</span><span style="color:#F97583">::</span><span style="color:#B392F0">Audit</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    })</span><span style="color:#F97583">?</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> hit </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> response</span><span style="color:#F97583">.</span><span style="color:#E1E4E8">hits {</span></span>
+<span class="line"><span style="color:#B392F0">        println!</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"{}: {}"</span><span style="color:#E1E4E8">, hit</span><span style="color:#F97583">.</span><span style="color:#E1E4E8">title</span><span style="color:#F97583">.</span><span style="color:#B392F0">unwrap_or_default</span><span style="color:#E1E4E8">(), hit</span><span style="color:#F97583">.</span><span style="color:#E1E4E8">text);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    Ok</span><span style="color:#E1E4E8">(())</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>两个细节：写入之后要调用 <code>commit()</code>；另外 README 原版示例用 <code>..Default::default()</code> 补齐 <code>SearchRequest</code> 的其余字段，但在当前的 memvid-core 2.0.140 里这个结构体并没有实现 <code>Default</code>，照抄会编译失败，所以上面按官方 <code>examples/basic_usage.rs</code> 的写法把字段写全了。</p>
+<h2 id="进阶本地嵌入与模型一致性">进阶：本地嵌入与模型一致性</h2>
+<p>开启 <code>vec</code> 后可以用本地 ONNX 模型生成嵌入，默认是 <code>bge-small-en-v1.5</code>（384 维，README 标注约 120MB）。模型文件需要自己下载放到 <code>~/.cache/memvid/text-models</code> 目录，库不会代你下载。</p>
+<p>另一个值得留意的细节是<strong>模型绑定</strong>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#E1E4E8">mem</span><span style="color:#F97583">.</span><span style="color:#B392F0">set_vec_model</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"bge-small-en-v1.5"</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">?</span><span style="color:#E1E4E8">;</span></span></code></pre>
+<p>绑定是持久的，会写进文件的索引清单。之后再用另一个模型名调用 <code>set_vec_model</code>，会直接报 <code>ModelMismatch</code>，而不是让你把两种嵌入悄悄混进同一个索引。混用嵌入模型是向量检索里很隐蔽的坑，这个设计能把它提前拦住。</p>
+<p>如果不想本地跑模型，也可以开 <code>api_embed</code>，用 OpenAI 的 <code>text-embedding-3-small</code>（1536 维）等云端嵌入。</p>
+<h2 id="需要留意的地方">需要留意的地方</h2>
+<ul>
+<li><strong>v1 已废弃</strong>：早期基于二维码视频的记忆方案已经弃用。README 明确提醒，如果你读到的资料还在讲二维码，那是过时的。</li>
+<li><strong>嵌入模型要手动准备</strong>：本地嵌入的 ONNX 文件需要自己下载。</li>
+<li><strong>性能数字是自测</strong>：见上文，选型时自己验证。</li>
+</ul>
+<h2 id="结尾三行速查">结尾：三行速查</h2>
+<ol>
+<li>记忆就是一个 <code>.mv2</code> 文件，复制即迁移，没有旁路文件。</li>
+<li>写入后记得 <code>commit()</code>；<code>SearchRequest</code> 没有 <code>Default</code>，字段要写全。</li>
+<li>用向量检索时先 <code>set_vec_model</code> 绑定模型，防止嵌入混用。</li>
+</ol>
+<p>项目地址：github.com/memvid/memvid</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>Memvid</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>Agent 记忆</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>Rust</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/spark-is-free-so-why-is-databricks-valued-at-190-billion-dollars" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 spark-is-free-so-why-is-databricks-valued-at-190-billion-dollars</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
