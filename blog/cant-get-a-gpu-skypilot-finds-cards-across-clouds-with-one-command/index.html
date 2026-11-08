@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/cant-get-a-gpu-skypilot-finds-cards-across-clouds-with-one-command/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/cant-get-a-gpu-skypilot-finds-cards-across-clouds-with-one-command/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/cant-get-a-gpu-skypilot-finds-cards-across-clouds-with-one-command/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/cant-get-a-gpu-skypilot-finds-cards-across-clouds-with-one-command/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/cant-get-a-gpu-skypilot-finds-cards-across-clouds-with-one-command/"><meta property="og:title" content="cant-get-a-gpu-skypilot-finds-cards-across-clouds-with-one-command — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="cant-get-a-gpu-skypilot-finds-cards-across-clouds-with-one-command — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>cant-get-a-gpu-skypilot-finds-cards-across-clouds-with-one-command — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/cant-get-a-gpu-skypilot-finds-cards-across-clouds-with-one-command/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 11 / 07</span><span class="text-meta" data-astro-cid-tldeq5d5>约 11 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>cant-get-a-gpu-skypilot-finds-cards-across-clouds-with-one-command</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>SkyPilot</span><span class="tag-outline" data-astro-cid-tldeq5d5>GPU</span><span class="tag-outline" data-astro-cid-tldeq5d5>多云</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="gpu-抢不到skypilot-一条命令跨云找卡">GPU 抢不到？SkyPilot 一条命令跨云找卡</h1>
+<p><img src="/assets/images/cant-get-a-gpu-skypilot-finds-cards-across-clouds-with-one-command-summary.png" alt="知识点总结"></p>
+<p>A100 缺货，它自动换一家云。</p>
+<h2 id="摘要">摘要</h2>
+<p>SkyPilot 是一个开源的 AI 算力调度系统：用一份 YAML 描述任务，<code>sky launch</code> 就能在你的 Kubernetes、Slurm 或 20 多家云里找到最便宜、有货的 GPU，缺货自动换地方，闲置还能自动回收。</p>
+<h2 id="它解决什么问题">它解决什么问题</h2>
+<p>训练和推理最常见的两个烦恼：卡不好抢，抢到了又忘记关。</p>
+<ul>
+<li>某家云的 A100 容量不足，你得手动换区域、换厂商，重新配环境。</li>
+<li>每家云的控制台、CLI、镜像都不一样，脚本很难迁移。</li>
+<li>集群闲着也在计费，没人记得去关。</li>
+</ul>
+<p>SkyPilot 的思路是：把“我要什么”和“在哪跑”拆开。你只写资源需求，剩下的找卡、开机、传代码、装依赖、跑任务，都由它完成。</p>
+<h2 id="核心优势">核心优势</h2>
+<ul>
+<li><strong>一份任务，到处能跑</strong>：任务用 YAML（或 Python API）描述，可以在 Kubernetes、Slurm、各家云之间切换，避免绑定单一厂商。</li>
+<li><strong>自动找最便宜、有货的</strong>：它会在你已配置的基础设施里挑最便宜且可用的，遇到容量错误自动故障转移到下一个候选。</li>
+<li><strong>BYOC，数据不出你的账号</strong>：所有资源都在你自己的云账号、VPC 和集群里启动。</li>
+<li><strong>省钱的细节很实在</strong>：空闲自动停机（autostop）、共享集群上的装箱调度（binpacking）、托管任务出错自动恢复。</li>
+<li><strong>对 Kubernetes 友好</strong>：给 K8s 加上成组调度（gang scheduling）、多集群统一入口和扩缩容，并且可以 SSH 进 Pod、同步代码、连 IDE，开发体验接近 Slurm。</li>
+<li><strong>不用改代码</strong>：已有的 GPU、TPU、CPU 工作负载直接跑。</li>
+</ul>
+<p>截至目前，支持的基础设施包括 Kubernetes、Slurm、AWS、GCP、Azure、OCI、CoreWeave、Nebius、Lambda Cloud、RunPod、Vast.ai、Crusoe 等二十多家。</p>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li>个人开发者、小团队：想用最便宜的卡做微调、跑实验，不想被某一家云绑死。</li>
+<li>已经有 Kubernetes 集群的 AI 团队：想让算法同学不用懂 K8s 也能提任务。</li>
+<li>平台团队：需要一个统一入口管理多云、多集群的 GPU。</li>
+</ul>
+<h2 id="快速上手">快速上手</h2>
+<p><strong>1. 安装</strong>，按需选择云：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">uv</span><span style="color:#9ECBFF"> pip</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> "skypilot[kubernetes,aws,gcp]"</span></span></code></pre>
+<p><strong>2. 检查哪些云已经可用</strong>（会读取你本机已有的云凭证）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sky</span><span style="color:#9ECBFF"> check</span></span></code></pre>
+<p><strong>3. 写一个任务文件</strong> <code>my_task.yaml</code>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">resources</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  accelerators</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">A100:8</span><span style="color:#6A737D">   # 8 张 A100</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#85E89D">num_nodes</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#85E89D">workdir</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">~/torch_examples</span><span style="color:#6A737D">   # 本地目录，会同步到集群的 ~/sky_workdir/</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#85E89D">setup</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">|</span></span>
+<span class="line"><span style="color:#9ECBFF">  cd mnist</span></span>
+<span class="line"><span style="color:#9ECBFF">  pip install -r requirements.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#85E89D">run</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">|</span></span>
+<span class="line"><span style="color:#9ECBFF">  cd mnist</span></span>
+<span class="line"><span style="color:#9ECBFF">  python main.py --epochs 1</span></span></code></pre>
+<p>先把示例代码拉下来：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> clone</span><span style="color:#9ECBFF"> https://github.com/pytorch/examples.git</span><span style="color:#9ECBFF"> ~/torch_examples</span></span></code></pre>
+<p><strong>4. 启动</strong>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sky</span><span style="color:#9ECBFF"> launch</span><span style="color:#79B8FF"> -c</span><span style="color:#9ECBFF"> mycluster</span><span style="color:#9ECBFF"> my_task.yaml</span></span></code></pre>
+<p>这一条命令背后，SkyPilot 会依次做五件事：</p>
+<ol>
+<li>在你的集群或云里找最便宜、有货的基础设施</li>
+<li>开出 GPU（Pod 或虚拟机），容量错误时自动故障转移</li>
+<li>把本地 <code>workdir</code> 同步上去</li>
+<li>运行 <code>setup</code> 安装依赖</li>
+<li>运行 <code>run</code> 并实时输出日志</li>
+</ol>
+<p><strong>5. 用完就收</strong>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sky</span><span style="color:#9ECBFF"> status</span><span style="color:#6A737D">          # 查看集群</span></span>
+<span class="line"><span style="color:#B392F0">sky</span><span style="color:#9ECBFF"> down</span><span style="color:#9ECBFF"> mycluster</span><span style="color:#6A737D">  # 释放，停止计费</span></span></code></pre>
+<p>提前设置空闲自动停机，可以避免忘关：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sky</span><span style="color:#9ECBFF"> launch</span><span style="color:#79B8FF"> -c</span><span style="color:#9ECBFF"> mycluster</span><span style="color:#9ECBFF"> my_task.yaml</span><span style="color:#79B8FF"> -i</span><span style="color:#79B8FF"> 30</span><span style="color:#79B8FF"> --down</span></span></code></pre>
+<p>意思是空闲 30 分钟后自动释放集群。注意区别：只写 <code>-i 30</code> 是自动停机（autostop，保留磁盘），加上 <code>--down</code> 才是彻底删除（autodown）。“空闲”指集群上没有排队或运行中的任务、也没有活跃的 SSH 连接，计时在集群端进行，本机关机也不影响。</p>
+<h2 id="进阶用法">进阶用法</h2>
+<p><strong>多个候选卡，谁有货用谁。</strong> 在 <code>resources</code> 里用 <code>any_of</code> 列出可接受的配置：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">resources</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  any_of</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#85E89D">accelerators</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">H100:8</span></span>
+<span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#85E89D">accelerators</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">A100-80GB:8</span></span></code></pre>
+<p><strong>用竞价实例省钱</strong>，配合托管任务（<code>sky jobs launch</code>）可以在被回收后自动恢复：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">resources</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  accelerators</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">A100:8</span></span>
+<span class="line"><span style="color:#85E89D">  use_spot</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sky</span><span style="color:#9ECBFF"> jobs</span><span style="color:#9ECBFF"> launch</span><span style="color:#9ECBFF"> my_task.yaml</span></span></code></pre>
+<p><strong>推理服务</strong>同样可以用它部署，官方示例覆盖 vLLM、SGLang、Ollama，训练示例覆盖 verl、DeepSpeed、TorchTitan、Unsloth、Ray 等常用框架。</p>
+<h2 id="局限与提醒">局限与提醒</h2>
+<ul>
+<li>它是调度层，不是算力提供方：账号、配额和 GPU 额度仍然要自己申请，热门卡在所有云都缺货时它也变不出卡。</li>
+<li>在多家云之间迁移时，数据位置和出口流量费用要自己算账。</li>
+<li>项目迭代很快，命令和 YAML 字段以当前版本文档为准。</li>
+</ul>
+<h2 id="小抄常用命令与选型">小抄：常用命令与选型</h2>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>命令 / 写法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>安装</td>
+<td><code>uv pip install "skypilot[kubernetes,aws,gcp]"</code></td>
+</tr>
+<tr>
+<td>检查可用的云</td>
+<td><code>sky check</code></td>
+</tr>
+<tr>
+<td>启动任务</td>
+<td><code>sky launch -c mycluster my_task.yaml</code></td>
+</tr>
+<tr>
+<td>空闲 30 分钟自动删除</td>
+<td><code>sky launch -c mycluster my_task.yaml -i 30 --down</code></td>
+</tr>
+<tr>
+<td>查看集群</td>
+<td><code>sky status</code></td>
+</tr>
+<tr>
+<td>释放集群</td>
+<td><code>sky down mycluster</code></td>
+</tr>
+<tr>
+<td>竞价实例 + 自动恢复</td>
+<td><code>use_spot: true</code> 配合 <code>sky jobs launch my_task.yaml</code></td>
+</tr>
+<tr>
+<td>多候选卡</td>
+<td><code>resources</code> 下写 <code>any_of</code></td>
+</tr>
+</tbody>
+</table>
+<p>什么时候该用它：</p>
+<ul>
+<li>只在一家云、卡也够用 → 直接用那家的工具就行，不必引入。</li>
+<li>经常抢不到卡、或想比价 → 用 <code>any_of</code> 多候选加 <code>sky launch</code>。</li>
+<li>总忘记关机 → 一律带上 <code>-i 30 --down</code>。</li>
+</ul>
+<p>项目地址：github.com/skypilot-org/skypilot</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>SkyPilot</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>GPU</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>多云</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/ollama-or-vllm-count-your-users-first" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 ollama-or-vllm-count-your-users-first</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
