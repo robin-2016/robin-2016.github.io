@@ -1,0 +1,362 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/from-electron-to-gpui-how-to-choose-among-9-cross-platform-desktop-frameworks/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/from-electron-to-gpui-how-to-choose-among-9-cross-platform-desktop-frameworks/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/from-electron-to-gpui-how-to-choose-among-9-cross-platform-desktop-frameworks/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/from-electron-to-gpui-how-to-choose-among-9-cross-platform-desktop-frameworks/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/from-electron-to-gpui-how-to-choose-among-9-cross-platform-desktop-frameworks/"><meta property="og:title" content="from-electron-to-gpui-how-to-choose-among-9-cross-platform-desktop-frameworks — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="from-electron-to-gpui-how-to-choose-among-9-cross-platform-desktop-frameworks — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>from-electron-to-gpui-how-to-choose-among-9-cross-platform-desktop-frameworks — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/from-electron-to-gpui-how-to-choose-among-9-cross-platform-desktop-frameworks/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 11 / 08</span><span class="text-meta" data-astro-cid-tldeq5d5>约 31 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>from-electron-to-gpui-how-to-choose-among-9-cross-platform-desktop-frameworks</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>跨平台</span><span class="tag-outline" data-astro-cid-tldeq5d5>桌面开发</span><span class="tag-outline" data-astro-cid-tldeq5d5>Rust</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="从-electron-到-gpui9-个跨平台桌面方案该怎么选">从 Electron 到 GPUI，9 个跨平台桌面方案该怎么选</h1>
+<p><img src="/assets/images/from-electron-to-gpui-how-to-choose-among-9-cross-platform-desktop-frameworks-summary.png" alt="知识点总结"></p>
+<p>这 9 个方案里，有 3 个出生还不到两个月。</p>
+<h2 id="摘要">摘要</h2>
+<p>把 Electron、Tauri、Wails、MyGo、Flutter、GPUI、Rune、Native Shell、PyQt 放在一起，按技术栈、渲染方式、成熟度和热度逐个对比，最后给出一张按团队背景选型的速查表。</p>
+<h2 id="背景跨平台客户端又热闹起来了">背景：跨平台客户端又热闹起来了</h2>
+<p>前几年聊跨平台桌面，基本就是「Electron 太重，换 Tauri」。到 2026 年底，局面变了：</p>
+<ul>
+<li><strong>Web 路线</strong>里，Electron 仍是生态霸主，Tauri、Wails、MyGo 的网页模式改用系统 WebView，继续变轻；</li>
+<li><strong>自绘路线</strong>早有 Flutter 打底，GPUI、Rune、MyGo 的原生模式又因为 Zed 编辑器 1.0 的成功，被更多人认真看待；</li>
+<li><strong>原生控件路线</strong>（Native Shell）重新出现，而且一套代码覆盖桌面 + 手机 + Web；</li>
+<li>还有一个新变量：<strong>AI 写 UI</strong>。Rune 和 Native Shell 都把「让 AI agent 能写、能看、能测界面」写进了设计目标。</li>
+</ul>
+<p>下面的数据统一取自 2026-11-08 的 GitHub、PyPI 和 crates.io。</p>
+<h2 id="先看全景一张表">先看全景：一张表</h2>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>语言 / 技术栈</th>
+<th>界面怎么画</th>
+<th>平台</th>
+<th>GitHub Stars</th>
+<th>成熟度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Electron</td>
+<td>JS/TS + Chromium + Node.js</td>
+<td>内置 Chromium</td>
+<td>桌面</td>
+<td>12.4 万</td>
+<td>非常成熟（v45）</td>
+</tr>
+<tr>
+<td>Tauri</td>
+<td>Rust 后端 + 任意 Web 前端</td>
+<td>系统 WebView</td>
+<td>桌面 + iOS/Android</td>
+<td>11.2 万</td>
+<td>稳定（2.12），3.0 alpha</td>
+</tr>
+<tr>
+<td>Wails</td>
+<td>Go 后端 + 任意 Web 前端</td>
+<td>系统 WebView</td>
+<td>桌面</td>
+<td>3.7 万</td>
+<td>v3.1，v3 刚正式发布</td>
+</tr>
+<tr>
+<td>PyQt / PySide</td>
+<td>Python + Qt</td>
+<td>Qt 控件（自绘）</td>
+<td>桌面</td>
+<td>—（Qt 近 30 年）</td>
+<td>非常成熟</td>
+</tr>
+<tr>
+<td>Flutter</td>
+<td>Dart</td>
+<td>自带引擎自绘</td>
+<td>桌面 + iOS/Android + Web</td>
+<td>18.1 万</td>
+<td>非常成熟（3.47）</td>
+</tr>
+<tr>
+<td>GPUI</td>
+<td>Rust</td>
+<td>GPU 自绘</td>
+<td>桌面（+WASM 实验）</td>
+<td>Zed 9.4 万 / GPUI Kit 2 万</td>
+<td>引擎成熟，API 未稳定</td>
+</tr>
+<tr>
+<td>MyGo</td>
+<td>纯 Go</td>
+<td>WebView 或 GPU 自绘，可混用</td>
+<td>桌面</td>
+<td>5,408</td>
+<td>v0.8，诞生 6 周</td>
+</tr>
+<tr>
+<td>Rune</td>
+<td>Rust</td>
+<td>GPU 自绘</td>
+<td>桌面 + Web</td>
+<td>5,157</td>
+<td>pre-release，诞生 2 周多</td>
+</tr>
+<tr>
+<td>Native Shell</td>
+<td>Rust 内核 + TSX / Rust</td>
+<td>各平台原生控件</td>
+<td>桌面 + iOS/Android + Web</td>
+<td>2,112</td>
+<td>v0.4，诞生 3 周多</td>
+</tr>
+</tbody>
+</table>
+<h2 id="逐个看">逐个看</h2>
+<h3 id="1-electron生态最大的老大哥">1. Electron：生态最大的「老大哥」</h3>
+<p><strong>是什么</strong>：把 Chromium 浏览器内核和 Node.js 一起打包进应用，界面就是一个网页，主进程用 Node.js 调用系统能力。VS Code、Slack 这些大家每天在用的桌面软件都是它做的。</p>
+<p><strong>技术栈</strong>：JavaScript / TypeScript + HTML/CSS + Node.js。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="js"><code><span class="line"><span style="color:#6A737D">// main.js</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#E1E4E8"> { </span><span style="color:#79B8FF">app</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">BrowserWindow</span><span style="color:#E1E4E8"> } </span><span style="color:#F97583">=</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"electron"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">app.</span><span style="color:#B392F0">whenReady</span><span style="color:#E1E4E8">().</span><span style="color:#B392F0">then</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> win</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> BrowserWindow</span><span style="color:#E1E4E8">({ width: </span><span style="color:#79B8FF">800</span><span style="color:#E1E4E8">, height: </span><span style="color:#79B8FF">600</span><span style="color:#E1E4E8"> });</span></span>
+<span class="line"><span style="color:#E1E4E8">  win.</span><span style="color:#B392F0">loadFile</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"index.html"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">app.</span><span style="color:#B392F0">on</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"window-all-closed"</span><span style="color:#E1E4E8">, () </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (process.platform </span><span style="color:#F97583">!==</span><span style="color:#9ECBFF"> "darwin"</span><span style="color:#E1E4E8">) app.</span><span style="color:#B392F0">quit</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre>
+<p><strong>优势</strong>：</p>
+<ul>
+<li><strong>三个平台用的是同一个 Chromium</strong>，渲染结果一致，前端代码几乎不用为平台差异分支；</li>
+<li>生态最大：npm 包随便用，打包、签名、自动更新（Electron Forge、electron-builder）都有成熟方案；</li>
+<li>前端团队零门槛，招人最容易。</li>
+</ul>
+<p><strong>劣势</strong>：</p>
+<ul>
+<li>每个应用都自带一份 Chromium + Node.js，安装包和内存占用是 9 个方案里最重的一档；</li>
+<li>主进程、渲染进程、预加载脚本的分层和安全配置（上下文隔离、IPC 白名单）需要认真设计，否则容易留下安全隐患；</li>
+<li>不支持移动端。</li>
+</ul>
+<p><strong>热度与成熟度</strong>：12.4 万 Stars，2013 年起步，当前 v45.2.3（2026-11-04）。<strong>最成熟、最稳妥</strong>，体积和内存不是硬约束时，它依然是很多团队的默认答案。</p>
+<h3 id="2-tauriwebview-路线的事实标准">2. Tauri：WebView 路线的事实标准</h3>
+<p><strong>是什么</strong>：Rust 写后端逻辑，前端随便用 React、Vue、Svelte，界面跑在操作系统自带的 WebView 里（macOS 的 WKWebView、Windows 的 WebView2、Linux 的 WebKitGTK）。</p>
+<p><strong>技术栈</strong>：Rust + HTML/CSS/JS。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#6A737D">// src-tauri/src/lib.rs</span></span>
+<span class="line"><span style="color:#E1E4E8">#[tauri</span><span style="color:#F97583">::</span><span style="color:#E1E4E8">command]</span></span>
+<span class="line"><span style="color:#F97583">fn</span><span style="color:#B392F0"> greet</span><span style="color:#E1E4E8">(name</span><span style="color:#F97583">:</span><span style="color:#F97583"> &amp;</span><span style="color:#B392F0">str</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">-&gt;</span><span style="color:#B392F0"> String</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#B392F0">    format!</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Hello, {}!"</span><span style="color:#E1E4E8">, name)</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">#[cfg_attr(mobile, tauri</span><span style="color:#F97583">::</span><span style="color:#E1E4E8">mobile_entry_point)]</span></span>
+<span class="line"><span style="color:#F97583">pub</span><span style="color:#F97583"> fn</span><span style="color:#B392F0"> run</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#B392F0">    tauri</span><span style="color:#F97583">::</span><span style="color:#B392F0">Builder</span><span style="color:#F97583">::</span><span style="color:#B392F0">default</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#F97583">        .</span><span style="color:#B392F0">invoke_handler</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">tauri</span><span style="color:#F97583">::</span><span style="color:#B392F0">generate_handler!</span><span style="color:#E1E4E8">[greet])</span></span>
+<span class="line"><span style="color:#F97583">        .</span><span style="color:#B392F0">run</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">tauri</span><span style="color:#F97583">::</span><span style="color:#B392F0">generate_context!</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"><span style="color:#F97583">        .</span><span style="color:#B392F0">expect</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"error while running tauri application"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#6A737D">// 前端</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { invoke } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@tauri-apps/api/core"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> msg</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#B392F0"> invoke</span><span style="color:#E1E4E8">&lt;</span><span style="color:#79B8FF">string</span><span style="color:#E1E4E8">&gt;(</span><span style="color:#9ECBFF">"greet"</span><span style="color:#E1E4E8">, { name: </span><span style="color:#9ECBFF">"Ada"</span><span style="color:#E1E4E8"> });</span></span></code></pre>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>不捆绑浏览器内核，安装包和内存都远小于 Electron；</li>
+<li>2.0 起同一套工程能出 iOS、Android；</li>
+<li>权限（capability）模型做得细，插件生态是同类里最全的。</li>
+</ul>
+<p><strong>劣势</strong>：</p>
+<ul>
+<li>三个平台的 WebView 内核不一样，CSS 兼容、字体渲染、性能都要分别测，Linux 上的 WebKitGTK 最容易出问题；</li>
+<li>后端要写 Rust，对纯前端团队有门槛。3.0 alpha 新增了可选的 CEF（内置 Chromium）运行时，正是为了解决内核不一致，但代价是安装包明显变大。</li>
+</ul>
+<p><strong>热度与成熟度</strong>：11.2 万 Stars，接近 Electron 的 12.4 万；稳定线 2.12.5（2026-10-21），3.0 还在 alpha。<strong>生产可用，首选级别。</strong></p>
+<h3 id="3-wailsgo-版的-tauri">3. Wails：Go 版的 Tauri</h3>
+<p><strong>是什么</strong>：思路和 Tauri 几乎一样，只是后端换成 Go。Go 结构体的方法会被自动生成为前端可调用的 JS/TS 绑定。</p>
+<p><strong>技术栈</strong>：Go + 任意 Web 前端 + 系统 WebView。</p>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>Go 团队零学习成本，编译快，后端并发和网络库现成；</li>
+<li>v3 带来多窗口、系统托盘、新的绑定生成器，补齐了 v2 最常被吐槽的短板。</li>
+</ul>
+<p><strong>劣势</strong>：</p>
+<ul>
+<li>同样受三平台 WebView 差异困扰；</li>
+<li>不支持移动端；</li>
+<li>v3.0.0 在 2026-10-26 才正式发布，v2 → v3 有迁移成本，社区教程大多仍是 v2 写法。</li>
+</ul>
+<p><strong>热度与成熟度</strong>：3.7 万 Stars，2018 年起步，v2 已有大量生产应用。<strong>稳定可用，Go 团队的默认选择</strong>，新项目可直接上 v3。</p>
+<h3 id="4-mygogo-生态的新挑战者">4. MyGo：Go 生态的新挑战者</h3>
+<p><strong>是什么</strong>：前端圈知名开源作者 egoist 在 2026-09-26 开的新项目，口号是「用 Go 写桌面应用，原生 UI 或 Web 前端都行」。窗口界面有两种写法，同一个应用、甚至同一个窗口里都能混用：</p>
+<ul>
+<li><strong>网页模式</strong>：和 Wails 类似，用系统 WebView，前端通过自动生成的 TypeScript 客户端调用 Go；</li>
+<li><strong>原生模式</strong>：用 Go 的 <code>ui</code> 包写界面，MyGo 自己在 GPU 上绘制，没有 HTML、没有 JS、没有 WebView。</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="go"><code><span class="line"><span style="color:#F97583">type</span><span style="color:#B392F0"> Greeter</span><span style="color:#F97583"> struct</span><span style="color:#E1E4E8">{}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Greet returns a greeting.</span></span>
+<span class="line"><span style="color:#F97583">func</span><span style="color:#E1E4E8"> (</span><span style="color:#B392F0">Greeter</span><span style="color:#E1E4E8">) </span><span style="color:#B392F0">Greet</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">name</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">string</span><span style="color:#E1E4E8"> { </span><span style="color:#F97583">return</span><span style="color:#9ECBFF"> "Hello, "</span><span style="color:#F97583"> +</span><span style="color:#E1E4E8"> name }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">func</span><span style="color:#B392F0"> main</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#E1E4E8">	mygo.</span><span style="color:#B392F0">Bind</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">Greeter</span><span style="color:#E1E4E8">{})</span></span>
+<span class="line"><span style="color:#E1E4E8">	mygo.App.</span><span style="color:#B392F0">WhenReady</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">func</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#E1E4E8">		mygo.</span><span style="color:#B392F0">NewWindow</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">mygo</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">WindowOptions</span><span style="color:#E1E4E8">{Title: </span><span style="color:#9ECBFF">"Hello"</span><span style="color:#E1E4E8">, URL: </span><span style="color:#9ECBFF">"/"</span><span style="color:#E1E4E8">})</span></span>
+<span class="line"><span style="color:#E1E4E8">	})</span></span>
+<span class="line"><span style="color:#F97583">	if</span><span style="color:#E1E4E8"> err </span><span style="color:#F97583">:=</span><span style="color:#E1E4E8"> mygo.App.</span><span style="color:#B392F0">Run</span><span style="color:#E1E4E8">(); err </span><span style="color:#F97583">!=</span><span style="color:#79B8FF"> nil</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">		log.</span><span style="color:#B392F0">Fatal</span><span style="color:#E1E4E8">(err)</span></span>
+<span class="line"><span style="color:#E1E4E8">	}</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { Greeter } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "./mygo"</span><span style="color:#E1E4E8">; </span><span style="color:#6A737D">// 自动生成</span></span>
+<span class="line"><span style="color:#E1E4E8">document.body.textContent </span><span style="color:#F97583">=</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> Greeter.</span><span style="color:#B392F0">greet</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Ada"</span><span style="color:#E1E4E8">);</span></span></code></pre>
+<p><strong>优势</strong>：</p>
+<ul>
+<li><strong>纯 Go、不用 cgo</strong>，在一台机器上就能交叉编译出三个平台的包，而 Wails 在 macOS、Linux 上要靠 cgo 接 WebView，交叉编译这两个平台得借助 Docker；</li>
+<li>产物是一个几 MB 的 Go 二进制；</li>
+<li>打包发布链路很全：dmg、Windows 安装器、deb、签名公证、带增量更新的自动升级都内置。</li>
+</ul>
+<p><strong>劣势</strong>：</p>
+<ul>
+<li>诞生约 6 周，版本 v0.8.3，API 随时可能变；</li>
+<li>原生 UI 的控件数量、复杂场景的稳定性还没经过大规模验证；</li>
+<li>要求 Go 1.27.3 以上。</li>
+</ul>
+<p><strong>热度与成熟度</strong>：6 周 5,400 多 Stars，增速很猛；<strong>适合尝鲜和内部工具，重要产品先观望。</strong></p>
+<h3 id="5-flutter从手机打到桌面的自绘框架">5. Flutter：从手机打到桌面的自绘框架</h3>
+<p><strong>是什么</strong>：Google 出品的 UI 框架，不用 WebView，也不用系统控件，而是自带渲染引擎把每一个像素自己画出来。移动端起家，一套 Dart 代码可以出 iOS、Android、Web、Windows、macOS、Linux 六个平台；Ubuntu 的新版安装器就是用 Flutter 写的。</p>
+<p><strong>技术栈</strong>：Dart + Flutter 引擎（Skia / Impeller）。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="dart"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#9ECBFF"> 'package:flutter/material.dart'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">void</span><span style="color:#B392F0"> main</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#B392F0">  runApp</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">const</span><span style="color:#79B8FF"> MaterialApp</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    home</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> Scaffold</span><span style="color:#E1E4E8">(body</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> Center</span><span style="color:#E1E4E8">(child</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> Text</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'Hello'</span><span style="color:#E1E4E8">))),</span></span>
+<span class="line"><span style="color:#E1E4E8">  ));</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p><strong>优势</strong>：</p>
+<ul>
+<li><strong>平台覆盖最广</strong>，手机和桌面能共用绝大部分代码；</li>
+<li>自绘带来的像素级一致，动画流畅，热重载开发体验好；</li>
+<li>组件丰富，Material 和 Cupertino 两套风格开箱即用，pub.dev 生态庞大。</li>
+</ul>
+<p><strong>劣势</strong>：</p>
+<ul>
+<li>要学 Dart，团队技术栈多一门语言；</li>
+<li>桌面端插件和第三方库明显少于移动端，菜单、托盘、多窗口等桌面能力常要靠社区插件或自己写平台代码；</li>
+<li>控件是「画」出来的，不是系统原生的，在桌面上细看会有「不像本地应用」的感觉。</li>
+</ul>
+<p><strong>热度与成熟度</strong>：18.1 万 Stars，是 9 个方案里最高的；当前稳定版 3.47.9（2026-10-29）。<strong>成熟可用</strong>，尤其适合同时要做手机和桌面的团队。</p>
+<h3 id="6-gpuized-编辑器背后的-gpu-引擎">6. GPUI：Zed 编辑器背后的 GPU 引擎</h3>
+<p><strong>是什么</strong>：Zed 团队为自家编辑器打造的 Rust UI 框架，整个界面像游戏一样直接用 GPU 绘制，不经过 WebView，也不用系统控件。Zed 在 2026-04-29 发布 1.0；GPUI 作为 Zed 仓库里的一个 crate，采用 Apache-2.0 协议，并发布到了 crates.io。</p>
+<p><strong>技术栈</strong>：Rust，GPU 渲染；配套组件库首推长桥开源的 <strong>GPUI Kit</strong>（原名 gpui-component），提供 75+ 组件、WASM 支持、无障碍和无头 UI 测试，长桥自家的桌面交易客户端就是用它写的。</p>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>性能天花板高，Zed 本身就是最好的证明：大文件、长列表、高刷新率都很顺；</li>
+<li>有真实的大型商业产品在跑（Zed、长桥桌面端）；</li>
+<li>内存占用远低于 WebView 方案。</li>
+</ul>
+<p><strong>劣势</strong>：</p>
+<ul>
+<li>文档少，很多用法要读 Zed 源码；</li>
+<li>crates.io 上的 gpui 还停在 0.2.2，API 跟着 Zed 主线变，组件库常常要从 git 拉；</li>
+<li>只能写 Rust，招人和上手成本最高；不支持移动端。</li>
+</ul>
+<p><strong>热度与成熟度</strong>：GPUI 本身没有独立仓库，Zed 仓库 9.4 万 Stars，GPUI Kit 近 2 万。<strong>引擎成熟、API 不稳定</strong>，适合对性能有极致要求、团队熟悉 Rust 的产品。</p>
+<h3 id="7-rune为-ai-写-ui-而生的-rust-框架">7. Rune：为 AI 写 UI 而生的 Rust 框架</h3>
+<p><strong>是什么</strong>：Anomaly（AI 编程工具 opencode 背后的团队）在 2026-10-22 开源的 Rust UI 框架，自带 GPU 渲染器、文字排版、布局和弹簧动画，支持 macOS、Windows、Linux 和 Web（WASM）。开源两周就在 Hacker News 上拿到 177 分。</p>
+<p>它最特别的一点：<strong>每个应用都能无头运行</strong>，AI agent 可以把界面渲染成 PNG、导出元素树、用脚本模拟输入，自己检查自己写的 UI。README 里甚至直接给了一段让 coding agent 用 Rune 写应用的提示词。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#F97583">fn</span><span style="color:#B392F0"> view</span><span style="color:#E1E4E8">(s</span><span style="color:#F97583">:</span><span style="color:#F97583"> &amp;</span><span style="color:#B392F0">State</span><span style="color:#E1E4E8">, _</span><span style="color:#F97583">:</span><span style="color:#F97583"> &amp;mut</span><span style="color:#B392F0"> Cx</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">State</span><span style="color:#E1E4E8">&gt;) </span><span style="color:#F97583">-&gt;</span><span style="color:#B392F0"> El</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    let</span><span style="color:#E1E4E8"> t </span><span style="color:#F97583">=</span><span style="color:#B392F0"> tok</span><span style="color:#F97583">::</span><span style="color:#B392F0">theme</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">    let</span><span style="color:#E1E4E8"> label </span><span style="color:#F97583">=</span><span style="color:#B392F0"> text</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">if</span><span style="color:#E1E4E8"> s</span><span style="color:#F97583">.</span><span style="color:#E1E4E8">on { </span><span style="color:#9ECBFF">"Lights on"</span><span style="color:#E1E4E8"> } </span><span style="color:#F97583">else</span><span style="color:#E1E4E8"> { </span><span style="color:#9ECBFF">"Lights off"</span><span style="color:#E1E4E8"> })</span></span>
+<span class="line"><span style="color:#F97583">        .</span><span style="color:#B392F0">font</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">type_</span><span style="color:#F97583">::</span><span style="color:#79B8FF">TITLE</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">.</span><span style="color:#B392F0">color</span><span style="color:#E1E4E8">(t</span><span style="color:#F97583">.</span><span style="color:#E1E4E8">text);</span></span>
+<span class="line"><span style="color:#B392F0">    col</span><span style="color:#E1E4E8">()</span><span style="color:#F97583">.</span><span style="color:#B392F0">w_full</span><span style="color:#E1E4E8">()</span><span style="color:#F97583">.</span><span style="color:#B392F0">h_full</span><span style="color:#E1E4E8">()</span><span style="color:#F97583">.</span><span style="color:#B392F0">center</span><span style="color:#E1E4E8">()</span><span style="color:#F97583">.</span><span style="color:#B392F0">gap</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">16.0</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">.</span><span style="color:#B392F0">fill</span><span style="color:#E1E4E8">(t</span><span style="color:#F97583">.</span><span style="color:#E1E4E8">bg)</span><span style="color:#F97583">.</span><span style="color:#B392F0">child</span><span style="color:#E1E4E8">(label)</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>声明式 API 简洁，自带动画和组件库 rune-kit；</li>
+<li>「AI 可验证」的设计思路领先，适合让 agent 大量生成界面的团队；</li>
+<li>MIT 协议。</li>
+</ul>
+<p><strong>劣势</strong>：</p>
+<ul>
+<li>官方明确写着 pre-release，没有发布版本，只能 pin 某个 dev 提交；</li>
+<li><strong>不接受 PR</strong>，只收 issue，社区参与方式受限；</li>
+<li>无障碍深度、输入法、无 GPU 环境下的表现，社区仍在追问。</li>
+</ul>
+<p><strong>热度与成熟度</strong>：两周多 5,100+ Stars。<strong>目前是实验品，适合关注、不适合押注。</strong></p>
+<h3 id="8-native-shellnsh一套代码各平台真原生">8. Native Shell（NSH）：一套代码，各平台真原生</h3>
+<p><strong>是什么</strong>：长桥在 2026-10-14 开源的 Rust UI 框架，主打「Build once, native everywhere」。和 Flutter、GPUI、Rune 自己画界面不同，它<strong>调用每个平台自己的原生控件</strong>：iOS 用 UIKit，Android 用原生 View，macOS 用 AppKit，Windows 用 Win32 + Direct2D，Linux 用 GTK 4，Web 输出 HTML，甚至还能渲染到 GPUI 窗口和终端里。</p>
+<p><strong>技术栈</strong>：Rust 内核；界面可以用 Rust 写，也可以用 TSX 写（编译成 QuickJS 字节码），布局是 flexbox/grid，样式用 Tailwind 类名，响应式是 Solid 风格的信号。</p>
+<p><strong>优势</strong>：</p>
+<ul>
+<li><strong>本文 9 个方案里唯一一个桌面 + iOS + Android + Web 全覆盖、且用原生控件的</strong>，外观、输入法、无障碍天然贴合系统；</li>
+<li>可以嵌进已有的原生 App；</li>
+<li>支持运行时下发签名的 TSX 模块，在沙盒里运行，适合插件和 AI 生成的界面。</li>
+</ul>
+<p><strong>劣势</strong>：</p>
+<ul>
+<li>诞生 3 周多，v0.4.0，生态几乎为零；</li>
+<li>各平台原生控件行为不一致，跨平台像素级一致比自绘方案难；</li>
+<li>最低系统要求偏高：macOS 14、iOS 15、Android 9、GTK 4.14。</li>
+</ul>
+<p><strong>热度与成熟度</strong>：2,100 Stars，背后有长桥做 GPUI Kit 的经验。<strong>思路最有野心，但现在只适合跟进观察。</strong></p>
+<h3 id="9-pyqt--pyside最老牌的稳妥选择">9. PyQt / PySide：最老牌的稳妥选择</h3>
+<p><strong>是什么</strong>：Python 对 Qt 的绑定。Qt 是 1995 年就发布的 C++ 跨平台框架，控件、图表、多媒体、数据库一应俱全。PyQt6 由 Riverbank 维护，PySide6 是 Qt 官方绑定，两者当前都是 6.12.0。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> sys</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> PyQt6.QtWidgets </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> QApplication, QPushButton</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">app </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> QApplication(sys.argv)</span></span>
+<span class="line"><span style="color:#E1E4E8">btn </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> QPushButton(</span><span style="color:#9ECBFF">"Hello"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">btn.clicked.connect(</span><span style="color:#F97583">lambda</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"clicked"</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#E1E4E8">btn.show()</span></span>
+<span class="line"><span style="color:#E1E4E8">sys.exit(app.exec())</span></span></code></pre>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>成熟度碾压：控件最全，有可视化设计器 Qt Designer，资料和问答海量；</li>
+<li>写数据分析工具、科研软件、内部工具时，能直接用 Python 的 numpy、pandas 生态。</li>
+</ul>
+<p><strong>劣势</strong>：</p>
+<ul>
+<li><strong>协议要注意</strong>：PyQt6 是 GPL，闭源商用要买商业授权；想要更宽松的 LGPL，就换 PySide6；</li>
+<li>打包靠 PyInstaller / Nuitka，安装包大、启动慢，源码保护弱；</li>
+<li>界面风格偏传统，做成现代化 UI 要花不少样式功夫。</li>
+</ul>
+<p><strong>热度与成熟度</strong>：<strong>最成熟</strong>，但在新项目里的势头不如 WebView 和 Rust 系。</p>
+<h2 id="还有哪些值得一提">还有哪些值得一提</h2>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>技术栈</th>
+<th>一句话</th>
+<th>Stars</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compose Multiplatform</td>
+<td>Kotlin</td>
+<td>JetBrains 出品，Android 团队最顺手</td>
+<td>1.9 万</td>
+</tr>
+<tr>
+<td>Avalonia</td>
+<td>C# / .NET，自绘</td>
+<td>WPF 的跨平台继承者，.NET 团队首选</td>
+<td>3.2 万</td>
+</tr>
+<tr>
+<td>Slint</td>
+<td>Rust / C++ / JS，声明式 DSL</td>
+<td>1.x 稳定，嵌入式设备也能跑</td>
+<td>2.4 万</td>
+</tr>
+<tr>
+<td>Dioxus</td>
+<td>Rust，类 React</td>
+<td>一套代码出 Web、桌面、移动端</td>
+<td>4.0 万</td>
+</tr>
+</tbody>
+</table>
+<h2 id="面向人群按团队背景选">面向人群：按团队背景选</h2>
+<ul>
+<li><strong>前端团队，要小体积</strong>：Tauri；要绝对的渲染一致性，再考虑 Electron。</li>
+<li><strong>Go 团队</strong>：要稳就用 Wails v3；想要单二进制、交叉编译、甚至不写前端，试试 MyGo。</li>
+<li><strong>Rust 团队，追求极致性能</strong>：GPUI + GPUI Kit。</li>
+<li><strong>Python / 数据 / 科研工具</strong>：PySide6（协议宽松）或 PyQt6。</li>
+<li><strong>一套代码同时上手机和桌面</strong>：今天选 Flutter 或 Tauri 2；明天值得盯的是 Native Shell。</li>
+<li><strong>让 AI 大量生成界面</strong>：关注 Rune 和 Native Shell 的 agent 友好设计，先在小项目里试。</li>
+</ul>
+<h2 id="我的看法">我的看法</h2>
+<p>三条路线的分化会越来越明显：Web 路线（Electron、Tauri、Wails）赢在生态和开发效率；自绘路线（Flutter、GPUI、Rune、MyGo 原生模式）赢在性能和一致性；原生控件路线（Native Shell）赢在系统体验和移动端覆盖。</p>
+<p>两个月内冒出三个新框架，说明「Electron 太重」这个老问题还没被彻底解决，也说明 AI 正在改变 UI 框架的设计标准：能不能被 agent 写好、测好，正在变成新的竞争点。但对要上线的产品来说，成熟度仍然是第一位的。新框架先放进内部工具里试，比直接押上主力产品稳妥得多。</p>
+<p>你的下一个桌面项目，会继续用 Electron / Tauri 这种 Web 方案，还是转向 Flutter、GPUI 这类自绘框架，或者赌一把原生控件？</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>跨平台</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>桌面开发</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>Rust</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/cant-get-a-gpu-skypilot-finds-cards-across-clouds-with-one-command" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 cant-get-a-gpu-skypilot-finds-cards-across-clouds-with-one-command</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
