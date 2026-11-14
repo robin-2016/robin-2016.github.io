@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="robots" content="index, follow"><!-- Canonical & hreflang --><link rel="canonical" href="https://robin-2016.github.io/blog/google-open-sources-modern-web-guidance-to-stop-agents-writing-legacy-code/"><link rel="alternate" hreflang="zh" href="https://robin-2016.github.io/blog/google-open-sources-modern-web-guidance-to-stop-agents-writing-legacy-code/"><link rel="alternate" hreflang="en" href="https://robin-2016.github.io/en/blog/google-open-sources-modern-web-guidance-to-stop-agents-writing-legacy-code/"><link rel="alternate" hreflang="x-default" href="https://robin-2016.github.io/blog/google-open-sources-modern-web-guidance-to-stop-agents-writing-legacy-code/"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://robin-2016.github.io/blog/google-open-sources-modern-web-guidance-to-stop-agents-writing-legacy-code/"><meta property="og:title" content="google-open-sources-modern-web-guidance-to-stop-agents-writing-legacy-code — Robin"><meta property="og:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta property="og:image" content="https://robin-2016.github.io/favicon.svg"><meta property="og:site_name" content="Robin"><meta property="og:locale" content="zh_CN"><!-- Twitter Card --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="google-open-sources-modern-web-guidance-to-stop-agents-writing-legacy-code — Robin"><meta name="twitter:description" content="Robin 的个人作品集与技术博客，展示全栈项目与开发笔记。"><meta name="twitter:image" content="https://robin-2016.github.io/favicon.svg"><!-- Icons --><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><!-- JSON-LD --><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Robin","url":"https://robin-2016.github.io","description":"Robin's personal portfolio and dev notes.","author":{"@type":"Person","name":"Robin","url":"https://robin-2016.github.io","sameAs":["https://github.com/robin-2016"]}}</script><title>google-open-sources-modern-web-guidance-to-stop-agents-writing-legacy-code — Robin</title><style>.post-header[data-astro-cid-tldeq5d5]{border-bottom:var(--rule-thick) solid var(--ink);padding:24px 24px 20px}.post-meta[data-astro-cid-tldeq5d5]{flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;display:flex}.post-title[data-astro-cid-tldeq5d5]{letter-spacing:-.5px;margin-bottom:12px;font-size:clamp(22px,4vw,32px);font-weight:900;line-height:1.25}.post-tags[data-astro-cid-tldeq5d5]{flex-wrap:wrap;gap:6px;display:flex}.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr 200px;display:grid}.post-content[data-astro-cid-tldeq5d5]{border-right:var(--rule-thin) solid var(--gray-light);color:#333;min-width:0;padding:28px 24px;font-size:16px;line-height:1.8}.post-content[data-astro-cid-tldeq5d5] h2,.post-content[data-astro-cid-tldeq5d5] h3{border-left:2.5px solid var(--accent);margin:32px 0 12px;padding-left:10px;font-size:18px;font-weight:800}.post-content[data-astro-cid-tldeq5d5] h3{font-size:16px}.post-content[data-astro-cid-tldeq5d5] p{margin-bottom:16px}.post-content[data-astro-cid-tldeq5d5] ul,.post-content[data-astro-cid-tldeq5d5] ol{margin-bottom:16px;padding-left:24px}.post-content[data-astro-cid-tldeq5d5] li{margin-bottom:6px}.post-content[data-astro-cid-tldeq5d5] pre{background:#f4f4f4;border-radius:2px;margin:20px 0;padding:16px;font-size:14px;overflow-x:auto}.post-content[data-astro-cid-tldeq5d5] code{background:#f4f4f4;border-radius:2px;padding:1px 5px;font-size:14px}.post-content[data-astro-cid-tldeq5d5] pre code{background:0 0;padding:0}.post-content[data-astro-cid-tldeq5d5] img{border:var(--rule-thin) solid var(--gray-light);max-width:100%;margin:20px auto}.post-content[data-astro-cid-tldeq5d5] blockquote{border-left:3px solid var(--accent);color:var(--gray);margin:20px 0;padding-left:16px}.post-content[data-astro-cid-tldeq5d5] a{border-bottom:1px solid var(--ink)}.post-sidebar[data-astro-cid-tldeq5d5]{padding:28px 20px}.sidebar-block[data-astro-cid-tldeq5d5]{margin-bottom:24px}.sidebar-label[data-astro-cid-tldeq5d5]{letter-spacing:2px;color:var(--gray);margin-bottom:8px;font-size:10px}.sidebar-author[data-astro-cid-tldeq5d5]{margin-bottom:2px;font-size:14px;font-weight:800}.sidebar-author-desc[data-astro-cid-tldeq5d5]{color:var(--gray);font-size:12px}.sidebar-tags[data-astro-cid-tldeq5d5]{flex-direction:column;gap:6px;display:flex}.sidebar-tag[data-astro-cid-tldeq5d5]{font-size:13px;font-weight:600}.post-nav[data-astro-cid-tldeq5d5]{border-top:var(--rule-thick) solid var(--ink);justify-content:space-between;gap:16px;padding:16px 24px;display:flex}.post-nav-link[data-astro-cid-tldeq5d5]{border-bottom:1px solid var(--ink);font-size:13px;font-weight:700}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:right;margin-left:auto}@media (width<=768px){.post-body[data-astro-cid-tldeq5d5]{grid-template-columns:1fr}.post-header[data-astro-cid-tldeq5d5]{padding:16px}.post-content[data-astro-cid-tldeq5d5]{padding:20px 16px}.post-sidebar[data-astro-cid-tldeq5d5]{border-top:var(--rule-thin) solid var(--gray-light)}.post-nav[data-astro-cid-tldeq5d5]{flex-wrap:wrap;padding:12px 16px}.post-nav-next[data-astro-cid-tldeq5d5]{text-align:left;margin-left:0}}
+.site-nav[data-astro-cid-wpvy4v7s]{border-bottom:var(--rule-thick) solid var(--ink);justify-content:space-between;align-items:center;padding:12px 24px;display:flex}.site-logo[data-astro-cid-wpvy4v7s]{letter-spacing:3px;color:var(--ink);font-size:14px;font-weight:900}.nav-right[data-astro-cid-wpvy4v7s]{align-items:center;display:flex}.nav-links[data-astro-cid-wpvy4v7s]{display:flex}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:16px;border-left:var(--rule-thin) solid var(--ink)!important}@media (width<=480px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 16px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 10px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:8px}}@media (width<=360px){.site-nav[data-astro-cid-wpvy4v7s]{padding:10px 12px}.nav-links[data-astro-cid-wpvy4v7s] a[data-astro-cid-wpvy4v7s]{padding:4px 7px;font-size:10px}.lang-switch[data-astro-cid-wpvy4v7s]{margin-left:6px}}.site-footer[data-astro-cid-jo6i4kqk]{background:var(--ink);justify-content:space-between;align-items:center;padding:14px 24px;display:flex}.copy[data-astro-cid-jo6i4kqk]{color:#ffffff4d;font-size:12px}.motto[data-astro-cid-jo6i4kqk]{color:var(--accent);font-size:12px;font-weight:700}:root{--ink:#0a2540;--accent:#f8c400;--bg:#fff;--bg-warm:#fafaf8;--gray:#888;--gray-light:#eee;--white:#fff;--rule-thick:2.5px;--rule-grid:1.5px;--rule-thin:1px;--font-body:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px}body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none}.text-meta{letter-spacing:.08em;color:var(--gray);font-size:11px;font-weight:700}.text-label{letter-spacing:.05em;color:var(--gray);font-size:12px}.tag{letter-spacing:.06em;padding:2px 8px;font-size:11px;font-weight:800;line-height:1.6;display:inline-block}.tag-accent{background:var(--accent);color:var(--ink)}.tag-ink{background:var(--ink);color:var(--white)}.tag-outline{border:var(--rule-thin) solid var(--ink);color:var(--ink);font-size:11px;font-weight:700;display:inline-block}.tag-outline.active{background:var(--ink);color:var(--white)}.box-btn{border:var(--rule-thin) solid var(--ink);color:var(--ink);letter-spacing:.06em;cursor:pointer;background:0 0;padding:4px 14px;font-size:11px;font-weight:700;transition:background .15s,color .15s;display:inline-block}.box-btn+.box-btn{border-left:none}.box-btn:hover,.box-btn.active,.box-btn-solid{background:var(--ink);color:var(--white)}.box-btn-solid:hover{opacity:.85}.rule-thick{height:var(--rule-thick);background:var(--ink)}.rule-thin{height:var(--rule-thin);background:var(--gray-light)}.site-wrapper{flex-direction:column;min-height:100vh;display:flex}.site-main{flex:1}.breadcrumb{border-bottom:var(--rule-thin) solid var(--gray-light);align-items:center;gap:8px;padding:10px 24px;font-size:12px;display:flex}.breadcrumb .sep{color:var(--gray-light)}.breadcrumb .cur{font-weight:700}@media (width<=768px){.hide-mobile{display:none}.breadcrumb{padding:8px 16px}}
+</style></head><body><div class="site-wrapper"><nav class="site-nav" data-astro-cid-wpvy4v7s><a href="/" class="site-logo" data-astro-cid-wpvy4v7s>ROBIN</a><div class="nav-right" data-astro-cid-wpvy4v7s><div class="nav-links" data-astro-cid-wpvy4v7s><a href="/" class="box-btn" data-astro-cid-wpvy4v7s>产品</a><a href="/blog" class="box-btn active" data-astro-cid-wpvy4v7s>博客</a><a href="/about" class="box-btn" data-astro-cid-wpvy4v7s>关于</a></div><a href="/en/blog/google-open-sources-modern-web-guidance-to-stop-agents-writing-legacy-code/" class="lang-switch box-btn" data-other-lang="en" data-astro-cid-wpvy4v7s>EN</a></div></nav><script type="module">document.querySelector(`.lang-switch`)?.addEventListener(`click`,e=>{let t=e.currentTarget;localStorage.setItem(`robin-lang`,t.dataset.otherLang??`zh`)});</script><main class="site-main"><div class="breadcrumb" data-astro-cid-tldeq5d5><a href="/blog" data-astro-cid-tldeq5d5>博客</a><span class="sep" data-astro-cid-tldeq5d5>/</span><span class="cur" data-astro-cid-tldeq5d5>AI</span></div><div class="post-header" data-astro-cid-tldeq5d5><div class="post-meta" data-astro-cid-tldeq5d5><span class="tag tag-ink" data-astro-cid-tldeq5d5>AI</span><span class="text-meta" data-astro-cid-tldeq5d5>2026 / 11 / 14</span><span class="text-meta" data-astro-cid-tldeq5d5>约 16 分钟阅读</span></div><h1 class="post-title" data-astro-cid-tldeq5d5>google-open-sources-modern-web-guidance-to-stop-agents-writing-legacy-code</h1><div class="post-tags" data-astro-cid-tldeq5d5><span class="tag-outline" data-astro-cid-tldeq5d5>Agent Skill</span><span class="tag-outline" data-astro-cid-tldeq5d5>前端</span><span class="tag-outline" data-astro-cid-tldeq5d5>Chrome</span></div></div><div class="post-body" data-astro-cid-tldeq5d5><article class="post-content" data-astro-cid-tldeq5d5><h1 id="谷歌开源-modern-web-guidance专治-agent-写旧代码">谷歌开源 Modern Web Guidance，专治 Agent 写旧代码</h1>
+<p><img src="/assets/images/google-open-sources-modern-web-guidance-to-stop-agents-writing-legacy-code-summary.png" alt="知识点总结"></p>
+<p>在谷歌自家评测里，不装指南的 Claude Code 只过了 57%。</p>
+<h2 id="摘要">摘要</h2>
+<p>Modern Web Guidance 是 Chrome、Edge、Firefox 和 MDN 团队共同维护的 Skill，用本地检索把 250 项现代 Web 特性的写法喂给编码 Agent。在项目自己的近期评测里，通过率提升 27 到 36 个百分点。</p>
+<h2 id="核心优势">核心优势</h2>
+<p>让 Agent 写前端，常见的毛病是「会用，但用旧的」：弹窗手写一堆 JavaScript，悬浮提示依赖第三方库，明明浏览器已经原生支持。官方 README 给的原因很直接：大模型的训练数据里有海量旧代码。</p>
+<p>Modern Web Guidance 的思路不是再训练模型，而是在 Agent 动手前，把对应的现代写法塞进它的上下文。项目 2026 年 3 月在 GoogleChrome 组织下创建，现在有 1.1 万多个 Star，2026-11-10 发布了 v1.0.0。</p>
+<ul>
+<li><strong>覆盖面广</strong>：官方统计 250 项现代 Web 特性（CSS 与布局 140 项，HTML 与 DOM 36 项，JavaScript 与 API 74 项），对应 203 个真实开发场景，包括 View Transitions、Popover、Anchor Positioning、容器查询、<code>:user-invalid</code>、内置 AI API 等。</li>
+<li><strong>内容精炼</strong>：指南按评测结果修剪，模型本来就会的内容直接删掉，只留它容易写错的地方。安装选项里，官方给这个技能包标的开销约 205 个 token，指的是 Agent 平时常驻的那段技能描述；具体指南用到时才取回，不会一直占着上下文。</li>
+<li><strong>本地离线检索</strong>：用离线嵌入模型加 BM25 搜索匹配指南，不联网、不要 API Key，npm 包没有任何依赖。</li>
+<li><strong>对兼容性有交代</strong>：指南附带 Baseline 状态和浏览器版本数据，不够成熟的特性要求写轻量回退（官方原则是少于 50 行，或按需加载 polyfill），而不是直接塞一个大库。</li>
+<li><strong>多个 Agent 通用</strong>：Claude Code、Codex、GitHub Copilot CLI、Antigravity、Grok Build CLI、Kimi Code 等都有安装方式。</li>
+</ul>
+<h2 id="官方评测通过率提升多少">官方评测：通过率提升多少</h2>
+<p>项目自带一套评测：在真实的 Web 应用上给 Agent 布置任务，用 Playwright 检查结果，对比装与不装指南的通过率。README 里 11 月 8 日的三组数据（括号内为所用模型）：</p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>任务数 / 断言数</th>
+<th>不装指南 → 装指南</th>
+<th>提升</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Antigravity CLI（gemini-4-argon）</td>
+<td>214 / 1673</td>
+<td>58% → 94%</td>
+<td>+36 个百分点</td>
+</tr>
+<tr>
+<td>Claude Code（opus-5-5）</td>
+<td>215 / 1801</td>
+<td>57% → 88%</td>
+<td>+31 个百分点</td>
+</tr>
+<tr>
+<td>Codex CLI（gpt-6.1-sol）</td>
+<td>215 / 1795</td>
+<td>54% → 82%</td>
+<td>+28 个百分点</td>
+</tr>
+</tbody>
+</table>
+<p>往前几轮（11 月 2 日到 6 日）的快照，提升幅度在 27 到 36 个百分点之间。需要注意：这是项目方自己跑的评测，题目和评分器也是自己写的，README 里也没有给出第三方复现，数字适合当方向参考，不要当成你项目里的保证。</p>
+<h2 id="面向人群">面向人群</h2>
+<ul>
+<li>用 Claude Code、Codex 等 Agent 写前端，发现它总爱用老写法的人；</li>
+<li>想让 Agent 帮忙把旧项目现代化的人（有专门的扫描命令）；</li>
+<li>想在团队里统一「浏览器支持策略」，并让 Agent 遵守的人。</li>
+</ul>
+<p>后端、基础设施、脚本类任务不在范围内，Skill 的触发规则里明确排除了这些。</p>
+<h2 id="快速上手">快速上手</h2>
+<h3 id="第-1-步先不装试一下">第 1 步：先不装，试一下</h3>
+<p>要求 Node.js 22 或更高版本。下面三条命令不需要安装：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 按需求搜索相关指南</span></span>
+<span class="line"><span style="color:#B392F0">npx</span><span style="color:#9ECBFF"> modern-web-guidance@latest</span><span style="color:#9ECBFF"> search</span><span style="color:#9ECBFF"> "animate a dialog modal backdrop"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 按 ID 取回一篇指南</span></span>
+<span class="line"><span style="color:#B392F0">npx</span><span style="color:#9ECBFF"> modern-web-guidance@latest</span><span style="color:#9ECBFF"> retrieve</span><span style="color:#9ECBFF"> "animate-to-from-top-layer"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 扫描代码库里的旧写法</span></span>
+<span class="line"><span style="color:#B392F0">npx</span><span style="color:#9ECBFF"> modern-web-guidance@latest</span><span style="color:#9ECBFF"> legacy-scan</span><span style="color:#9ECBFF"> .</span></span></code></pre>
+<h3 id="第-2-步安装">第 2 步：安装</h3>
+<p>最简单的方式是运行交互式向导：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">npx</span><span style="color:#9ECBFF"> modern-web-guidance@latest</span><span style="color:#9ECBFF"> install</span></span></code></pre>
+<p>也可以走各个 Agent 自己的插件通道：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Claude Code</span></span>
+<span class="line"><span style="color:#B392F0">/plugin</span><span style="color:#9ECBFF"> marketplace</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> GoogleChrome/modern-web-guidance</span></span>
+<span class="line"><span style="color:#B392F0">/plugin</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> modern-web-guidance@googlechrome</span></span>
+<span class="line"><span style="color:#B392F0">/reload-plugins</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># OpenAI Codex</span></span>
+<span class="line"><span style="color:#B392F0">codex</span><span style="color:#9ECBFF"> plugin</span><span style="color:#9ECBFF"> marketplace</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> GoogleChrome/modern-web-guidance</span></span>
+<span class="line"><span style="color:#B392F0">codex</span><span style="color:#9ECBFF"> plugin</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> modern-web-guidance@googlechrome</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Vercel Skills CLI</span></span>
+<span class="line"><span style="color:#B392F0">npx</span><span style="color:#9ECBFF"> skills</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> GoogleChrome/modern-web-guidance</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># GitHub CLI</span></span>
+<span class="line"><span style="color:#B392F0">gh</span><span style="color:#9ECBFF"> skill</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> GoogleChrome/modern-web-guidance</span></span></code></pre>
+<p>Antigravity、Grok Build CLI、Kimi Code 和 Copilot CLI 也各有命令，详见仓库 README。装好之后更新用 <code>npx modern-web-guidance@latest update</code>。</p>
+<h3 id="第-3-步之后-agent-会自己做这三件事">第 3 步：之后 Agent 会自己做这三件事</h3>
+<ol>
+<li><strong>激活</strong>：遇到弹窗、表单、动画、无障碍、性能（LCP、INP）这类前端任务，Agent 先调用这个 Skill；</li>
+<li><strong>搜索</strong>：用 2 到 5 个词描述单个能力，比如搜 <code>light dismiss dialog</code>，而不是太笼统的 <code>dialog</code>，也不要带框架名；</li>
+<li><strong>取回</strong>：把匹配到的指南读进上下文，再动手写代码，写完对照指南检查。</li>
+</ol>
+<p>另外，Skill 要求 Agent 在交付改动时，附一个 <code>Modern Web Guidance</code> 小节，说明用了哪些指南、避开了什么坑，你一眼就能看出它有没有真的用上。</p>
+<h2 id="一篇指南长什么样">一篇指南长什么样</h2>
+<p>以「表单字段出错时，给整个分组变色」为例。旧做法要用 JavaScript 监听输入、手动给父元素加类名。指南给出的做法是 <code>:has()</code> 配合 <code>:user-invalid</code>，纯 CSS 就行：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="css"><code><span class="line"><span style="color:#6A737D">/* 卡片里只要有一个输入框被用户填错，就把左边框变红 */</span></span>
+<span class="line"><span style="color:#B392F0">.card-section:has</span><span style="color:#E1E4E8">(:</span><span style="color:#85E89D">user-invalid</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#79B8FF">  border-left-color</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">#d93025</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">  background-color</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">#fff8f8</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>指南里还写明了：<code>:user-invalid</code> 从 2023-11-02 起属于 Baseline 广泛可用；如果要兼容不支持 <code>:has()</code> 的浏览器，就用 JavaScript 给父元素切换类名作为回退；还提醒作用范围要写具体（选字段分组，不要选 <code>body</code>），并且颜色变化只是强调，每个字段仍然需要自己的错误文字。</p>
+<p>问题、方案、完整代码、兼容数据、回退写法，一篇指南全包了。</p>
+<h2 id="进阶用法">进阶用法</h2>
+<h3 id="一体检旧代码">一、体检旧代码</h3>
+<p><code>legacy-scan</code> 会扫描项目里的过时写法，输出结果后由 Agent 逐条核对，剔除误报，再按指南改写。要注意它只覆盖约 20% 的指南，也就是带确定性规则的那部分，所以「扫描没发现问题」不等于「已经完全现代化」。</p>
+<h3 id="二控制实验性特性">二、控制实验性特性</h3>
+<p>默认情况下，Origin Trial 特性和只有单一浏览器引擎支持的新特性（最近 3 个月内上线或仍在稳定中）仍然可以被搜到，但取回时会被拦住，防止 Agent 擅自采用不稳定的 API。想放开，在项目根目录放一个 <code>.mwgrc</code> 文件，或用命令设置：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">npx</span><span style="color:#9ECBFF"> modern-web-guidance@latest</span><span style="color:#9ECBFF"> set-allow-origin-trials</span></span>
+<span class="line"><span style="color:#B392F0">npx</span><span style="color:#9ECBFF"> modern-web-guidance@latest</span><span style="color:#9ECBFF"> set-allow-volatile-features</span></span></code></pre>
+<p>它们分别对应 <code>allowOriginTrials</code> 和 <code>allowVolatileFeatures</code> 两个配置项，文件可以提交进仓库，团队共用。</p>
+<h3 id="三把浏览器支持策略写进-agentsmd">三、把浏览器支持策略写进 AGENTS.md</h3>
+<p>Skill 默认认为 Baseline 广泛可用的特性不需要回退。如果你的用户群有特殊要求，建议在 <code>AGENTS.md</code> 或 <code>CLAUDE.md</code> 里写清楚，比如允许采用「新近可用」的特性，但自定义回退代码不超过 20 行、不引入外部依赖，Agent 就会按这条规则取舍。</p>
+<h3 id="四隐私与遥测">四、隐私与遥测</h3>
+<p>Google 会收集匿名使用信息：安装次数、调用它的 Agent 名称、取回的指南 ID，以及 Agent 生成的搜索词，不收集你的原始提示词。不想参与，在 shell 配置里设置环境变量：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> DISABLE_TELEMETRY</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span></span></code></pre>
+<h2 id="几个使用前要知道的点">几个使用前要知道的点</h2>
+<ul>
+<li>需要 Node.js 22 以上，第一次用 <code>npx</code> 要联网。在 Codex、Claude Code 这类沙箱环境里，要提前放行网络访问；</li>
+<li>官方评测是自测，效果以你自己的项目为准；</li>
+<li>它只管前端和浏览器侧 JavaScript，不会帮你处理后端；</li>
+<li>v1.0.0 是 11 月 10 日才发布的，npm 上此前已有 100 多个版本，命令和指南内容迭代很快，装好后记得定期执行 <code>update</code>。</li>
+</ul>
+<h2 id="收藏清单">收藏清单</h2>
+<ol>
+<li>先试：<code>npx modern-web-guidance@latest search "你的需求"</code>，不用安装；</li>
+<li>再装：<code>npx modern-web-guidance@latest install</code>，或走 Claude Code、Codex 的插件命令；</li>
+<li>配好：需要实验性特性就设 <code>.mwgrc</code>，有兼容要求就写进 <code>AGENTS.md</code>，不想上报数据就设 <code>DISABLE_TELEMETRY=1</code>。</li>
+</ol>
+<p>项目地址：github.com/GoogleChrome/modern-web-guidance</p>
+</article><aside class="post-sidebar" data-astro-cid-tldeq5d5><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author" data-astro-cid-tldeq5d5>Robin</p><p class="sidebar-author-desc" data-astro-cid-tldeq5d5>自由职业者</p></div><div class="sidebar-block" data-astro-cid-tldeq5d5><p class="sidebar-label" data-astro-cid-tldeq5d5>标签</p><div class="sidebar-tags" data-astro-cid-tldeq5d5><span class="sidebar-tag" data-astro-cid-tldeq5d5>Agent Skill</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>前端</span><span class="sidebar-tag" data-astro-cid-tldeq5d5>Chrome</span></div></div></aside></div><div class="post-nav" data-astro-cid-tldeq5d5><a href="/blog/one-config-for-10-shells-the-starship-prompt" class="post-nav-link post-nav-prev" data-astro-cid-tldeq5d5>← 上一篇 one-config-for-10-shells-the-starship-prompt</a></div></main><footer class="site-footer" data-astro-cid-jo6i4kqk><span class="copy" data-astro-cid-jo6i4kqk>© 2026 Robin</span><span class="motto" data-astro-cid-jo6i4kqk>总想折腾点啥</span></footer></div><!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;301821033df444ba9b9ca9ac69fdc4ca&quot;}"></script><!-- End Cloudflare Web Analytics --></body></html>
